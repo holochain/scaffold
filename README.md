@@ -10,3 +10,34 @@ The web tool generates a scaffold.json file which the holochain software uses to
 Also, the scaffold system may generate some really basic UI, but it will be extremely primitive. You will still need to do significant interface development if you plan on having users interface with your system directly (you might be able to skip this if your app will mostly be interfaced with via API).
 
 Please see the [holochain repository](http://github.com/metacurrency/holochain) for more information on how this can be used as an alternative blockchain/Ethereum-based applications.
+
+---
+
+## Usage
+
+##### Command Line
+
+```
+npm install
+node ./bin/hc_scaffold.js --help
+```
+
+##### Web App
+
+```
+npm install
+npm start
+```
+
+##### Building / Testing
+
+```
+npm install
+npm test
+```
+
+## Contributing
+
+Before Opening a Pull Request:
+- Make sure `npm test` succeeds
+- Squash all commits

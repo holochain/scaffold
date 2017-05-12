@@ -1,0 +1,51 @@
+{
+  "name": "hc-scaffold",
+  "version": "0.0.1",
+  "description": "Web and NodeJs based wizard for generating scaffolding for (holochain)[http://github.com/metacurrency/holochain] applications.",
+  "main": "lib/wizard.js",
+  "bin": {
+    "hc_scaffold": "bin/hc_scaffold.js"
+  },
+  "scripts": {
+    "test": "node build.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metacurrency/hc-scaffold.git"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/metacurrency/hc-scaffold/issues"
+  },
+  "homepage": "https://github.com/metacurrency/hc-scaffold#readme",
+  "dependencies": {
+    "ajv": "^5.0.1",
+    "express": "^4.15.2",
+    "minimist": "^1.2.0",
+    "opn": "^5.0.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "browserify": "^14.3.0",
+    "chai": "^3.5.0",
+    "jsonlint": "^1.6.2",
+    "mocha": "^3.3.0",
+    "standard": "^10.0.2",
+    "uglify-js": "^3.0.4",
+    "vue": "^2.3.3",
+    "vueify": "^9.4.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach"
+    ]
+  }
+}

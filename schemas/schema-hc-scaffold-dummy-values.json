@@ -1,0 +1,6 @@
+{
+  "#1": "this file lets us replace one property for validation",
+  "#2": "without worrying about other fields getting in the way.",
+  "scaffoldVersion": "0.0.1",
+  "name": "dummy"
+}
