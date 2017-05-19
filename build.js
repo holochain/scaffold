@@ -4,6 +4,7 @@
 /* Hand-rolled build for now, may want a util at some point.
  */
 
+const Ajv = require('ajv')
 const fs = require('fs')
 const path = require('path')
 const childProcess = require('child_process')
@@ -20,14 +21,21 @@ const BUILD_LIST = [
     'websrc/**/*.js'
   ]]],
 
+  // -- schema validation -- //
+
+  [schema, [
+    'schemas/hc-scaffold-meta-schema.json',
+    'schemas/json-meta-schema.json']],
+
+  [schema, [
+    'schemas/hc-scaffold-schema.json',
+    'schemas/hc-scaffold-meta-schema.json']],
+
   // compile all our i18n json string files into one js file
   [jsongen, ['locales', /^.+\.json$/i, 'gen/strings.js']],
 
   // compile all our json schema files into one js file
   [jsongen, ['schemas', /^.+\.json$/i, 'gen/schemas.js']],
-
-  // compile all our field definitions into one js file
-  [jsongen, ['fields', /^.+\.json$/i, 'gen/fields.js']],
 
   // -- hc_scaffold_wizard -- //
 
@@ -182,4 +190,21 @@ function jsongen (cb, dir, pattern, gen) {
       '-c', '-q', toCheck.shift()])
   }
   checkNext()
+}
+
+/**
+ * Validate a json file using a json schema file
+ */
+function schema (cb, check, schema) {
+  console.log('check ' + check + ' against ' + schema)
+
+  let ajv = new Ajv()
+  let validator = ajv.compile(JSON.parse(fs.readFileSync(schema)))
+
+  let data = JSON.parse(fs.readFileSync(check))
+  if (!validator(data)) {
+    throw new Error(ajv.errorsText(validator.errors))
+  }
+
+  cb()
 }

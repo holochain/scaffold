@@ -1,0 +1,55 @@
+{
+  "$schema":"http://json-schema.org/draft-06/schema#",
+  "id":"http://ceptr.org/projects/holochain/schemas/hc-scaffold-schema.json",
+  "definitions": {},
+  "type":"object",
+  "hc-hint-type": "category",
+  "required": [
+    "scaffoldVersion",
+    "name",
+    "holochainDirectory"
+  ],
+  "properties": {
+    "scaffoldVersion": {
+      "type": "string",
+      "hc-hint-type": "hidden",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "0.0.1"
+    },
+
+    "name":{
+      "type": "string",
+      "hc-hint-type": "text",
+      "hc-hint-dummy": "dummy",
+      "pattern": "^.+$",
+      "default": ""
+    },
+
+    "holochainDirectory": {
+      "type": "object",
+      "hc-hint-type": "category",
+      "required": [
+        "list",
+        "publishDna",
+        "searchable"
+      ],
+      "properties": {
+        "list": {
+          "type": "boolean",
+          "hc-hint-type": "checkbox",
+          "default": true
+        },
+        "publishDna": {
+          "type": "boolean",
+          "hc-hint-type": "checkbox",
+          "default": true
+        },
+        "searchable": {
+          "type": "boolean",
+          "hc-hint-type": "checkbox",
+          "default": true
+        }
+      }
+    }
+  }
+}

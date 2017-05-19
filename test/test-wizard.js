@@ -2,20 +2,36 @@
 
 const expect = require('chai').expect
 
+const testSchema = {
+  '$schema': 'http://json-schema.org/draft-06/schema#',
+  'id': 'http://ceptr.org/projects/holochain/schemas/hc-scaffold-schema.json',
+  'definitions': {},
+  'type': 'object',
+  'hc-hint-type': 'category',
+  'required': [
+    'name'
+  ],
+  'properties': {
+    'name': {
+      'type': 'string',
+      'hc-hint-type': 'text',
+      'hc-hint-dummy': 'dummy',
+      'pattern': '^.+$',
+      'default': ''
+    }
+  }
+}
+
 exports.specify = (name, WizardLib) => {
   describe(name, () => {
     let wiz
 
     beforeEach(() => {
-      wiz = new WizardLib()
+      wiz = new WizardLib(null, testSchema)
     })
 
     it('field count', () => {
       expect(wiz.getFieldCount()).equals(1)
-    })
-
-    it('field idx 0 on page 1', () => {
-      expect(wiz.getFieldIndexesForPage(1).indexOf(0) > -1).equals(true)
     })
 
     it('can set name as string', () => {
