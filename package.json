@@ -22,6 +22,7 @@
   "dependencies": {
     "ajv": "^5.0.1",
     "express": "^4.15.2",
+    "handlebars": "^4.0.8",
     "minimist": "^1.2.0",
     "opn": "^5.0.0",
     "prompt": "^1.0.0"
@@ -34,9 +35,7 @@
     "jsonlint": "^1.6.2",
     "mocha": "^3.3.0",
     "standard": "^10.0.2",
-    "uglify-js": "^3.0.4",
-    "vue": "^2.3.3",
-    "vueify": "^9.4.1"
+    "uglify-js": "^3.0.4"
   },
   "standard": {
     "globals": [

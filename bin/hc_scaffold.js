@@ -35,7 +35,7 @@ class WizardRunner {
 
     let field = this.wiz.getField(this.fieldIdx)
     console.log()
-    console.log('# ' + field.name + ' (' + field.jsonPath + ')')
+    console.log('# ' + field.name + ' (' + field.field.jsonPath + ')')
     console.log('# ' + field.description)
 
     prompt.get({

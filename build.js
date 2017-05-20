@@ -58,10 +58,13 @@ const BUILD_LIST = [
 
   // -- hc_scaffold_web -- //
 
+  // compile our templates
+
+  [handlebars, ['websrc/templates', 'gen/webtemplates.js']],
+
   // bundle everything up into one js file
   [exec, ['./node_modules/.bin/browserify', [
-    '-t', 'vueify',
-    '-s', 'hc_scaffold_wizard',
+    '-s', 'hc_scaffold_web',
     '-o', 'dist/js/.hc_scaffold_web.js',
     '-e', 'websrc/webmain.js']]],
 
@@ -141,13 +144,39 @@ function exec (cb, cmd, args) {
 }
 
 /**
+ */
+const reHtml = /^.+\.html$/i
+function handlebars (cb, srcdir, destfile) {
+  let files = fs.readdirSync(srcdir)
+  let args = []
+  for (let file of files) {
+    if (!reHtml.test(file)) {
+      continue
+    }
+    args.push(path.join(srcdir, file))
+  }
+
+  let opts = [
+    '--output', destfile,
+    '--commonjs', 'handlebars/runtime',
+    '--extension', 'html',
+    '--knownOnly',
+    '--min'
+  ]
+  args = opts.concat(args)
+  exec(cb, './node_modules/.bin/handlebars', args)
+}
+
+/**
  * Remove/Delete/Unlink a list of files
  */
 function rm (cb /* args */) {
   let args = [].slice.call(arguments, 0)
   cb = args.shift()
   for (let i = 0; i < args.length; ++i) {
-    fs.unlinkSync(args[i])
+    try {
+      fs.unlinkSync(args[i])
+    } catch (e) { /* pass */ }
   }
   cb()
 }
