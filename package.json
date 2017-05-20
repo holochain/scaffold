@@ -21,6 +21,7 @@
   "homepage": "https://github.com/metacurrency/hc-scaffold#readme",
   "dependencies": {
     "ajv": "^5.0.1",
+    "easy-table": "^1.1.0",
     "express": "^4.15.2",
     "handlebars": "^4.0.8",
     "minimist": "^1.2.0",

@@ -33,6 +33,7 @@
             "enum": [
                 "hidden",
                 "category",
+                "table",
                 "text",
                 "checkbox"
             ]

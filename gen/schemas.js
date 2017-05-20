@@ -41,6 +41,7 @@ module.exports = exports = {
         "enum": [
           "hidden",
           "category",
+          "table",
           "text",
           "checkbox"
         ]
@@ -234,6 +235,7 @@ module.exports = exports = {
     "required": [
       "scaffoldVersion",
       "name",
+      "properties",
       "holochainDirectory"
     ],
     "properties": {
@@ -249,6 +251,40 @@ module.exports = exports = {
         "hc-hint-dummy": "dummy",
         "pattern": "^.+$",
         "default": ""
+      },
+      "properties": {
+        "type": "object",
+        "hc-hint-type": "category",
+        "required": [
+          "humanLanguages"
+        ],
+        "properties": {
+          "humanLanguages": {
+            "type": "array",
+            "hc-hint-type": "table",
+            "default": [
+              {
+                "name": "en"
+              }
+            ],
+            "items": {
+              "type": "object",
+              "hc-hint-type": "category",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "hc-hint-type": "text",
+                  "hc-hint-dummy": "en",
+                  "pattern": "^\\S\\S$",
+                  "default": ""
+                }
+              }
+            }
+          }
+        }
       },
       "holochainDirectory": {
         "type": "object",

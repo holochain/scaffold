@@ -5,8 +5,11 @@ const fs = require('fs')
 const path = require('path')
 const minimist = require('minimist')
 const prompt = require('prompt')
+const table = require('easy-table')
 
 const Wizard = require('../lib/wizard').Wizard
+
+const __ = require('../lib/hc_i18n').getText
 
 class WizardRunner {
   constructor (editData) {
@@ -21,6 +24,7 @@ class WizardRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve
       this._reject = reject
+      this.fieldDef = this.wiz.getNextFieldDef()
       this._run()
     })
   }
@@ -28,20 +32,36 @@ class WizardRunner {
   // -- private -- //
 
   _run () {
-    if (this.fieldIdx >= this.wiz.getFieldCount()) {
+    if (!this.fieldDef) {
       this._resolve(this.wiz)
       return
     }
 
-    let field = this.wiz.getField(this.fieldIdx)
-    console.log()
-    console.log('# ' + field.name + ' (' + field.field.jsonPath + ')')
-    console.log('# ' + field.description)
+    this._prompt()
+  }
 
+  _prompt () {
+    console.log()
+    console.log('# ' + this.fieldDef.getTrName() +
+      ' (' + this.fieldDef.getJsonPath() + ')')
+    console.log('# ' + this.fieldDef.getTrDescription())
+
+    switch (this.fieldDef.getHcHintType()) {
+      case 'table':
+        this._tablePrompt()
+        break
+      default:
+        this._defaultPrompt()
+        break
+    }
+  }
+
+  _defaultPrompt () {
+    console.log('# (' + JSON.stringify(this.fieldDef.getValue()) + ')')
     prompt.get({
       properties: {
         data: {
-          message: '(' + JSON.stringify(field.value) + ') $ '
+          message: '>>>'
         }
       }
     }, (err, result) => {
@@ -51,11 +71,71 @@ class WizardRunner {
       }
       try {
         if (!result.data.length) {
-          field.setValue(field.value)
+          this.fieldDef.setValue(this.fieldDef.getValue())
         } else {
-          field.setValue(result.data)
+          this.fieldDef.setValue(result.data)
         }
-        this.fieldIdx++
+        this.fieldDef = this.wiz.getNextFieldDef()
+        this._run()
+      } catch (e) {
+        console.error(e.toString())
+        this._run()
+      }
+    })
+  }
+
+  _tablePrompt () {
+    let rawValue = this.fieldDef.getValue()
+    let data = []
+    for (let r = 0; r < rawValue.length; ++r) {
+      let row = rawValue[r]
+      let rowVal = {}
+      rowVal[__('ui-row-index')] = r
+      for (let c = 0; c < this.fieldDef.children.length; ++c) {
+        let col = this.fieldDef.children[c]
+        rowVal[col.getTrName()] = row[col.path]
+      }
+      data.push(rowVal)
+    }
+
+    console.log()
+    console.log(table.print(data))
+
+    prompt.get({
+      properties: {
+        data: {
+          message: '(delete [idx] | addrow | finish) >>>'
+        }
+      }
+    }, (err, result) => {
+      if (err) {
+        console.error(err)
+        process.exit(1)
+      }
+      try {
+        if (!result.data.length) {
+          throw new Error('invalid input')
+        } else {
+          let cmd = result.data.toLowerCase().split(' ')
+          let value = this.fieldDef.getValue()
+          if (cmd[0][0] === 'd') {
+            let idx = (cmd[1]) | 0
+            if (idx < 0 || idx > value.length) {
+              throw new Error('index out of range')
+            }
+            console.log(idx, value)
+            value.splice(idx, 1)
+            console.log(value)
+            this.fieldDef.setValue(value)
+          } else if (cmd[0][0] === 'a') {
+            value.push({name: 'a' + value.length.toString()})
+            this.fieldDef.setValue(value)
+          } else if (cmd[0][0] === 'f') {
+            this.fieldDef = this.wiz.getNextFieldDef()
+          } else {
+            throw new Error('invalid input')
+          }
+        }
         this._run()
       } catch (e) {
         console.error(e.toString())
