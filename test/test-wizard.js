@@ -31,16 +31,20 @@ exports.specify = (name, WizardLib) => {
     })
 
     it('field count', () => {
-      expect(wiz.getFieldCount()).equals(1)
+      let count = 0
+      while (wiz.getNextFieldDef()) {
+        count++
+      }
+      expect(count).equals(1)
     })
 
     it('can set name as string', () => {
-      let f = wiz.getField(0)
+      let f = wiz.getNextFieldDef()
       f.setValue('test')
     })
 
     it('empty name throws', () => {
-      let f = wiz.getField(0)
+      let f = wiz.getNextFieldDef()
       expect(() => { f.setValue('') }).throw()
     })
   })

@@ -2,6 +2,12 @@
 module.exports = exports = {
   "en": {
     "ui-row-index": "Row Index",
+    "ui-action-row-number": "Select Row Index",
+    "ui-action-row-add": "Add Row",
+    "ui-action-row-edit": "Edit Row",
+    "ui-action-row-delete": "Delete Row",
+    "ui-action-cancel": "Cancel",
+    "ui-action-finish": "Finish",
     "field-scaffoldVersion-name": "Scaffold Version",
     "field-scaffoldVersion-description": "Scaffold JSON file format version",
     "field-name-name": "Name",

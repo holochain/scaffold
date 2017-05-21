@@ -14,7 +14,6 @@ const __ = require('../lib/hc_i18n').getText
 class WizardRunner {
   constructor (editData) {
     this.wiz = new Wizard(editData)
-    this.fieldIdx = 0
     prompt.message = ''
     prompt.delimiter = ''
     prompt.start()
@@ -40,11 +39,15 @@ class WizardRunner {
     this._prompt()
   }
 
-  _prompt () {
+  _printFieldInfo () {
     console.log()
     console.log('# ' + this.fieldDef.getTrName() +
       ' (' + this.fieldDef.getJsonPath() + ')')
     console.log('# ' + this.fieldDef.getTrDescription())
+  }
+
+  _prompt () {
+    this._printFieldInfo()
 
     switch (this.fieldDef.getHcHintType()) {
       case 'table':
@@ -84,7 +87,7 @@ class WizardRunner {
     })
   }
 
-  _tablePrompt () {
+  _printTableInfo () {
     let rawValue = this.fieldDef.getValue()
     let data = []
     for (let r = 0; r < rawValue.length; ++r) {
@@ -100,11 +103,74 @@ class WizardRunner {
 
     console.log()
     console.log(table.print(data))
+  }
+
+  _editTableIndex (idx) {
+    let fieldIdx = 0
+
+    let valueRow = JSON.parse(JSON.stringify(this.fieldDef.getValue()[idx]))
+
+    let setField = () => {
+      if (fieldIdx >= this.fieldDef.children.length) {
+        try {
+          // little hacky to get validatio going here
+          let valueClone = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
+          valueClone[idx] = valueRow
+          this.fieldDef.setValue(valueClone)
+        } catch (e) {
+          console.error(e.toString())
+        }
+        return this._run()
+      }
+      let field = this.fieldDef.children[fieldIdx]
+
+      console.log()
+      console.log('# ' + field.getTrName() +
+        ' (' + field.getJsonPath() + ')')
+      console.log('# ' + field.getTrDescription())
+      console.log('# (' + JSON.stringify(field.getValue()) + ')')
+      prompt.get({
+        properties: {
+          data: {
+            message: '>>>'
+          }
+        }
+      }, (err, result) => {
+        if (err) {
+          console.error(err)
+          process.exit(1)
+        }
+        try {
+          if (!result.data.length) {
+            valueRow[field.path] = field.getValue()
+          } else {
+            valueRow[field.path] = result.data
+          }
+          fieldIdx++
+          setField()
+        } catch (e) {
+          console.error(e.toString())
+          setField()
+        }
+      })
+    }
+    setField()
+  }
+
+  _selectTableIndex (idx) {
+    this._printFieldInfo()
+    this._printTableInfo()
+
+    console.log(__('ui-action-row-number') + ' ' + idx)
+    console.log('(' +
+      'e - ' + __('ui-action-row-edit') + ' | ' +
+      'd - ' + __('ui-action-row-delete') + ' | ' +
+      'c - ' + __('ui-action-cancel') + ')')
 
     prompt.get({
       properties: {
         data: {
-          message: '(delete [idx] | addrow | finish) >>>'
+          message: '(e|d|c)'
         }
       }
     }, (err, result) => {
@@ -117,19 +183,62 @@ class WizardRunner {
           throw new Error('invalid input')
         } else {
           let cmd = result.data.toLowerCase().split(' ')
-          let value = this.fieldDef.getValue()
-          if (cmd[0][0] === 'd') {
-            let idx = (cmd[1]) | 0
-            if (idx < 0 || idx > value.length) {
+          let value = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
+          if (cmd[0][0] === 'e') {
+            return this._editTableIndex(idx)
+          } else if (cmd[0][0] === 'd') {
+            value.splice(idx, 1)
+            this.fieldDef.setValue(value)
+          }
+        }
+        this._run()
+      } catch (e) {
+        console.error(e.toString())
+        this._run()
+      }
+    })
+  }
+
+  _tablePrompt () {
+    this._printTableInfo()
+
+    console.log('(' +
+      '## - ' + __('ui-action-row-number') + ' | ' +
+      'a - ' + __('ui-action-row-add') + ' | ' +
+      'f - ' + __('ui-action-finish') + ')')
+
+    prompt.get({
+      properties: {
+        data: {
+          message: '(##|a|f) >>>'
+        }
+      }
+    }, (err, result) => {
+      if (err) {
+        console.error(err)
+        process.exit(1)
+      }
+      try {
+        if (!result.data.length) {
+          throw new Error('invalid input')
+        } else {
+          let cmd = result.data.toLowerCase().split(' ')
+          let value = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
+          if (parseInt(cmd[0]).toString() === cmd[0]) {
+            let idx = parseInt(cmd[0])
+            if (idx < 0 || idx >= value.length) {
               throw new Error('index out of range')
             }
-            console.log(idx, value)
-            value.splice(idx, 1)
-            console.log(value)
-            this.fieldDef.setValue(value)
+            return this._selectTableIndex(idx)
           } else if (cmd[0][0] === 'a') {
-            value.push({name: 'a' + value.length.toString()})
-            this.fieldDef.setValue(value)
+            let newRow = {}
+            for (let c of this.fieldDef.children) {
+              newRow[c.path] = c.getDefault()
+            }
+            value.push(newRow)
+            // skip validation for now
+            this.fieldDef.value = value
+            return this._editTableIndex(value.length - 1)
           } else if (cmd[0][0] === 'f') {
             this.fieldDef = this.wiz.getNextFieldDef()
           } else {

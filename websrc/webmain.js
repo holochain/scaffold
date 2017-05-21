@@ -19,6 +19,7 @@ class WizardRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve
       this._reject = reject
+      this.fieldDef = this.wiz.getNextFieldDef()
       this._run()
     })
   }
@@ -26,15 +27,14 @@ class WizardRunner {
   // -- private -- //
 
   _run () {
-    if (this.fieldIdx >= this.wiz.getFieldCount()) {
+    if (!this.fieldDef) {
       this._resolve(this.wiz)
       return
     }
 
-    let field = this.wiz.getField(this.fieldIdx)
-    this._genField(field)
+    this._genField()
 
-    this.fieldIdx++
+    this.fieldDef = this.wiz.getNextFieldDef()
     this._run()
   }
 
@@ -46,13 +46,16 @@ class WizardRunner {
     return c
   }
 
-  _genField (field) {
+  _genField () {
     let inputWidget = handlebars.templates['field-text']({
-      field: field
+      jsonPath: this.fieldDef.getJsonPath(),
+      value: this.fieldDef.getValue()
     })
 
     this.formBody.appendChild(this._genTemplate('field-container', {
-      field: field,
+      jsonPath: this.fieldDef.getJsonPath(),
+      name: this.fieldDef.getTrName(),
+      description: this.fieldDef.getTrDescription(),
       inputWidget: inputWidget
     }))
   }
