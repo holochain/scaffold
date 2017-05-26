@@ -7,9 +7,9 @@ const minimist = require('minimist')
 const prompt = require('prompt')
 const table = require('easy-table')
 
-const Wizard = require('../lib/wizard').Wizard
+const Wizard = require('../src/lib/wizard').Wizard
 
-const __ = require('../lib/hc_i18n').getText
+const __ = require('../src/lib/hc_i18n').getText
 
 class WizardRunner {
   constructor (editData) {

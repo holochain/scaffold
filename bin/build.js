@@ -14,28 +14,26 @@ const BUILD_LIST = [
   // check our code style
   [exec, ['./node_modules/.bin/standard', [
     'build.js',
-    'server.js',
-    'lib/**/*.js',
-    'bin/**/*.js',
-    'test/**/*.js',
-    'websrc/**/*.js'
+    'src/lib/**/*.js',
+    'src/web/**/*.js',
+    'src/test/**/*.js'
   ]]],
 
   // -- schema validation -- //
 
   [schema, [
-    'schemas/hc-scaffold-meta-schema.json',
-    'schemas/json-meta-schema.json']],
+    'src/schemas/hc-scaffold-meta-schema.json',
+    'src/schemas/json-meta-schema.json']],
 
   [schema, [
-    'schemas/hc-scaffold-schema.json',
-    'schemas/hc-scaffold-meta-schema.json']],
+    'src/schemas/hc-scaffold-schema.json',
+    'src/schemas/hc-scaffold-meta-schema.json']],
 
   // compile all our i18n json string files into one js file
-  [jsongen, ['locales', /^.+\.json$/i, 'gen/strings.js']],
+  [jsongen, ['src/locales', /^.+\.json$/i, 'src/gen/strings.js']],
 
   // compile all our json schema files into one js file
-  [jsongen, ['schemas', /^.+\.json$/i, 'gen/schemas.js']],
+  [jsongen, ['src/schemas', /^.+\.json$/i, 'src/gen/schemas.js']],
 
   // -- hc_scaffold_wizard -- //
 
@@ -43,7 +41,7 @@ const BUILD_LIST = [
   [exec, ['./node_modules/.bin/browserify', [
     '-s', 'hc_scaffold_wizard',
     '-o', 'dist/js/.hc_scaffold_wizard.js',
-    '-e', 'lib/wizard.js']]],
+    '-e', 'src/lib/wizard.js']]],
 
   // transpile it all into es5 compatible
   [exec, ['./node_modules/.bin/babel', [
@@ -60,13 +58,13 @@ const BUILD_LIST = [
 
   // compile our templates
 
-  [handlebars, ['websrc/templates', 'gen/webtemplates.js']],
+  [handlebars, ['src/web/templates', 'src/gen/webtemplates.js']],
 
   // bundle everything up into one js file
   [exec, ['./node_modules/.bin/browserify', [
     '-s', 'hc_scaffold_web',
     '-o', 'dist/js/.hc_scaffold_web.js',
-    '-e', 'websrc/webmain.js']]],
+    '-e', 'src/web/webmain.js']]],
 
   // transpile it all into es5 compatible
   [exec, ['./node_modules/.bin/babel', [
@@ -89,7 +87,7 @@ const BUILD_LIST = [
 
   // run unit tests
   [exec, ['./node_modules/.bin/mocha', [
-    'test/*.js']]]
+    'src/test/*.js']]]
 ]
 
 // entry point

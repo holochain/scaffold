@@ -2,13 +2,13 @@
   "name": "hc-scaffold",
   "version": "0.0.1",
   "description": "Web and NodeJs based wizard for generating scaffolding for (holochain)[http://github.com/metacurrency/holochain] applications.",
-  "main": "lib/wizard.js",
+  "main": "src/lib/wizard.js",
   "bin": {
-    "hc_scaffold": "bin/hc_scaffold.js"
+    "hc_scaffold": "./bin/hc_scaffold.js"
   },
   "scripts": {
-    "test": "node build.js",
-    "start": "node server.js"
+    "test": "node ./bin/build.js",
+    "start": "node ./bin/demo-server.js"
   },
   "repository": {
     "type": "git",

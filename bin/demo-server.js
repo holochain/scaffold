@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict'
 
 const PORT = 18080
@@ -18,7 +20,7 @@ function main () {
     next()
   })
 
-  app.use(express.static(path.join(__dirname, 'dist')))
+  app.use(express.static(path.resolve(__dirname, '../dist')))
 
   app.listen(PORT, () => {
     console.log('server started at http://127.0.0.1:' + PORT)

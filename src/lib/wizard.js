@@ -8,7 +8,7 @@ i18n.loadLocale(require('../gen/strings'))
 const schemas = require('../gen/schemas')
 const scaffoldSchema = schemas['hc-scaffold-schema']
 
-const FieldDef = require('./fields/field-def').FieldDef
+const FieldDef = require('./field-def').FieldDef
 
 class Wizard {
   constructor (current, schema) {

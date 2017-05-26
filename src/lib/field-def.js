@@ -1,6 +1,6 @@
 'use strict'
 
-const i18n = require('../hc_i18n')
+const i18n = require('./hc_i18n')
 const __ = i18n.getText
 
 class FieldDef {

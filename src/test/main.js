@@ -1,7 +1,7 @@
 'use strict'
 
 const SrcWizard = require('../lib/wizard').Wizard
-const MinWizard = require('../dist/js/hc_scaffold_wizard').Wizard
+const MinWizard = require('../../dist/js/hc_scaffold_wizard').Wizard
 
 const testWizard = require('./test-wizard')
 
