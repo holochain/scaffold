@@ -8,6 +8,11 @@ h1 {
   font-size: 150%;
 }
 
+form {
+  width: 60%;
+  margin-left: 40%;
+}
+
 fieldset {
   margin: 1rem;
   padding: 0.5rem;
@@ -53,7 +58,23 @@ input[type="button"]:active {
   padding: 1rem;
 }
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+}
+
+.sidebar > input {
+  width: 100%;
+  margin: 1rem;
+}
+
 .json-display {
+  position: absolute;
+  width: 100%;
+  top: 4rem;
+  bottom: 0;
   font-family: 'Inconsolata', monospace;
   margin: 1rem;
   padding: 1rem;

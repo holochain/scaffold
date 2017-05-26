@@ -1,0 +1,60 @@
+rule handlebars
+  command = node_modules/.bin/handlebars $
+    --output $out $
+    --commonjs handlebars/runtime $
+    --extension html $
+    --knownOnly $
+    --min $
+    $in
+
+rule browserify
+  command = node_modules/.bin/browserify $
+    -s $s $
+    -o $out $
+    -e $in
+
+rule babel
+  command = node_modules/.bin/babel -o $out $in
+
+rule uglify
+  command = node_modules/.bin/uglifyjs $
+    -c -m $
+    -o $out $
+    $in
+
+rule jsonpack
+  command = node build/json_pack.js $out $in
+
+build src/gen/strings.js: jsonpack $
+  src\locales\en.json
+
+build src/gen/schemas.js: jsonpack $
+  src\schemas\hc-scaffold-meta-schema.json $
+  src\schemas\hc-scaffold-schema.json $
+  src\schemas\json-meta-schema.json
+
+build src/gen/webtemplates.js: handlebars $
+  src\web\templates\field-container.html $
+  src\web\templates\field-text.html $
+  src\web\templates\page.html
+
+build .hc_scaffold_wizard.js: browserify src/lib/wizard.js | $
+    src\lib\field-def.js $
+    src\lib\hc_i18n.js $
+    src\lib\wizard.js $
+    src/gen/schemas.js $
+    src/gen/strings.js
+  s = hc_scaffold_wizard
+
+build .hc_scaffold_wizard.es5.js: babel .hc_scaffold_wizard.js
+
+build dist/js/hc_scaffold_wizard.js: uglify .hc_scaffold_wizard.es5.js
+
+build .hc_scaffold_web.js: browserify src/web/webmain.js | $
+    src\web\webmain.js $
+    src/gen/webtemplates.js
+  s = hc_scaffold_web
+
+build .hc_scaffold_web.es5.js: babel .hc_scaffold_web.js
+
+build dist/js/hc_scaffold_web.js: uglify .hc_scaffold_web.es5.js
