@@ -1,3 +1,62 @@
 body {
   font-family: 'Noto Sans', sans-serif;
 }
+
+h1 {
+  margin: 1rem;
+  padding: 1rem;
+  font-size: 150%;
+}
+
+fieldset {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #aaa;
+}
+
+fieldset > label {
+  display: block;
+  margin: 0.5rem;
+}
+
+fieldset > input {
+  display: inline-block;
+  margin: 0.5rem;
+}
+
+fieldset > .validation-result.validation-ok {
+  color: #4c4;
+}
+
+fieldset > .validation-result.validation-fail {
+  color: #c44;
+}
+
+input {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid #aaa;
+  padding: 0.5rem;
+}
+
+input[type="button"]:hover {
+  background-color: #cfc;
+}
+
+input[type="button"]:active {
+  background-color: #ccf;
+}
+
+.form-controls {
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.json-display {
+  font-family: 'Inconsolata', monospace;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px dashed #aaa;
+}

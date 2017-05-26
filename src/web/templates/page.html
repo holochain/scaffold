@@ -1,11 +1,10 @@
 <div class="page">
   <h1>HC Scaffold</h1>
   <form>
-    <div id="form-body"></div>
-    <div id="form-controls">
-      <input type="button" id="prev" value="Back" />
-      <input type="button" id="next" value="Next" />
-      <input type="button" id="gen" value="Generate Scaffold Json" />
+    <div class="form-body"></div>
+    <div class="form-controls">
+      <input type="button" data-hc-bind="click:$downloadJson" value="Download Scaffold Json" />
     </div>
   </form>
+  <pre class="json-display json"></pre>
 </div>

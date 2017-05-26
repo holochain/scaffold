@@ -113,7 +113,7 @@ class WizardRunner {
     let setField = () => {
       if (fieldIdx >= this.fieldDef.children.length) {
         try {
-          // little hacky to get validatio going here
+          // little hacky to get validation going here
           let valueClone = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
           valueClone[idx] = valueRow
           this.fieldDef.setValue(valueClone)

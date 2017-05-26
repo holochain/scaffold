@@ -1,1 +1,1 @@
-<input type="text" id="field-{{jsonPath}}" value="{{value}}" />
+<input type="text" data-hc-bind="change:$validateField keyup:$validateField" data-hc-json-path="{{jsonPath}}" id="field-{{jsonPath}}" value="{{value}}" /><span class="validation-result"></span>
