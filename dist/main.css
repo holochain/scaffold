@@ -38,6 +38,14 @@ fieldset > .validation-result.validation-fail {
   color: #c44;
 }
 
+.hc-table-row {
+  border-bottom: 1px solid #aaa;
+}
+
+.hc-table > .hc-table-row > fieldset {
+  display: inline-block;
+}
+
 input {
   background-color: #fff;
   border-radius: 0.5rem;
@@ -45,11 +53,21 @@ input {
   padding: 0.5rem;
 }
 
-input[type="button"]:hover {
+input[type="button"],
+input[type="checkbox"]
+{
+  cursor: pointer;
+}
+
+input[type="button"]:hover,
+input[type="checkbox"]:hover
+{
   background-color: #cfc;
 }
 
-input[type="button"]:active {
+input[type="button"]:active,
+input[type="checkbox"]:active
+{
   background-color: #ccf;
 }
 

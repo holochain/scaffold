@@ -22,7 +22,6 @@ class WizardRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve
       this._reject = reject
-      this.fieldDef = this.wiz.getNextFieldDef()
       this._run()
     })
   }
@@ -37,7 +36,7 @@ class WizardRunner {
 
     let validationResult = 'ok'
     try {
-      fieldData.fieldDef.setValue(elem.value)
+      fieldData.fieldDef.setValue(fieldData.setter(elem))
     } catch (e) {
       validationResult = e.toString()
     }
@@ -71,17 +70,54 @@ class WizardRunner {
     window.revokeObjectURL(data)
   }
 
+  $addTableRow (elem, evtName, params) {
+    if (!('json-path' in params) || !(params['json-path'] in this.fields)) {
+      throw new Error('invalid addTableRow call ' + JSON.stringify(params))
+    }
+    const fieldData = this.fields[params['json-path']]
+    const fieldDef = fieldData.fieldDef
+    let value = JSON.parse(JSON.stringify(fieldDef.getValue()))
+    let newRow = {}
+    for (let c of fieldDef.children) {
+      newRow[c.path] = c.getDefault()
+    }
+    value.push(newRow)
+    // no validation here
+    fieldDef.value = value
+    this._fillTable(fieldData)
+    this._displayJson()
+  }
+
+  $deleteTableRow (elem, evtName, params) {
+    if (!('json-path' in params) || !(params['json-path'] in this.fields)) {
+      throw new Error('invalid deleteTableRow call ' + JSON.stringify(params))
+    }
+    if (!('row-index' in params)) {
+      throw new Error('invalid deleteTableRow call ' + JSON.stringify(params))
+    }
+    const fieldData = this.fields[params['json-path']]
+    const fieldDef = fieldData.fieldDef
+    const rowIndex = parseInt(params['row-index'])
+    let value = JSON.parse(JSON.stringify(fieldDef.getValue()))
+    value.splice(rowIndex, 1)
+    // no validation here
+    fieldDef.value = value
+    this._fillTable(fieldData)
+    this._displayJson()
+  }
+
   // -- private -- //
 
   _run () {
-    if (!this.fieldDef) {
+    let fieldDef = this.wiz.getNextFieldDef()
+    if (!fieldDef) {
       this._resolve(this.wiz)
       return
     }
 
-    this._genField()
+    let fieldData = this._genField(fieldDef, fieldDef.getJsonPath())
+    this.formBody.appendChild(fieldData.containerElem)
 
-    this.fieldDef = this.wiz.getNextFieldDef()
     this._run()
   }
 
@@ -143,30 +179,97 @@ class WizardRunner {
     return c
   }
 
-  _genField () {
+  _genField (fieldDef, jsonPath) {
     const fieldData = {
-      fieldDef: this.fieldDef
+      fieldDef: fieldDef
     }
 
-    const jsonPath = this.fieldDef.getJsonPath()
-    let inputWidget = handlebars.templates['field-text']({
-      jsonPath: jsonPath,
-      value: this.fieldDef.getValue()
-    })
+    let inputWidget
+    switch (fieldDef.getHcHintType()) {
+      case 'table':
+        inputWidget = handlebars.templates['field-table']({
+          jsonPath: jsonPath
+        })
+        break
+      case 'checkbox':
+        inputWidget = handlebars.templates['field-checkbox']({
+          jsonPath: jsonPath,
+          checked: fieldDef.getValue() ? 'checked="checked"' : ''
+        })
+        fieldData.setter = (elem) => elem.checked ? 'true' : 'false'
+        break
+      default:
+        inputWidget = handlebars.templates['field-text']({
+          jsonPath: jsonPath,
+          value: fieldDef.getValue()
+        })
+        fieldData.setter = (elem) => elem.value
+        break
+    }
 
     fieldData.containerElem = this._genTemplate('field-container', {
       jsonPath: jsonPath,
-      name: this.fieldDef.getTrName(),
-      description: this.fieldDef.getTrDescription(),
+      name: fieldDef.getTrName(),
+      description: fieldDef.getTrDescription(),
       inputWidget: inputWidget
     })
-
-    this.formBody.appendChild(fieldData.containerElem)
 
     fieldData.validationResultElem = fieldData.containerElem.querySelector(
       '.validation-result')
 
+    if (fieldDef.getHcHintType() === 'table') {
+      this._fillTable(fieldData)
+    }
+
     this.fields[jsonPath] = fieldData
+
+    return fieldData
+  }
+
+  _fillTable (fieldData) {
+    const jsonPath = fieldData.fieldDef.getJsonPath()
+
+    const tableElem = fieldData.containerElem.querySelector('.hc-table')
+    while (tableElem.childNodes.length) {
+      tableElem.removeChild(tableElem.childNodes[0])
+    }
+
+    const rawValue = fieldData.fieldDef.getValue()
+    for (let r = 0; r < rawValue.length; ++r) {
+      let rowData = rawValue[r]
+
+      let rowElem = document.createElement('div')
+      rowElem.classList.add('hc-table-row')
+      rowElem.appendChild(this._genTemplate('field-table-delete-row', {
+        jsonPath: jsonPath,
+        rowIndex: r
+      }))
+
+      for (let cFieldDef of fieldData.fieldDef.children) {
+        // direct set avoids validation for now
+        cFieldDef.value = rowData[cFieldDef.path]
+
+        const subJsonPath = cFieldDef.getJsonPath() + '[' + r + ']'
+        const subFieldData = this._genField(cFieldDef, subJsonPath)
+
+        const setter1 = subFieldData.setter
+        subFieldData.setter = (elem) => {
+          const subData = setter1(elem)
+          this._tableValidate(fieldData, subFieldData, r, subData)
+          return subData
+        }
+
+        rowElem.appendChild(subFieldData.containerElem)
+      }
+      tableElem.appendChild(rowElem)
+    }
+  }
+
+  _tableValidate (fieldData, subFieldData, rowIndex, subData) {
+    const fieldDef = fieldData.fieldDef
+    let fullValue = JSON.parse(JSON.stringify(fieldDef.getValue()))
+    fullValue[rowIndex][subFieldData.fieldDef.path] = subData
+    fieldDef.setValue(fullValue)
   }
 }
 
