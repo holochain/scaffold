@@ -22,4 +22,3 @@ exports.exec = function exec (cb, cmd, args) {
     }
   })
 }
-

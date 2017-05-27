@@ -7,7 +7,7 @@
     "hc_scaffold": "./bin/hc_scaffold.js"
   },
   "scripts": {
-    "test": "node ./bin/build.js",
+    "test": "standard && node ./bin/build.js && ninja && mocha src/test/main.js",
     "start": "node ./bin/demo-server.js"
   },
   "repository": {
@@ -39,6 +39,10 @@
     "uglify-js": "^3.0.4"
   },
   "standard": {
+    "ignore": [
+      "dist",
+      "src/gen"
+    ],
     "globals": [
       "describe",
       "it",

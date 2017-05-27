@@ -7,7 +7,7 @@ const path = require('path')
 
 const exec = require('./exec-helper').exec
 
-function dolint(inputs, done) {
+function dolint (inputs, done) {
   inputs = inputs.slice(0)
   const next = () => {
     if (!inputs.length) {
@@ -20,7 +20,7 @@ function dolint(inputs, done) {
   next()
 }
 
-function dopack(output, inputs) {
+function dopack (output, inputs) {
   output = path.normalize(output)
 
   const data = {}
@@ -34,7 +34,7 @@ function dopack(output, inputs) {
 module.exports = exports = ${JSON.stringify(data, null, '  ')}`)
   fs.closeSync(fout)
   let stat = fs.statSync(output)
-  console.log("Generated " + output + " = " + stat.size + " bytes")
+  console.log('Generated ' + output + ' = ' + stat.size + ' bytes')
 }
 
 const inputs = process.argv.slice(2)
@@ -43,4 +43,3 @@ const output = inputs.shift()
 dolint(inputs, () => {
   dopack(output, inputs)
 })
-

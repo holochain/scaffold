@@ -3,6 +3,7 @@ node_modules
 dist/.*.js
 .*.js
 .ninja*
+build.ninja
 
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
