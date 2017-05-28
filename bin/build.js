@@ -2,9 +2,16 @@
 
 'use strict'
 
-// const os = require('os')
+const os = require('os')
+
+let isWindows = false
+// TODO - better heuristic to distinguish msys from windows cmd
+if (os.platform() === 'win32' && (!('SHELL' in process.env))) {
+  isWindows = true
+}
+
 const fs = require('fs')
-const path = require('path')
+const path = isWindows ? require('path').win32 : require('path').posix
 
 const BUILD_LIST = [
   [jsonPack, ['src/gen/strings.js', 'src/locales']],
@@ -23,7 +30,7 @@ const ninjaFile = fs.openSync('build.ninja', 'w')
 main()
 function main () {
   fs.writeSync(ninjaFile, `rule handlebars
-  command = node_modules/.bin/handlebars $
+  command = ${path.normalize('node_modules/.bin/handlebars')} $
     --output $out $
     --commonjs handlebars/runtime $
     --extension html $
@@ -32,22 +39,22 @@ function main () {
     $in
 
 rule browserify
-  command = node_modules/.bin/browserify $
+  command = ${path.normalize('node_modules/.bin/browserify')} $
     -s $s $
     -o $out $
     -e $in
 
 rule babel
-  command = node_modules/.bin/babel -o $out $in
+  command = ${path.normalize('node_modules/.bin/babel')} -o $out $in
 
 rule uglify
-  command = node_modules/.bin/uglifyjs $
+  command = ${path.normalize('node_modules/.bin/uglifyjs')} $
     -c -m $
     -o $out $
     $in
 
 rule jsonpack
-  command = node ${'build/json_pack.js'} $out $in`)
+  command = node ${path.normalize('build/json_pack.js')} $out $in`)
 
   const queue = BUILD_LIST.slice(0)
   const next = function next () {
@@ -89,10 +96,10 @@ function jsonPack (cb, gen, src) {
 
   fs.writeSync(ninjaFile, `
 
-build ${gen}: jsonpack`)
+build ${path.normalize(gen)}: jsonpack`)
   for (let i = 0; i < files.length; ++i) {
     fs.writeSync(ninjaFile, ` $
-  ${files[i]}`)
+  ${path.normalize(files[i])}`)
   }
 
   cb()
@@ -103,10 +110,10 @@ function handlebars (cb, gen, src) {
 
   fs.writeSync(ninjaFile, `
 
-build ${gen}: handlebars`)
+build ${path.normalize(gen)}: handlebars`)
   for (let i = 0; i < files.length; ++i) {
     fs.writeSync(ninjaFile, ` $
-  ${files[i]}`)
+  ${path.normalize(files[i])}`)
   }
 
   cb()
@@ -120,10 +127,10 @@ function browserify (cb, gen, src, s, deps) {
 
   fs.writeSync(ninjaFile, `
 
-build .${shortname}.js: browserify ${src} |`)
+build .${shortname}.js: browserify ${path.normalize(src)} |`)
   for (let i = 0; i < files.length; ++i) {
     fs.writeSync(ninjaFile, ` $
-    ${files[i]}`)
+    ${path.normalize(files[i])}`)
   }
   fs.writeSync(ninjaFile, `
   s = ${s}`)
@@ -132,7 +139,7 @@ build .${shortname}.js: browserify ${src} |`)
 
 build .${shortname}.es5.js: babel .${shortname}.js
 
-build ${gen}: uglify .${shortname}.es5.js`)
+build ${path.normalize(gen)}: uglify .${shortname}.es5.js`)
 
   cb()
 }
