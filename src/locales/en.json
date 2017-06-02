@@ -25,5 +25,15 @@
   "field-holochainDirectory.publishDna-name": "Publish this App's DNA in the Holochain Directory?",
   "field-holochainDirectory.publishDna-description": "blabla",
   "field-holochainDirectory.searchable-name": "Should this App be searchable in the Holochain Directory?",
-  "field-holochainDirectory.searchable-description": "blabla"
+  "field-holochainDirectory.searchable-description": "blabla",
+  "field-zomes-name": "Zomes",
+  "field-zomes-description": "Distinct Functional Modules or Sub-Programs of your application",
+  "field-zomes.name-name": "Zome Name",
+  "field-zomes.name-description":"The name of your Zome",
+  "field-zomes.entryTypes-name": "",
+  "field-zomes.entryTypes-description": "",
+  "field-zomes.entryTypes.label-name": "",
+  "field-zomes.entryTypes.label-description": "",
+  "field-zomes.entryTypes.type-name": "",
+  "field-zomes.entryTypes.type-description": ""
 }

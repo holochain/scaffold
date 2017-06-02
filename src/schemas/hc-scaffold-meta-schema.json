@@ -31,11 +31,12 @@
         },
         "hcHintTypes": {
             "enum": [
-                "hidden",
                 "category",
+                "checkbox",
+                "hidden",
+                "loop",
                 "table",
-                "text",
-                "checkbox"
+                "text"
             ]
         },
         "stringArray": {

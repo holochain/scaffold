@@ -39,11 +39,12 @@ module.exports = exports = {
       },
       "hcHintTypes": {
         "enum": [
-          "hidden",
           "category",
+          "checkbox",
+          "hidden",
+          "loop",
           "table",
-          "text",
-          "checkbox"
+          "text"
         ]
       },
       "stringArray": {
@@ -236,7 +237,8 @@ module.exports = exports = {
       "scaffoldVersion",
       "name",
       "properties",
-      "holochainDirectory"
+      "holochainDirectory",
+      "zomes"
     ],
     "properties": {
       "scaffoldVersion": {
@@ -309,6 +311,56 @@ module.exports = exports = {
             "type": "boolean",
             "hc-hint-type": "checkbox",
             "default": true
+          }
+        }
+      },
+      "zomes": {
+        "type": "array",
+        "hc-hint-type": "loop",
+        "default": [],
+        "items": {
+          "type": "object",
+          "hc-hint-type": "category",
+          "required": [
+            "name",
+            "entryTypes"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "hc-hint-type": "text",
+              "hc-hint-dummy": "dummy",
+              "pattern": "^.+$",
+              "default": ""
+            },
+            "entryTypes": {
+              "type": "array",
+              "hc-hint-type": "table",
+              "default": [],
+              "items": {
+                "type": "object",
+                "hc-hint-type": "category",
+                "required": [
+                  "label",
+                  "type"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "hc-hint-type": "text",
+                    "hc-hint-dummy": "dummy",
+                    "pattern": "^.+$",
+                    "default": ""
+                  },
+                  "type": {
+                    "type": "string",
+                    "hc-hint-type": "text",
+                    "pattern": "(string|int64|float64)",
+                    "default": "string"
+                  }
+                }
+              }
+            }
           }
         }
       }

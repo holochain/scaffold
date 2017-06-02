@@ -22,7 +22,7 @@ class FieldDef {
         let subSchema = schema.properties[subName]
         this.children.push(new FieldDef(subName, subSchema, wizard, this))
       }
-    } else if (schema.type === 'array' && schema['hc-hint-type'] === 'table') {
+    } else if (schema.type === 'array') {
       for (let subName of schema.items.required) {
         let subSchema = schema.items.properties[subName]
         this.children.push(new FieldDef(subName, subSchema, wizard, this))

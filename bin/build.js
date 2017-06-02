@@ -2,6 +2,7 @@
 
 'use strict'
 
+const Ajv = require('ajv')
 const os = require('os')
 
 let isWindows = false
@@ -14,6 +15,12 @@ const fs = require('fs')
 const path = isWindows ? require('path').win32 : require('path').posix
 
 const BUILD_LIST = [
+  [schema, [
+    'src/schemas/hc-scaffold-meta-schema.json',
+    'src/schemas/json-meta-schema.json']],
+  [schema, [
+    'src/schemas/hc-scaffold-schema.json',
+    'src/schemas/hc-scaffold-meta-schema.json']],
   [jsonPack, ['src/gen/strings.js', 'src/locales']],
   [jsonPack, ['src/gen/schemas.js', 'src/schemas']],
   [handlebars, ['src/gen/webtemplates.js', 'src/web/templates']],
@@ -140,6 +147,26 @@ build .${shortname}.js: browserify ${path.normalize(src)} |`)
 build .${shortname}.es5.js: babel .${shortname}.js
 
 build ${path.normalize(gen)}: uglify .${shortname}.es5.js`)
+
+  cb()
+}
+
+/**
+ * Validate a json file using a json schema file
+ * Doesn't add a ninja rule... just does it right away
+ */
+function schema (cb, check, schema) {
+  console.log('check "' +
+    path.parse(check).name + '" against "' +
+    path.parse(schema).name + '"')
+
+  let ajv = new Ajv()
+  let validator = ajv.compile(JSON.parse(fs.readFileSync(schema)))
+
+  let data = JSON.parse(fs.readFileSync(check))
+  if (!validator(data)) {
+    throw new Error(ajv.errorsText(validator.errors))
+  }
 
   cb()
 }

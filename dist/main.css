@@ -10,7 +10,6 @@ h1 {
 
 form {
   width: 60%;
-  margin-left: 40%;
 }
 
 fieldset {
@@ -80,6 +79,7 @@ input[type="checkbox"]:active
   position: fixed;
   top: 0;
   bottom: 0;
+  right: 3rem;
   width: 35%;
 }
 

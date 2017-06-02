@@ -23,6 +23,17 @@ class WizardRunner {
     return new Promise((resolve, reject) => {
       this._resolve = resolve
       this._reject = reject
+
+      let op = this.wiz.getNextOp()
+      while (op) {
+        if (op[0] === 'field') {
+          console.log(JSON.stringify(['field', op[1].getJsonPath()]))
+        } else {
+          console.log(JSON.stringify(op))
+        }
+        op = this.wiz.getNextOp()
+      }
+
       this.fieldDef = this.wiz.getNextFieldDef()
       this._run()
     })

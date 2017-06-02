@@ -24,6 +24,9 @@ class Wizard {
 
     this.curFieldDef = null
 
+    console.log(this.rootFieldDef.toString())
+    // process.exit(0)
+
     /*
     console.log(this.rootFieldDef.toString())
     console.log(JSON.stringify(this.rootFieldDef.getDefaultJson(), null, '  '))
@@ -33,6 +36,34 @@ class Wizard {
 
     this.ajv = new Ajv()
     this.validator = this.ajv.compile(schema)
+  }
+
+  getNextOp () {
+    if (!this.curPage) {
+      this.curPage = this.rootFieldDef.children[0]
+      return ['page']
+    }
+    if (!this.curOpDef) {
+      this.curOpDef = this.curPage
+      return ['field', this.curOpDef]
+    }
+    if (this.curOpDef.children.length) {
+      this.curOpDef = this.curOpDef.children[0]
+      return ['field', this.curOpDef]
+    }
+    if (this.curOpDef.parent) {
+      let obj = this.curOpDef
+      let p = obj.parent
+      while (p) {
+        let idx = p.children.indexOf(obj)
+        if (idx + 1 < p.children.length) {
+          this.curOpDef = p.children[idx + 1]
+          return ['field', this.curOpDef]
+        }
+        obj = p
+        p = obj.parent
+      }
+    }
   }
 
   getNextFieldDef () {
