@@ -167,7 +167,11 @@ class Wizard {
               },
               'next': {
                 cb: () => {
-                  this._pageIndex += 1
+                  if (r === value.length - 1) {
+                    this._pageIndex = loopControlIndex
+                  } else {
+                    this._pageIndex += 1
+                  }
                 }
               },
               'delete': {
@@ -182,9 +186,8 @@ class Wizard {
           }
           this._pages.push(subCurPage)
           this._calculatePagesRec(childFieldDef, subCurPage)
-          for (let r = 0; r < subCurPage.fields.length; ++r) {
-            let subPageField = subCurPage.fields[r]
-            console.log('augment set', subPageField.def.getJsonPath())
+          for (let r2 = 0; r2 < subCurPage.fields.length; ++r2) {
+            let subPageField = subCurPage.fields[r2]
             let origSet = subPageField.ops.set.cb
             subPageField.ops.set.cb = (val) => {
               origSet(val)
@@ -261,7 +264,7 @@ class Wizard {
    */
   _dummySet (obj, dummyPath, val) {
     let cur = obj
-    for (let i = 0; i < dummyPath.length -1; ++i) {
+    for (let i = 0; i < dummyPath.length - 1; ++i) {
       cur = cur[dummyPath[i]]
     }
     cur[dummyPath[dummyPath.length - 1]] = val

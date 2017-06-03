@@ -32,8 +32,8 @@
   "field-zomes.name-description":"The name of your Zome",
   "field-zomes.entryTypes-name": "",
   "field-zomes.entryTypes-description": "",
-  "field-zomes.entryTypes.label-name": "",
+  "field-zomes.entryTypes.label-name": "Label",
   "field-zomes.entryTypes.label-description": "",
-  "field-zomes.entryTypes.type-name": "",
+  "field-zomes.entryTypes.type-name": "Type",
   "field-zomes.entryTypes.type-description": ""
 }

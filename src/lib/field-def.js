@@ -97,7 +97,6 @@ class FieldDef {
     let fullPath = [this.path]
     let obj = this.parent
     while (obj) {
-      console.log(obj.schema.type)
       if (obj.schema.type === 'array') {
         fullPath.unshift(0)
       }

@@ -35,14 +35,13 @@ class WizardRunner {
   _updateState () {
     let state = this.wiz.getCurrentState()
     if (this._pageIndex !== state.pageIndex) {
+      console.log('RUN PAGE', state.pageIndex)
       this._pageIndex = state.pageIndex
       this._fieldIndex = 0
     }
     this._pages = state.pages
 
     if (this._pageIndex >= this._pages.length) {
-
-      // we're all done!
       return null
     }
 
@@ -88,10 +87,10 @@ class WizardRunner {
     console.log('# ' + page.ref.getTrDescription())
     console.log()
     console.log('# Current ' + page.ref.getTrName())
-    /*let value = page.ref.getValue()
+    /* let value = page.ref.getValue()
     for (let sub of page.ref.children) {
       console.log('# - ' + sub.children[
-    }*/
+    } */
     console.log()
     console.log('(' +
       'a - Add an Entry | ' +
@@ -182,7 +181,17 @@ class WizardRunner {
       rowVal[__('ui-row-index')] = r
       for (let c = 0; c < field.def.children.length; ++c) {
         let col = field.def.children[c]
-        rowVal[col.getTrName()] = row[col.path]
+        rowVal[c + ' ' + col.getTrName()] = row[col.path]
+      }
+      data.push(rowVal)
+    }
+    if (!data.length) {
+      // empty table
+      let rowVal = {}
+      rowVal[__('ui-row-index')] = '-'
+      for (let c = 0; c < field.def.children.length; ++c) {
+        let col = field.def.children[c]
+        rowVal[c + ' ' + col.getTrName()] = '-'
       }
       data.push(rowVal)
     }
