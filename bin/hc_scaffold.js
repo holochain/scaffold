@@ -24,17 +24,8 @@ class WizardRunner {
       this._resolve = resolve
       this._reject = reject
 
-      let op = this.wiz.getNextOp()
-      while (op) {
-        if (op[0] === 'field') {
-          console.log(JSON.stringify(['field', op[1].getJsonPath()]))
-        } else {
-          console.log(JSON.stringify(op))
-        }
-        op = this.wiz.getNextOp()
-      }
+      this._pageIndex = -1
 
-      this.fieldDef = this.wiz.getNextFieldDef()
       this._run()
     })
   }
@@ -42,36 +33,50 @@ class WizardRunner {
   // -- private -- //
 
   _run () {
-    if (!this.fieldDef) {
-      this._resolve(this.wiz)
-      return
+    let state = this.wiz.getCurrentState()
+    if (this._pageIndex !== state.pageIndex) {
+      this._pageIndex = state.pageIndex
+      this._fieldIndex = 0
     }
+    this._pages = state.pages
 
-    this._prompt()
+    let field = this._pages[this._pageIndex].fields[this._fieldIndex]
+
+    this._prompt(field)
   }
 
-  _printFieldInfo () {
+  _advance () {
+    this._fieldIndex += 1
+    if (this._fieldIndex >= this._pages[this._pageIndex].fields.length) {
+      console.error('next page ops')
+      process.exit(1)
+    } else {
+      this._run()
+    }
+  }
+
+  _printFieldInfo (field) {
     console.log()
-    console.log('# ' + this.fieldDef.getTrName() +
-      ' (' + this.fieldDef.getJsonPath() + ')')
-    console.log('# ' + this.fieldDef.getTrDescription())
+    console.log('# ' + field.def.getTrName() +
+      ' (' + field.def.getJsonPath() + ')')
+    console.log('# ' + field.def.getTrDescription())
   }
 
-  _prompt () {
-    this._printFieldInfo()
+  _prompt (field) {
+    this._printFieldInfo(field)
 
-    switch (this.fieldDef.getHcHintType()) {
+    switch (field.def.getHcHintType()) {
       case 'table':
-        this._tablePrompt()
+        this._tablePrompt(field)
         break
       default:
-        this._defaultPrompt()
+        this._defaultPrompt(field)
         break
     }
   }
 
-  _defaultPrompt () {
-    console.log('# (' + JSON.stringify(this.fieldDef.getValue()) + ')')
+  _defaultPrompt (field) {
+    console.log('# (' + JSON.stringify(field.def.getValue()) + ')')
     prompt.get({
       properties: {
         data: {
@@ -85,12 +90,11 @@ class WizardRunner {
       }
       try {
         if (!result.data.length) {
-          this.fieldDef.setValue(this.fieldDef.getValue())
+          field.ops.set.cb(field.def.getValue())
         } else {
-          this.fieldDef.setValue(result.data)
+          field.ops.set.cb(result.data)
         }
-        this.fieldDef = this.wiz.getNextFieldDef()
-        this._run()
+        this._advance()
       } catch (e) {
         console.error(e.toString())
         this._run()
@@ -98,15 +102,15 @@ class WizardRunner {
     })
   }
 
-  _printTableInfo () {
-    let rawValue = this.fieldDef.getValue()
+  _printTableInfo (field) {
+    let rawValue = field.def.getValue()
     let data = []
     for (let r = 0; r < rawValue.length; ++r) {
       let row = rawValue[r]
       let rowVal = {}
       rowVal[__('ui-row-index')] = r
-      for (let c = 0; c < this.fieldDef.children.length; ++c) {
-        let col = this.fieldDef.children[c]
+      for (let c = 0; c < field.def.children.length; ++c) {
+        let col = field.def.children[c]
         rowVal[col.getTrName()] = row[col.path]
       }
       data.push(rowVal)
@@ -116,30 +120,20 @@ class WizardRunner {
     console.log(table.print(data))
   }
 
-  _editTableIndex (idx) {
-    let fieldIdx = 0
-
-    let valueRow = JSON.parse(JSON.stringify(this.fieldDef.getValue()[idx]))
+  _editTableIndex (field, idx) {
+    let subFieldIdx = 0
 
     let setField = () => {
-      if (fieldIdx >= this.fieldDef.children.length) {
-        try {
-          // little hacky to get validation going here
-          let valueClone = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
-          valueClone[idx] = valueRow
-          this.fieldDef.setValue(valueClone)
-        } catch (e) {
-          console.error(e.toString())
-        }
+      if (subFieldIdx >= field.subFields[idx].length) {
         return this._run()
       }
-      let field = this.fieldDef.children[fieldIdx]
+      let subField = field.subFields[idx][subFieldIdx]
 
       console.log()
-      console.log('# ' + field.getTrName() +
-        ' (' + field.getJsonPath() + ')')
-      console.log('# ' + field.getTrDescription())
-      console.log('# (' + JSON.stringify(field.getValue()) + ')')
+      console.log('# ' + subField.def.getTrName() +
+        ' (' + subField.def.getJsonPath() + ')')
+      console.log('# ' + subField.def.getTrDescription())
+      console.log('# (' + JSON.stringify(subField.def.getValue()) + ')')
       prompt.get({
         properties: {
           data: {
@@ -153,14 +147,14 @@ class WizardRunner {
         }
         try {
           if (!result.data.length) {
-            valueRow[field.path] = field.getValue()
+            subField.ops.set.cb(subField.def.getValue())
           } else {
-            valueRow[field.path] = result.data
+            subField.ops.set.cb(result.data)
           }
-          fieldIdx++
+          subFieldIdx++
           setField()
         } catch (e) {
-          console.error(e.toString())
+          console.error(e.stack)
           setField()
         }
       })
@@ -210,18 +204,18 @@ class WizardRunner {
     })
   }
 
-  _tablePrompt () {
-    this._printTableInfo()
+  _tablePrompt (field) {
+    this._printTableInfo(field)
 
     console.log('(' +
-      '## - ' + __('ui-action-row-number') + ' | ' +
+      '[#] - ' + __('ui-action-row-number') + ' | ' +
       'a - ' + __('ui-action-row-add') + ' | ' +
       'f - ' + __('ui-action-finish') + ')')
 
     prompt.get({
       properties: {
         data: {
-          message: '(##|a|f) >>>'
+          message: '([#]|a|f) >>>'
         }
       }
     }, (err, result) => {
@@ -234,7 +228,7 @@ class WizardRunner {
           throw new Error('invalid input')
         } else {
           let cmd = result.data.toLowerCase().split(' ')
-          let value = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
+          let value = JSON.parse(JSON.stringify(field.def.getValue()))
           if (parseInt(cmd[0]).toString() === cmd[0]) {
             let idx = parseInt(cmd[0])
             if (idx < 0 || idx >= value.length) {
@@ -242,23 +236,17 @@ class WizardRunner {
             }
             return this._selectTableIndex(idx)
           } else if (cmd[0][0] === 'a') {
-            let newRow = {}
-            for (let c of this.fieldDef.children) {
-              newRow[c.path] = c.getDefault()
-            }
-            value.push(newRow)
-            // skip validation for now
-            this.fieldDef.value = value
-            return this._editTableIndex(value.length - 1)
+            field.ops.add.cb()
+            return this._editTableIndex(field, value.length - 1)
           } else if (cmd[0][0] === 'f') {
-            this.fieldDef = this.wiz.getNextFieldDef()
+            return this._advance()
           } else {
             throw new Error('invalid input')
           }
         }
         this._run()
       } catch (e) {
-        console.error(e.toString())
+        console.error(e.stack)
         this._run()
       }
     })

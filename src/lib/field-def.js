@@ -73,24 +73,6 @@ class FieldDef {
     return this.value
   }
 
-  setValue (val) {
-    switch (this.getJsonType()) {
-      case 'boolean':
-        if (typeof val === 'string') {
-          val = val.toLowerCase()
-          if (val === 'true' || val === 'yes') {
-            val = true
-          } else if (val === 'false' || val === 'no') {
-            val = false
-          }
-        }
-        break
-    }
-
-    this.wizard.$validateFieldValue(this, val)
-    this.value = val
-  }
-
   getJsonPath () {
     let fullPath = this.path
     let obj = this.parent

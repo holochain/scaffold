@@ -22,9 +22,14 @@ class Wizard {
 
     this.rootFieldDef.loadData(current)
 
+    this._pages = []
+    this._pageIndex = 0
+
+    this._calculatePages()
+
     this.curFieldDef = null
 
-    console.log(this.rootFieldDef.toString())
+    //console.log(this.rootFieldDef.toString())
     // process.exit(0)
 
     /*
@@ -38,49 +43,17 @@ class Wizard {
     this.validator = this.ajv.compile(schema)
   }
 
-  getNextOp () {
-    if (!this.curPage) {
-      this.curPage = this.rootFieldDef.children[0]
-      return ['page']
+  getCurrentState () {
+    if (this._pageIndex < 0) {
+      this._pageIndex = 0
     }
-    if (!this.curOpDef) {
-      this.curOpDef = this.curPage
-      return ['field', this.curOpDef]
+    if (this._pageIndex > this._pages.length) {
+      // allow it to go 1 beyond... this signifies completion
+      this._pageIndex = this._pages.length
     }
-    if (this.curOpDef.children.length) {
-      this.curOpDef = this.curOpDef.children[0]
-      return ['field', this.curOpDef]
-    }
-    if (this.curOpDef.parent) {
-      let obj = this.curOpDef
-      let p = obj.parent
-      while (p) {
-        let idx = p.children.indexOf(obj)
-        if (idx + 1 < p.children.length) {
-          this.curOpDef = p.children[idx + 1]
-          return ['field', this.curOpDef]
-        }
-        obj = p
-        p = obj.parent
-      }
-    }
-  }
-
-  getNextFieldDef () {
-    if (this.curFieldDef && this.curFieldDef.getHcHintType() === 'table') {
-      // skip all children in tables
-      this.curFieldDef = this.curFieldDef.children[this.curFieldDef.children.length - 1]
-    }
-    let nxt = this._getNextFieldDef()
-    if (!nxt) {
-      return nxt
-    }
-    switch (nxt.getHcHintType()) {
-      case 'category':
-      case 'hidden':
-        return this.getNextFieldDef()
-      default:
-        return nxt
+    return {
+      pageIndex: this._pageIndex,
+      pages: this._pages
     }
   }
 
@@ -89,6 +62,21 @@ class Wizard {
   }
 
   // -- for use by friend classes (fields) -- //
+
+  /**
+   */
+  $valueTypeConvert (fieldDef, value) {
+    let type = fieldDef.getJsonType()
+    if (type === 'boolean' && typeof value === 'string') {
+      let tmp = value.toLowerCase()
+      if (tmp === 'true' || tmp === 'yes') {
+        value = true
+      } else if (tmp === 'false' || tmp === 'no') {
+        value = false
+      }
+    }
+    return value
+  }
 
   /**
    * Plug one value into the dummy file, and run validation
@@ -102,28 +90,158 @@ class Wizard {
     }
   }
 
+  /**
+   */
+  $validateTableValue (fieldDef, subFieldDef, newVal) {
+    let row = {}
+    for (let c of fieldDef.children) {
+      row[c.path] = c.getDummyJson()
+    }
+    row[subFieldDef.path] = newVal
+    this.$validateTableValue(fieldDef, row)
+  }
+
   // -- private -- //
 
-  _getNextFieldDef () {
-    if (!this.curFieldDef) {
-      this.curFieldDef = this.rootFieldDef.children[0]
-      return this.curFieldDef
+  /**
+   */
+  _calculatePages () {
+    this._pages = []
+    this._calculatePagesRec(this.rootFieldDef)
+  }
+
+  /**
+   */
+  _calculatePagesRec (fieldDef, curPage) {
+    if (!curPage) {
+      curPage = {
+        type: 'basic',
+        ops: {
+          'prev': {
+            cb: () => {
+              this._pageIndex -= 1
+            }
+          },
+          'next': {
+            cb: () => {
+              this._pageIndex += 1
+            }
+          }
+        },
+        fields: []
+      }
+      this._pages.push(curPage)
     }
-    if (this.curFieldDef.children.length) {
-      this.curFieldDef = this.curFieldDef.children[0]
-      return this.curFieldDef
-    }
-    if (this.curFieldDef.parent) {
-      let obj = this.curFieldDef
-      let p = obj.parent
-      while (p) {
-        let idx = p.children.indexOf(obj)
-        if (idx + 1 < p.children.length) {
-          this.curFieldDef = p.children[idx + 1]
-          return this.curFieldDef
+
+    for (let childFieldDef of fieldDef.children) {
+      let hint = childFieldDef.getHcHintType()
+      if (hint === 'loop') {
+        let loopControlIndex = this._pages.length
+        this._pages.push({
+          type: 'loopControl',
+          ref: childFieldDef,
+          ops: {
+            'prev': {
+              cb: () => {
+                this._pageIndex -= 1
+              }
+            },
+            'next': {
+              cb: () => {
+                this._pageIndex += childFieldDef.value.length + 1
+              }
+            },
+            'add': {
+              cb: () => {
+                let newRow = {}
+                for (let c of childFieldDef.children) {
+                  newRow[c.path] = c.getDefaultJson()
+                }
+                childFieldDef.value.push(newRow)
+                this._pageIndex += childFieldDef.value.length
+                this._calculatePages()
+              }
+            }
+          },
+          fields: []
+        })
+        let value = childFieldDef.value
+        for (let r = 0; r < value.length; ++r) {
+          let subCurPage = {
+            type: 'loopRow',
+            ref: childFieldDef,
+            rowIndex: r,
+            ops: {
+              'delete': {
+                cb: () => {
+                  childFieldDef.value.splice(r, 1)
+                  this._pageIndex = loopControlIndex
+                  this._calculatePages()
+                }
+              }
+            },
+            fields: []
+          }
+          this._pages.push(subCurPage)
+          this._calculatePagesRec(childFieldDef, subCurPage)
         }
-        obj = p
-        p = obj.parent
+      } else if (hint === 'category') {
+        this._calculatePagesRec(childFieldDef, curPage)
+      } else if (hint === 'hidden') {
+        // skip
+      } else {
+        let field = {
+          def: childFieldDef,
+          ops: {
+            'set': {
+              cb: (val) => {
+                val = this.$valueTypeConvert(childFieldDef, val)
+                this.$validateFieldValue(childFieldDef, val)
+                childFieldDef.value = val
+              }
+            }
+          }
+        }
+        curPage.fields.push(field)
+        if (hint === 'table') {
+          field.ops['add'] = {
+            cb: () => {
+              let newRow = {}
+              for (let c of childFieldDef.children) {
+                newRow[c.path] = c.getDefaultJson()
+              }
+              childFieldDef.value.push(newRow)
+              this._calculatePages()
+            }
+          }
+          field.subFields = []
+          let value = childFieldDef.value
+          for (let r = 0; r < value.length; ++r) {
+            let newRow = []
+            for (let c of childFieldDef.children) {
+              newRow.push({
+                def: c,
+                rowIndex: r,
+                ops: {
+                  'set': {
+                    cb: (val) => {
+                      val = this.$valueTypeConvert(c, val)
+                      this.$validateTableValue(childFieldDef, c, val)
+                      childFieldDef.value[r][c.path] = val
+                    }
+                  },
+                  'delete': {
+                    cb: () => {
+                      childFieldDef.value.splice(r, 1)
+                      this._calculatePages()
+                    }
+                  }
+                }
+              })
+            }
+            field.subFields.push(newRow)
+          }
+        }
       }
     }
   }
