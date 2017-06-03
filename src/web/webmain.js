@@ -13,7 +13,6 @@ class WizardRunner {
     this.jsonDisplay = document.body.querySelector('.json-display')
 
     this.wiz = new Wizard(editData)
-    this._displayJson()
 
     this.fields = {}
   }
@@ -36,7 +35,7 @@ class WizardRunner {
 
     let validationResult = 'ok'
     try {
-      fieldData.fieldDef.setValue(fieldData.setter(elem))
+      fieldData.field.ops.set.cb(fieldData.setter(elem))
     } catch (e) {
       validationResult = e.toString()
     }
@@ -75,17 +74,8 @@ class WizardRunner {
       throw new Error('invalid addTableRow call ' + JSON.stringify(params))
     }
     const fieldData = this.fields[params['json-path']]
-    const fieldDef = fieldData.fieldDef
-    let value = JSON.parse(JSON.stringify(fieldDef.getValue()))
-    let newRow = {}
-    for (let c of fieldDef.children) {
-      newRow[c.path] = c.getDefault()
-    }
-    value.push(newRow)
-    // no validation here
-    fieldDef.value = value
-    this._fillTable(fieldData)
-    this._displayJson()
+    fieldData.field.ops.add.cb()
+    this._run()
   }
 
   $deleteTableRow (elem, evtName, params) {
@@ -96,29 +86,73 @@ class WizardRunner {
       throw new Error('invalid deleteTableRow call ' + JSON.stringify(params))
     }
     const fieldData = this.fields[params['json-path']]
-    const fieldDef = fieldData.fieldDef
-    const rowIndex = parseInt(params['row-index'])
-    let value = JSON.parse(JSON.stringify(fieldDef.getValue()))
-    value.splice(rowIndex, 1)
-    // no validation here
-    fieldDef.value = value
-    this._fillTable(fieldData)
-    this._displayJson()
+    fieldData.field.ops.delete.cb(parseInt(params['row-index']))
+    this._run()
+  }
+
+  $pressButton (elem, evtName, params) {
+    if (!('button-type' in params)) {
+      throw new Error('invalid pressButton call ' + JSON.stringify(params))
+    }
+    let buttonType = params['button-type']
+    switch (buttonType) {
+      case 'add':
+        this._currentPage.ops.add.cb()
+        this._run()
+        break
+      case 'next':
+        this._currentPage.ops.next.cb()
+        this._run()
+        break
+      default:
+        throw new Error('invalid pressButton type ' + buttonType)
+    }
   }
 
   // -- private -- //
 
   _run () {
-    let fieldDef = this.wiz.getNextFieldDef()
-    if (!fieldDef) {
+    let state = this.wiz.getCurrentState()
+
+    while (this.formBody.childNodes.length) {
+      this.formBody.removeChild(this.formBody.childNodes[0])
+    }
+
+    if (state.pageIndex >= state.pages.length) {
+      this.formBody.appendChild(document.createTextNode('ALL DONE!'))
       this._resolve(this.wiz)
       return
     }
 
-    let fieldData = this._genField(fieldDef, fieldDef.getJsonPath())
-    this.formBody.appendChild(fieldData.containerElem)
+    this._currentPage = state.pages[state.pageIndex]
 
-    this._run()
+    let pageType = this._currentPage.type
+
+    if (pageType === 'loopControl') {
+      let addButton = this._genTemplate('page-button', {
+        buttonType: 'add',
+        value: 'Add ' + this._currentPage.ref.getTrName() + ' Element'
+      })
+      this.formBody.appendChild(addButton)
+      let nextButton = this._genTemplate('page-button', {
+        buttonType: 'next',
+        value: 'Done'
+      })
+      this.formBody.appendChild(nextButton)
+    } else {
+      for (let field of state.pages[state.pageIndex].fields) {
+        let fieldData = this._genField(field, field.def.getJsonPath())
+        this.formBody.appendChild(fieldData.containerElem)
+      }
+
+      let nextButton = this._genTemplate('page-button', {
+        buttonType: 'next',
+        value: 'Next Page'
+      })
+      this.formBody.appendChild(nextButton)
+
+      this._displayJson()
+    }
   }
 
   _displayJson () {
@@ -179,13 +213,13 @@ class WizardRunner {
     return c
   }
 
-  _genField (fieldDef, jsonPath) {
+  _genField (field, jsonPath) {
     const fieldData = {
-      fieldDef: fieldDef
+      field: field
     }
 
     let inputWidget
-    switch (fieldDef.getHcHintType()) {
+    switch (field.def.getHcHintType()) {
       case 'table':
         inputWidget = handlebars.templates['field-table']({
           jsonPath: jsonPath
@@ -194,14 +228,14 @@ class WizardRunner {
       case 'checkbox':
         inputWidget = handlebars.templates['field-checkbox']({
           jsonPath: jsonPath,
-          checked: fieldDef.getValue() ? 'checked="checked"' : ''
+          checked: field.def.getValue() ? 'checked="checked"' : ''
         })
         fieldData.setter = (elem) => elem.checked ? 'true' : 'false'
         break
       default:
         inputWidget = handlebars.templates['field-text']({
           jsonPath: jsonPath,
-          value: fieldDef.getValue()
+          value: field.def.getValue()
         })
         fieldData.setter = (elem) => elem.value
         break
@@ -209,15 +243,15 @@ class WizardRunner {
 
     fieldData.containerElem = this._genTemplate('field-container', {
       jsonPath: jsonPath,
-      name: fieldDef.getTrName(),
-      description: fieldDef.getTrDescription(),
+      name: field.def.getTrName(),
+      description: field.def.getTrDescription(),
       inputWidget: inputWidget
     })
 
     fieldData.validationResultElem = fieldData.containerElem.querySelector(
       '.validation-result')
 
-    if (fieldDef.getHcHintType() === 'table') {
+    if (field.def.getHcHintType() === 'table') {
       this._fillTable(fieldData)
     }
 
@@ -227,14 +261,14 @@ class WizardRunner {
   }
 
   _fillTable (fieldData) {
-    const jsonPath = fieldData.fieldDef.getJsonPath()
+    const jsonPath = fieldData.field.def.getJsonPath()
 
     const tableElem = fieldData.containerElem.querySelector('.hc-table')
     while (tableElem.childNodes.length) {
       tableElem.removeChild(tableElem.childNodes[0])
     }
 
-    const rawValue = fieldData.fieldDef.getValue()
+    const rawValue = fieldData.field.def.getValue()
     for (let r = 0; r < rawValue.length; ++r) {
       let rowData = rawValue[r]
 
@@ -245,31 +279,18 @@ class WizardRunner {
         rowIndex: r
       }))
 
-      for (let cFieldDef of fieldData.fieldDef.children) {
+      for (let subField of fieldData.field.subFields[r]) {
+      // for (let cFieldDef of fieldData.field.def.children) {
         // direct set avoids validation for now
-        cFieldDef.value = rowData[cFieldDef.path]
+        subField.def.value = rowData[subField.def.path]
 
-        const subJsonPath = cFieldDef.getJsonPath() + '[' + r + ']'
-        const subFieldData = this._genField(cFieldDef, subJsonPath)
-
-        const setter1 = subFieldData.setter
-        subFieldData.setter = (elem) => {
-          const subData = setter1(elem)
-          this._tableValidate(fieldData, subFieldData, r, subData)
-          return subData
-        }
+        const subJsonPath = subField.def.getJsonPath() + '[' + r + ']'
+        const subFieldData = this._genField(subField, subJsonPath)
 
         rowElem.appendChild(subFieldData.containerElem)
       }
       tableElem.appendChild(rowElem)
     }
-  }
-
-  _tableValidate (fieldData, subFieldData, rowIndex, subData) {
-    const fieldDef = fieldData.fieldDef
-    let fullValue = JSON.parse(JSON.stringify(fieldDef.getValue()))
-    fullValue[rowIndex][subFieldData.fieldDef.path] = subData
-    fieldDef.setValue(fullValue)
   }
 }
 

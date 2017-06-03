@@ -70,6 +70,10 @@ input[type="checkbox"]:active
   background-color: #ccf;
 }
 
+.form-body > input[type="button"] {
+  margin: 1rem;
+}
+
 .form-controls {
   margin: 1rem;
   padding: 1rem;

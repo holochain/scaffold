@@ -31,21 +31,18 @@ exports.specify = (name, WizardLib) => {
     })
 
     it('field count', () => {
-      let count = 0
-      while (wiz.getNextFieldDef()) {
-        count++
-      }
-      expect(count).equals(1)
+      let state = wiz.getCurrentState()
+      expect(state.pages[0].fields.length).equals(1)
     })
 
     it('can set name as string', () => {
-      let f = wiz.getNextFieldDef()
-      f.setValue('test')
+      let f = wiz.getCurrentState().pages[0].fields[0]
+      f.ops.set.cb('test')
     })
 
     it('empty name throws', () => {
-      let f = wiz.getNextFieldDef()
-      expect(() => { f.setValue('') }).throw()
+      let f = wiz.getCurrentState().pages[0].fields[0]
+      expect(() => { f.ops.set.cb('') }).throw()
     })
   })
 }
