@@ -19,7 +19,6 @@ class Wizard {
     }
 
     this.rootFieldDef = new FieldDef('root', schema, this, null)
-
     this.rootFieldDef.loadData(current)
 
     this._pages = []
@@ -29,7 +28,7 @@ class Wizard {
 
     this.curFieldDef = null
 
-    //console.log(this.rootFieldDef.toString())
+    // console.log(this.rootFieldDef.toString())
     // process.exit(0)
 
     /*
@@ -83,22 +82,11 @@ class Wizard {
    */
   $validateFieldValue (fieldDef, newVal) {
     let dummy = this.rootFieldDef.getDummyJson()
-    this._deepSet(dummy, fieldDef.getJsonPath(), newVal)
+    this._dummySet(dummy, fieldDef.getDummyJsonPath(), newVal)
 
     if (!this.validator(dummy)) {
       throw new Error(this.ajv.errorsText(this.validator.errors))
     }
-  }
-
-  /**
-   */
-  $validateTableValue (fieldDef, subFieldDef, newVal) {
-    let row = {}
-    for (let c of fieldDef.children) {
-      row[c.path] = c.getDummyJson()
-    }
-    row[subFieldDef.path] = newVal
-    this.$validateTableValue(fieldDef, row)
   }
 
   // -- private -- //
@@ -172,6 +160,16 @@ class Wizard {
             ref: childFieldDef,
             rowIndex: r,
             ops: {
+              'prev': {
+                cb: () => {
+                  this._pageIndex -= 1
+                }
+              },
+              'next': {
+                cb: () => {
+                  this._pageIndex += 1
+                }
+              },
               'delete': {
                 cb: () => {
                   childFieldDef.value.splice(r, 1)
@@ -184,6 +182,16 @@ class Wizard {
           }
           this._pages.push(subCurPage)
           this._calculatePagesRec(childFieldDef, subCurPage)
+          for (let r = 0; r < subCurPage.fields.length; ++r) {
+            let subPageField = subCurPage.fields[r]
+            console.log('augment set', subPageField.def.getJsonPath())
+            let origSet = subPageField.ops.set.cb
+            subPageField.ops.set.cb = (val) => {
+              origSet(val)
+              childFieldDef.value[r][subPageField.def.path] =
+                subPageField.def.value
+            }
+          }
         }
       } else if (hint === 'category') {
         this._calculatePagesRec(childFieldDef, curPage)
@@ -214,6 +222,15 @@ class Wizard {
               this._calculatePages()
             }
           }
+          field.ops['delete'] = {
+            cb: (idx) => {
+              if (typeof idx !== 'number') {
+                throw new Error('idx required to delete table row')
+              }
+              childFieldDef.value.splice(idx, 1)
+              this._calculatePages()
+            }
+          }
           field.subFields = []
           let value = childFieldDef.value
           for (let r = 0; r < value.length; ++r) {
@@ -226,14 +243,8 @@ class Wizard {
                   'set': {
                     cb: (val) => {
                       val = this.$valueTypeConvert(c, val)
-                      this.$validateTableValue(childFieldDef, c, val)
+                      this.$validateFieldValue(c, val)
                       childFieldDef.value[r][c.path] = val
-                    }
-                  },
-                  'delete': {
-                    cb: () => {
-                      childFieldDef.value.splice(r, 1)
-                      this._calculatePages()
                     }
                   }
                 }
@@ -244,6 +255,16 @@ class Wizard {
         }
       }
     }
+  }
+
+  /**
+   */
+  _dummySet (obj, dummyPath, val) {
+    let cur = obj
+    for (let i = 0; i < dummyPath.length -1; ++i) {
+      cur = cur[dummyPath[i]]
+    }
+    cur[dummyPath[dummyPath.length - 1]] = val
   }
 
   /**

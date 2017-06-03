@@ -66,7 +66,15 @@ class FieldDef {
   }
 
   getDummy () {
-    return this.schema['hc-hint-dummy'] || this.getDefault()
+    if (this.schema.type === 'array') {
+      let row = {}
+      for (let child of this.children) {
+        row[child.path] = child.getDummy()
+      }
+      return [row]
+    } else {
+      return this.schema['hc-hint-dummy'] || this.getDefault()
+    }
   }
 
   getValue () {
@@ -79,6 +87,22 @@ class FieldDef {
     while (obj) {
       if (obj.parent) {
         fullPath = obj.path + '.' + fullPath
+      }
+      obj = obj.parent
+    }
+    return fullPath
+  }
+
+  getDummyJsonPath () {
+    let fullPath = [this.path]
+    let obj = this.parent
+    while (obj) {
+      console.log(obj.schema.type)
+      if (obj.schema.type === 'array') {
+        fullPath.unshift(0)
+      }
+      if (obj.parent) {
+        fullPath.unshift(obj.path)
       }
       obj = obj.parent
     }

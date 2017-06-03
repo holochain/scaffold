@@ -32,7 +32,7 @@ class WizardRunner {
 
   // -- private -- //
 
-  _run () {
+  _updateState () {
     let state = this.wiz.getCurrentState()
     if (this._pageIndex !== state.pageIndex) {
       this._pageIndex = state.pageIndex
@@ -40,19 +40,38 @@ class WizardRunner {
     }
     this._pages = state.pages
 
-    let field = this._pages[this._pageIndex].fields[this._fieldIndex]
+    if (this._pageIndex >= this._pages.length) {
 
-    this._prompt(field)
+      // we're all done!
+      return null
+    }
+
+    return this._pages[this._pageIndex].fields[this._fieldIndex]
+  }
+
+  _run () {
+    let field = this._updateState()
+
+    if (this._pageIndex >= this._pages.length) {
+      this._resolve()
+      return
+    }
+
+    let pageType = this._pages[this._pageIndex].type
+
+    if (pageType === 'loopControl') {
+      this._promptLoopControl(this._pages[this._pageIndex])
+    } else {
+      this._prompt(field)
+    }
   }
 
   _advance () {
     this._fieldIndex += 1
     if (this._fieldIndex >= this._pages[this._pageIndex].fields.length) {
-      console.error('next page ops')
-      process.exit(1)
-    } else {
-      this._run()
+      this._pages[this._pageIndex].ops.next.cb()
     }
+    this._run()
   }
 
   _printFieldInfo (field) {
@@ -60,6 +79,43 @@ class WizardRunner {
     console.log('# ' + field.def.getTrName() +
       ' (' + field.def.getJsonPath() + ')')
     console.log('# ' + field.def.getTrDescription())
+  }
+
+  _promptLoopControl (page) {
+    console.log()
+    console.log('# ' + page.ref.getTrName() +
+      ' (' + page.ref.getJsonPath() + ')')
+    console.log('# ' + page.ref.getTrDescription())
+    console.log()
+    console.log('# Current ' + page.ref.getTrName())
+    /*let value = page.ref.getValue()
+    for (let sub of page.ref.children) {
+      console.log('# - ' + sub.children[
+    }*/
+    console.log()
+    console.log('(' +
+      'a - Add an Entry | ' +
+      'f - Finish with ' + page.ref.getTrName() + ' )')
+
+    this._getInput('(a|f)').then((result) => {
+      try {
+        if (!result.length) {
+          throw new Error('invalid input')
+        } else {
+          let cmd = result.toLowerCase().split(' ')
+          if (cmd[0][0] === 'a') {
+            page.ops.add.cb()
+            this._run()
+          } else if (cmd[0][0] === 'f') {
+            this._advance()
+            return
+          }
+        }
+      } catch (e) {
+        console.error(e.stack)
+        this._run()
+      }
+    })
   }
 
   _prompt (field) {
@@ -75,24 +131,39 @@ class WizardRunner {
     }
   }
 
+  _getInput (message) {
+    if (!message) {
+      message = ''
+    }
+    if (message.length) {
+      message += ' '
+    }
+    message += '>>>'
+    return new Promise((resolve, reject) => {
+      prompt.get({
+        properties: {
+          data: {
+            message: message
+          }
+        }
+      }, (err, result) => {
+        if (err) {
+          console.error(err)
+          process.exit(1)
+        }
+        resolve(result.data)
+      })
+    })
+  }
+
   _defaultPrompt (field) {
     console.log('# (' + JSON.stringify(field.def.getValue()) + ')')
-    prompt.get({
-      properties: {
-        data: {
-          message: '>>>'
-        }
-      }
-    }, (err, result) => {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
+    this._getInput().then((result) => {
       try {
-        if (!result.data.length) {
-          field.ops.set.cb(field.def.getValue())
+        if (result.length) {
+          field.ops.set.cb(result)
         } else {
-          field.ops.set.cb(result.data)
+          field.ops.set.cb(field.def.getValue())
         }
         this._advance()
       } catch (e) {
@@ -134,22 +205,12 @@ class WizardRunner {
         ' (' + subField.def.getJsonPath() + ')')
       console.log('# ' + subField.def.getTrDescription())
       console.log('# (' + JSON.stringify(subField.def.getValue()) + ')')
-      prompt.get({
-        properties: {
-          data: {
-            message: '>>>'
-          }
-        }
-      }, (err, result) => {
-        if (err) {
-          console.error(err)
-          process.exit(1)
-        }
+      this._getInput().then((result) => {
         try {
-          if (!result.data.length) {
-            subField.ops.set.cb(subField.def.getValue())
+          if (result.length) {
+            subField.ops.set.cb(result)
           } else {
-            subField.ops.set.cb(result.data)
+            subField.ops.set.cb(subField.def.getValue())
           }
           subFieldIdx++
           setField()
@@ -162,9 +223,9 @@ class WizardRunner {
     setField()
   }
 
-  _selectTableIndex (idx) {
-    this._printFieldInfo()
-    this._printTableInfo()
+  _selectTableIndex (field, idx) {
+    this._printFieldInfo(field)
+    this._printTableInfo(field)
 
     console.log(__('ui-action-row-number') + ' ' + idx)
     console.log('(' +
@@ -172,33 +233,23 @@ class WizardRunner {
       'd - ' + __('ui-action-row-delete') + ' | ' +
       'c - ' + __('ui-action-cancel') + ')')
 
-    prompt.get({
-      properties: {
-        data: {
-          message: '(e|d|c)'
-        }
-      }
-    }, (err, result) => {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
+    this._getInput('(e|d|c)').then((result) => {
       try {
-        if (!result.data.length) {
+        if (!result.length) {
           throw new Error('invalid input')
         } else {
-          let cmd = result.data.toLowerCase().split(' ')
-          let value = JSON.parse(JSON.stringify(this.fieldDef.getValue()))
+          let cmd = result.toLowerCase().split(' ')
           if (cmd[0][0] === 'e') {
-            return this._editTableIndex(idx)
+            return this._editTableIndex(field, idx)
           } else if (cmd[0][0] === 'd') {
-            value.splice(idx, 1)
-            this.fieldDef.setValue(value)
+            field.ops.delete.cb(idx)
+            field = this._updateState()
+            return this._tablePrompt(field)
           }
         }
         this._run()
       } catch (e) {
-        console.error(e.toString())
+        console.error(e.stack)
         this._run()
       }
     })
@@ -212,39 +263,29 @@ class WizardRunner {
       'a - ' + __('ui-action-row-add') + ' | ' +
       'f - ' + __('ui-action-finish') + ')')
 
-    prompt.get({
-      properties: {
-        data: {
-          message: '([#]|a|f) >>>'
-        }
-      }
-    }, (err, result) => {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
+    this._getInput('([#]|a|f)').then((result) => {
       try {
-        if (!result.data.length) {
+        if (!result.length) {
           throw new Error('invalid input')
         } else {
-          let cmd = result.data.toLowerCase().split(' ')
-          let value = JSON.parse(JSON.stringify(field.def.getValue()))
+          let cmd = result.toLowerCase().split(' ')
           if (parseInt(cmd[0]).toString() === cmd[0]) {
             let idx = parseInt(cmd[0])
-            if (idx < 0 || idx >= value.length) {
+            if (idx < 0 || idx >= field.def.getValue().length) {
               throw new Error('index out of range')
             }
-            return this._selectTableIndex(idx)
+            return this._selectTableIndex(field, idx)
           } else if (cmd[0][0] === 'a') {
             field.ops.add.cb()
-            return this._editTableIndex(field, value.length - 1)
+            field = this._updateState()
+            return this._editTableIndex(field, field.def.getValue().length - 1)
           } else if (cmd[0][0] === 'f') {
             return this._advance()
           } else {
             throw new Error('invalid input')
           }
         }
-        this._run()
+        // this._run()
       } catch (e) {
         console.error(e.stack)
         this._run()
@@ -296,7 +337,7 @@ function main () {
     runner.run().then((wiz) => {
       try {
         console.log('\nResults:')
-        console.log(JSON.stringify(wiz.getJson(), null, '  '))
+        console.log(JSON.stringify(runner.wiz.getJson(), null, '  '))
       } catch (e) {
         console.error(e)
         process.exit(1)
