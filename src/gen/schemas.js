@@ -323,6 +323,7 @@ module.exports = exports = {
           "hc-hint-type": "category",
           "required": [
             "name",
+            "description",
             "entryTypes"
           ],
           "properties": {
@@ -330,6 +331,15 @@ module.exports = exports = {
               "type": "string",
               "hc-hint-type": "text",
               "hc-hint-dummy": "dummy",
+              "hc-hint-loop-display": true,
+              "pattern": "^.+$",
+              "default": ""
+            },
+            "description": {
+              "type": "string",
+              "hc-hint-type": "text",
+              "hc-hint-dummy": "dummy",
+              "hc-hint-loop-display": true,
               "pattern": "^.+$",
               "default": ""
             },

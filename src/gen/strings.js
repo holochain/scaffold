@@ -30,6 +30,8 @@ module.exports = exports = {
     "field-zomes-description": "Distinct Functional Modules or Sub-Programs of your application",
     "field-zomes.name-name": "Zome Name",
     "field-zomes.name-description": "The name of your Zome",
+    "field-zomes.description-name": "Zome Description",
+    "field-zomes.description-description": "Describe what your Zome will accomplish",
     "field-zomes.entryTypes-name": "",
     "field-zomes.entryTypes-description": "",
     "field-zomes.entryTypes.label-name": "Label",

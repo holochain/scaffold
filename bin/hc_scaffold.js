@@ -87,10 +87,20 @@ class WizardRunner {
     console.log('# ' + page.ref.getTrDescription())
     console.log()
     console.log('# Current ' + page.ref.getTrName())
-    /* let value = page.ref.getValue()
-    for (let sub of page.ref.children) {
-      console.log('# - ' + sub.children[
-    } */
+
+    let value = page.ref.getValue()
+    for (let subval of value) {
+      process.stdout.write(' -')
+      for (let sub of page.ref.children) {
+        if (!sub.getHcHintLoopDisplay()) {
+          continue
+        }
+        process.stdout.write(' ')
+        process.stdout.write(subval[sub.path])
+      }
+      process.stdout.write('\n')
+    }
+
     console.log()
     console.log('(' +
       'a - Add an Entry | ' +
@@ -172,13 +182,17 @@ class WizardRunner {
     })
   }
 
-  _printTableInfo (field) {
+  _printTableInfo (field, selIdx) {
     let rawValue = field.def.getValue()
     let data = []
     for (let r = 0; r < rawValue.length; ++r) {
       let row = rawValue[r]
       let rowVal = {}
-      rowVal[__('ui-row-index')] = r
+      if (r === selIdx) {
+        rowVal[__('ui-row-index')] = '->' + r
+      } else {
+        rowVal[__('ui-row-index')] = '  ' + r
+      }
       for (let c = 0; c < field.def.children.length; ++c) {
         let col = field.def.children[c]
         rowVal[c + ' ' + col.getTrName()] = row[col.path]
@@ -234,7 +248,7 @@ class WizardRunner {
 
   _selectTableIndex (field, idx) {
     this._printFieldInfo(field)
-    this._printTableInfo(field)
+    this._printTableInfo(field, idx)
 
     console.log(__('ui-action-row-number') + ' ' + idx)
     console.log('(' +

@@ -3,6 +3,10 @@
 const i18n = require('./hc_i18n')
 const __ = i18n.getText
 
+function def (v) {
+  return typeof v !== 'undefined' && v !== null
+}
+
 class FieldDef {
   constructor (path, schema, wizard, parent) {
     this.path = path
@@ -53,6 +57,10 @@ class FieldDef {
     return this.schema['hc-hint-type']
   }
 
+  getHcHintLoopDisplay () {
+    return this.schema['hc-hint-loop-display'] || false
+  }
+
   getTrName () {
     return this.trname
   }
@@ -62,7 +70,9 @@ class FieldDef {
   }
 
   getDefault () {
-    return this.schema.default
+    return def(this.schema.default) ?
+      JSON.parse(JSON.stringify(this.schema.default)) :
+      null
   }
 
   getDummy () {
@@ -73,7 +83,9 @@ class FieldDef {
       }
       return [row]
     } else {
-      return this.schema['hc-hint-dummy'] || this.getDefault()
+      return def(this.schema['hc-hint-dummy']) ?
+        JSON.parse(JSON.stringify(this.schema['hc-hint-dummy'])) :
+        this.getDefault()
     }
   }
 
@@ -109,15 +121,18 @@ class FieldDef {
   }
 
   getDefaultJson () {
-    return this._mapJson((c) => { return c.getDefault() })
+    return JSON.parse(JSON.stringify(
+      this._mapJson((c) => { return c.getDefault() })))
   }
 
   getDummyJson () {
-    return this._mapJson((c) => { return c.getDummy() })
+    return JSON.parse(JSON.stringify(
+      this._mapJson((c) => { return c.getDummy() })))
   }
 
   getJson () {
-    return this._mapJson((c) => { return c.getValue() })
+    return JSON.parse(JSON.stringify(
+      this._mapJson((c) => { return c.getValue() })))
   }
 
   getDebugJson () {

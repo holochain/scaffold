@@ -28,16 +28,6 @@ class Wizard {
 
     this.curFieldDef = null
 
-    // console.log(this.rootFieldDef.toString())
-    // process.exit(0)
-
-    /*
-    console.log(this.rootFieldDef.toString())
-    console.log(JSON.stringify(this.rootFieldDef.getDefaultJson(), null, '  '))
-    console.log(JSON.stringify(this.rootFieldDef.getDummyJson(), null, '  '))
-    console.log(JSON.stringify(this.rootFieldDef.getJson(), null, '  '))
-    */
-
     this.ajv = new Ajv()
     this.validator = this.ajv.compile(schema)
   }
@@ -146,6 +136,7 @@ class Wizard {
                   newRow[c.path] = c.getDefaultJson()
                 }
                 childFieldDef.value.push(newRow)
+                console.log(JSON.stringify(childFieldDef.value))
                 this._pageIndex += childFieldDef.value.length
                 this._calculatePages()
               }
@@ -188,11 +179,15 @@ class Wizard {
           this._calculatePagesRec(childFieldDef, subCurPage)
           for (let r2 = 0; r2 < subCurPage.fields.length; ++r2) {
             let subPageField = subCurPage.fields[r2]
+            subPageField.ops.get.cb = () => {
+              return childFieldDef.value[r][subPageField.def.path]
+            }
             let origSet = subPageField.ops.set.cb
             subPageField.ops.set.cb = (val) => {
               origSet(val)
               childFieldDef.value[r][subPageField.def.path] =
                 subPageField.def.value
+              subPageField.def.value = subPageField.def.getDefault()
             }
           }
         }
@@ -204,6 +199,11 @@ class Wizard {
         let field = {
           def: childFieldDef,
           ops: {
+            'get': {
+              cb: () => {
+                return childFieldDef.value
+              }
+            },
             'set': {
               cb: (val) => {
                 val = this.$valueTypeConvert(childFieldDef, val)
@@ -247,7 +247,9 @@ class Wizard {
                     cb: (val) => {
                       val = this.$valueTypeConvert(c, val)
                       this.$validateFieldValue(c, val)
-                      childFieldDef.value[r][c.path] = val
+                      let tbl = field.ops.get.cb()
+                      tbl[r][c.path] = val
+                      field.ops.set.cb(tbl)
                     }
                   }
                 }
