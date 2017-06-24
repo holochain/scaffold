@@ -1,6 +1,6 @@
 {
   "name": "hc-scaffold",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Cli and Web wizard for generating scaffolding for holochain applications.",
   "main": "index.js",
   "scripts": {
