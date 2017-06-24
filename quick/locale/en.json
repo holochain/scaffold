@@ -23,43 +23,43 @@
   "field-desc-scaffoldVersion": "The hc-scaffold schema version of this file.",
 
   "field-name-Version": "DNA File Version",
-  "field-desc-Version": "Version indicator for dna file changes",
+  "field-desc-Version": "Version indicator for changes to DNA",
 
   "field-name-UUID": "DNA Unique ID",
-  "field-desc-UUID": "This ID distinguishes your app.",
+  "field-desc-UUID": "This ID differentiates your app from others. For example, to tell one Slack team from another which same code.",
 
   "field-name-Name": "Application Name",
   "field-desc-Name": "What would you like to call your holochain app?",
 
   "field-name-Properties": "Properties",
-  "field-desc-Properties": "Application properties.",
+  "field-desc-Properties": "Properties that you want available across all Zomes.",
 
   "field-name-Properties.description": "Application Description",
   "field-desc-Properties.description": "Briefly describe your holochain app.",
 
   "field-name-Properties.language": "Language",
-  "field-desc-Properties.language": "The base language of this holochain app.",
+  "field-desc-Properties.language": "The base (human) language of this holochain app.",
 
   "field-name-PropertiesSchemaFile": "Properties Schema File",
   "field-desc-PropertiesSchemaFile": "Describes the entries in the Properties section of your dna file.",
 
-  "field-name-DHTConfig": "Distributed Hash Table Configuration",
-  "field-desc-DHTConfig": "I.e. what hash type to use.",
+  "field-name-DHTConfig": "DHT Settings",
+  "field-desc-DHTConfig": "Configure the properties of your Distributed Hash Table (e.g. hash algorithm, neighborhood size, etc.).",
 
   "field-name-Zomes": "Zomes",
   "field-desc-Zomes": "List the Zomes your application will support.",
 
   "field-name-Zomes.Name": "Zome Name",
-  "field-desc-Zomes.Name": "The name of this particular zome.",
+  "field-desc-Zomes.Name": "The name of this code module.",
 
   "field-name-Zomes.Description": "Zome Description",
-  "field-desc-Zomes.Description": "Briefly describe this zome.",
+  "field-desc-Zomes.Description": "What is the purpose of this module?",
 
   "field-name-Zomes.NucleusType": "Nucleus Type",
-  "field-desc-Zomes.NucleusType": "What core language would you like to work in?",
+  "field-desc-Zomes.NucleusType": "What scripting language will you code in?",
 
   "field-name-Zomes.CodeFile": "Code File",
-  "field-desc-Zomes.CodeFile": "Points to the core script code in which you app is implemented.",
+  "field-desc-Zomes.CodeFile": "Points to the main script file for this Zome.",
 
   "field-name-Zomes.Entries": "Zome Entries",
   "field-desc-Zomes.Entries": "Data stored and tracked by your Zome.",
@@ -79,14 +79,14 @@
   "field-name-Zomes.Entries.Delete": "Delete",
 
   "field-name-Zomes.Functions": "Zome Functions",
-  "field-desc-Zomes.Functions": "Tasks your zome can execute.",
+  "field-desc-Zomes.Functions": "Functions which can be called in your Zome's API.",
 
   "field-name-Zomes.Functions.Name": "Name",
   "field-desc-Zomes.Functions.Name": "The name of this function.",
 
   "field-name-Zomes.Functions.CallingType": "Calling Type",
-  "field-desc-Zomes.Functions.CallingType": "What format of data should be passed to this function?",
+  "field-desc-Zomes.Functions.CallingType": "Data format for parameters passed to this function.",
 
   "field-name-Zomes.Functions.Exposure": "Exposure",
-  "field-desc-Zomes.Functions.Exposure": "Who can call this function?"
+  "field-desc-Zomes.Functions.Exposure": "Level to which is this function exposed."
 }
