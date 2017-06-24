@@ -9,4 +9,32 @@ The web tool generates a scaffold.json file which the holochain software uses to
 
 Also, the scaffold system may generate some really basic UI, but it will be extremely primitive. You will still need to do significant interface development if you plan on having users interface with your system directly (you might be able to skip this if your app will mostly be interfaced with via API).
 
-Please see the [holochain repository](http://github.com/metacurrency/holochain) for more information on how this can be used as an alternative blockchain/Ethereum-based applications.
+Please see the [holochain repository](http://github.com/metacurrency/holochain) for more information on how this can be used as an alternative to blockchain/Ethereum-based applications.
+
+## Usage
+
+To get started quickly, please see the [Hosted Version](https://neonphog.github.io/hc-scaffold/dist/) of this code.
+
+To run locally:
+
+```
+git clone https://github.com/metacurrency/hc-scaffold.git
+cd hc-scaffold
+npm install --production
+npm start
+```
+
+## Contributing
+
+This project uses [Ninja Build](https://ninja-build.org/). You will need to install it.
+
+```
+git clone https://github.com/metacurrency/hc-scaffold.git
+cd hc-scaffold
+npm install
+npm test
+npm start
+```
+
+- Please make sure `npm test` is successfull before submitting pull requests.
+- Please make sure to squash your changes before submitting / updating pull requests.

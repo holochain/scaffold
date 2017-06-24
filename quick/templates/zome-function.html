@@ -1,0 +1,23 @@
+<tr class="zome-function-row">
+  <td>
+    <a href="javascript:void(0)" data-hc-bind="click:$deleteZomeFunction" data-hc-id="{{id}}">
+      <i class="material-icons">&#xE92B;</i><span>{{__ 'button-deleteZomeFunction'}}</span>
+    </a>
+  </td>
+  <td>
+    <input type="text" data-hc-bind="change:$render keyup:$render" id="name-{{id}}" class="zome-function-name" />
+  </td>
+  <td>
+    <select data-hc-bind="change:$render" class="zome-function-calling-type">
+      <option value="json" selected="selected">Json</option>
+      <option value="string">String</option>
+    </select>
+  </td>
+  <td>
+    <select data-hc-bind="change:$render" class="zome-function-exposure">
+      <option value="" selected="selected">Zome</option>
+      <option value="auth">Auth</option>
+      <option value="public">Public</option>
+    </select>
+  </td>
+</tr>

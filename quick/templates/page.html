@@ -1,0 +1,39 @@
+<div class="page">
+  <form>
+    <h1>{{__ 'pageTitle'}}</h1>
+    <div class="instructions">{{__ 'pageInstructions'}}</div>
+    <fieldset>
+      <legend>{{__ 'field-name-Name'}}</legend>
+      <label for="appname">{{__ 'field-desc-Name'}}</label>
+      <input type="text" data-hc-bind="change:$render keyup:$render" id="appname" />
+    </fieldset>
+    <fieldset>
+      <legend>{{__ 'field-name-Properties.description'}}</legend>
+      <label for="appdesc">{{__ 'field-desc-Properties.description'}}</label>
+      <input type="text" data-hc-bind="change:$render keyup:$render" id="appdesc" />
+    </fieldset>
+
+    <div class="instructions">
+      {{__ 'field-desc-Zomes'}}
+    </div>
+    <div id="zomes"></div>
+    <a href="javascript:void(0)" data-hc-bind="click:$addZome">
+      <i class="material-icons">&#xE147;</i><span>{{__ 'button-addZome'}}</span>
+    </a>
+  </form>
+  <div class="sidebar">
+    <a href="javascript:void(0)" data-hc-bind="click:$toggleYaml" class="when-shown">
+      <i class="material-icons">&#xE315;</i><span>{{__ 'button-showHideYaml'}}</span>
+    </a>
+    <a href="javascript:void(0)" data-hc-bind="click:$menu" class="when-shown">
+      <i class="material-icons">&#xE5D2;</i><span>{{__ 'button-menu'}}</span>
+    </a>
+    <a title="{{__ 'button-showHideYaml'}}" href="javascript:void(0)" data-hc-bind="click:$toggleYaml" class="no-text when-hidden">
+      <i class="material-icons">&#xE314;</i>
+    </a>
+    <a title="{{__ 'button-menu'}}" href="javascript:void(0)" data-hc-bind="click:$menu" class="no-text when-hidden">
+      <i class="material-icons">&#xE5D2;</i>
+    </a>
+    <pre class="yaml-display yaml"></pre>
+  </div>
+</div>

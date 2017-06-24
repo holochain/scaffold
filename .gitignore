@@ -1,3 +1,9 @@
+node_modules
+.hc-scaffold-quick-start.*
+.test.*
+.ninja_*
+build.ninja
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a

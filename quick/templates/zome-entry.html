@@ -1,0 +1,35 @@
+<tr class="zome-entry-row">
+  <td>
+    <a href="javascript:void(0)" data-hc-bind="click:$deleteZomeEntry" data-hc-id="{{id}}">
+      <i class="material-icons">&#xE92B;</i><span>{{__ 'button-deleteZomeEntry'}}</span>
+    </a>
+  </td>
+  <td>
+    <input type="text" data-hc-bind="change:$render keyup:$render" id="name-{{id}}" class="zome-entry-name" />
+  </td>
+  <td>
+    <select data-hc-bind="change:$render" class="zome-entry-data-format">
+      <option value="json" selected="selected">Json</option>
+      <option value="links">Links</option>
+      <option value="string">String</option>
+    </select>
+  </td>
+  <td>
+    <select data-hc-bind="change:$render" class="zome-entry-sharing">
+      <option value="public" selected="selected">Public</option>
+      <option value="private">Private</option>
+    </select>
+  </td>
+  <td>
+    <input type="checkbox" data-hc-bind="change:$render" name="create-{{id}}" checked="checked" class="zome-entry-create" />
+  </td>
+  <td>
+    <input type="checkbox" data-hc-bind="change:$render" name="read-{{id}}" checked="checked" class="zome-entry-read" />
+  </td>
+  <td>
+    <input type="checkbox" data-hc-bind="change:$render" name="update-{{id}}" class="zome-entry-update" />
+  </td>
+  <td>
+    <input type="checkbox" data-hc-bind="change:$render" name="delete-{{id}}" class="zome-entry-delete" />
+  </td>
+</tr>

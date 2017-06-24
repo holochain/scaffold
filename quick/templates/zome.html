@@ -1,0 +1,49 @@
+<fieldset class="zome">
+  <a href="javascript:void(0)" data-hc-bind="click:$deleteZome" data-hc-id="{{id}}">
+    <i class="material-icons">&#xE92B;</i><span>{{__ 'button-deleteZome'}}</span>
+  </a>
+  <fieldset>
+    <legend>{{__ 'field-name-Zomes.Name'}}</legend>
+    <label for="zomename-{{id}}">{{__ 'field-desc-Zomes.Name'}}</label>
+    <input type="text" data-hc-bind="change:$render keyup:$render" id="zomename-{{id}}" class="zomename" />
+  </fieldset>
+  <fieldset>
+    <legend>{{__ 'field-name-Zomes.Description'}}</legend>
+    <label for="zomename-{{id}}">{{__ 'field-desc-Zomes.Description'}}</label>
+    <input type="text" data-hc-bind="change:$render keyup:$render" id="zomedesc-{{id}}" class="zomedesc" />
+  </fieldset>
+  <fieldset>
+    <legend>{{__ 'field-name-Zomes.Entries'}}</legend>
+    <label>{{__ 'field-desc-Zomes.Entries'}}</label>
+    <table id="zomeentries-{{id}}">
+      <tr>
+        <td></td>
+        <th>{{__ 'field-name-Zomes.Entries.Name'}}</th>
+        <th>{{__ 'field-name-Zomes.Entries.DataFormat'}}</th>
+        <th>{{__ 'field-name-Zomes.Entries.Sharing'}}</th>
+        <th><i title="{{__ 'field-name-Zomes.Entries.Create'}}" class="material-icons">&#xE146;</i></th>
+        <th><i title="{{__ 'field-name-Zomes.Entries.Read'}}" class="material-icons">&#xE151;</i></th>
+        <th><i title="{{__ 'field-name-Zomes.Entries.Update'}}" class="material-icons">&#xE150;</i></th>
+        <th><i title="{{__ 'field-name-Zomes.Entries.Delete'}}" class="material-icons">&#xE14A;</i></th>
+      </tr>
+    </table>
+    <a href="javascript:void(0)" data-hc-bind="click:$addZomeEntry" data-hc-id="{{id}}">
+      <i class="material-icons">&#xE147;</i><span>{{__ 'button-addZomeEntry'}}</span>
+    </a>
+  </fieldset>
+  <fieldset>
+    <legend>{{__ 'field-name-Zomes.Functions'}}</legend>
+    <label>{{__ 'field-desc-Zomes.Functions'}}</label>
+    <table id="zomefunctions-{{id}}">
+      <tr>
+        <td></td>
+        <th>{{__ 'field-name-Zomes.Functions.Name'}}</th>
+        <th>{{__ 'field-name-Zomes.Functions.CallingType'}}</th>
+        <th>{{__ 'field-name-Zomes.Functions.Exposure'}}</th>
+      </tr>
+    </table>
+    <a href="javascript:void(0)" data-hc-bind="click:$addZomeFunction" data-hc-id="{{id}}">
+      <i class="material-icons">&#xE147;</i><span>{{__ 'button-addZomeFunction'}}</span>
+    </a>
+  </fieldset>
+</fieldset>

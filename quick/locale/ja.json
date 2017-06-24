@@ -1,0 +1,91 @@
+{
+  "__notes__": "TODO - this file is google translated - need real translation",
+
+  "langName": "日本語",
+  "pageTitle": "HC Scaffold クイックスタート",
+  "pageInstructions": "このユーティリティはHolochain Scaffold yamlファイルを生成するのに役立ちます。このファイルを使用すると、Holochainアプリケーションのスケルトンを生成できます。",
+
+  "yaml-header": "これは、ホロカイン足場yamlの定義です",
+
+  "button-menu": "メニュー",
+  "button-language": "言語",
+  "button-newDocument": "新しい文書",
+  "button-upload": "YAML / JSONのアップロード",
+  "button-about": "約",
+  "button-addZome": "ゾムを追加",
+  "button-showHideYaml": "表示/非表示YAML",
+  "button-downloadScaffoldYaml": "足場YAMLをダウンロード",
+  "button-deleteZome": "このゾムを削除する",
+  "button-addZomeEntry": "ゾーミングエントリを追加",
+  "button-deleteZomeEntry": "ゾーミングエントリを削除する",
+  "button-addZomeFunction": "ゾム関数を追加する",
+  "button-deleteZomeFunction": "このゾム関数を削除する",
+
+  "field-name-scaffoldVersion": "足場のバージョン",
+  "field-desc-scaffoldVersion": "このファイルのhc-scaffoldスキーマバージョン",
+
+  "field-name-Version": "DNAファイルのバージョン",
+  "field-desc-Version": "dnaファイルの変更のバージョンインジケータ",
+
+  "field-name-UUID": "DNAユニークID",
+  "field-desc-UUID": "このIDはあなたのアプリを区別します",
+
+  "field-name-Name": "アプリケーション名",
+  "field-desc-Name": "ホロキンのアプリケーションと何を呼びたいのですか？",
+
+  "field-name-Properties.description": "アプリケーションの説明",
+  "field-desc-Properties.description": "簡単にあなたのホロチャンのアプリを説明してください。",
+
+  "field-name-Properties.language": "言語",
+  "field-desc-Properties.language": "このホロチャインアプリの基本言語。",
+
+  "field-name-PropertiesSchemaFile": "プロパティスキーマファイル",
+  "field-desc-PropertiesSchemaFile": "dnaファイルの[プロパティ]セクションのエントリについて説明します。",
+
+  "field-name-DHTConfig": "分散ハッシュテーブルの構成",
+  "field-desc-DHTConfig": "つまり、使用するハッシュタイプ。",
+
+  "field-name-Zomes": "ゾム",
+  "field-desc-Zomes": "アプリケーションがサポートするゾムを列挙してください。",
+
+  "field-name-Zomes.Name": "ゾム名",
+  "field-desc-Zomes.Name": "この特定のゾムの名前。",
+
+  "field-name-Zomes.Description": "ゾムの説明",
+  "field-desc-Zomes.Description": "このゾムについて簡単に説明します。",
+
+  "field-name-Zomes.NucleusType": "核種",
+  "field-desc-Zomes.NucleusType": "どのようなコア言語で作業したいですか？",
+
+  "field-name-Zomes.CodeFile": "コード",
+  "field-desc-Zomes.CodeFile": "あなたのアプリが実装されているコアスクリプトコードを指します。",
+
+  "field-name-Zomes.Entries": "ゾムのエントリー",
+  "field-desc-Zomes.Entries": "ゾムによって保存され、追跡されたデータ。",
+
+  "field-name-Zomes.Entries.Name": "名",
+  "field-desc-Zomes.Entries.Name": "このエントリの名前",
+
+  "field-name-Zomes.Entries.DataFormat": "日付フォーマット",
+  "field-desc-Zomes.Entries.DataFormat": "このエントリにはどのような種類のデータを保存する必要がありますか？",
+
+  "field-name-Zomes.Entries.Sharing": "共有",
+  "field-desc-Zomes.Entries.Sharing": "このエントリーは一般にアクセス可能であるべきですか？",
+
+  "field-name-Zomes.Entries.Create": "作成する",
+  "field-name-Zomes.Entries.Read": "読む",
+  "field-name-Zomes.Entries.Update": "更新",
+  "field-name-Zomes.Entries.Delete": "削除",
+
+  "field-name-Zomes.Functions": "ゾム関数",
+  "field-desc-Zomes.Functions": "ゾムが実行できるタスク。",
+
+  "field-name-Zomes.Functions.Name": "名",
+  "field-desc-Zomes.Functions.Name": "この関数の名前。",
+
+  "field-name-Zomes.Functions.CallingType": "コールタイプ",
+  "field-desc-Zomes.Functions.CallingType": "どのような形式のデータをこの関数に渡す必要がありますか？",
+
+  "field-name-Zomes.Functions.Exposure": "暴露",
+  "field-desc-Zomes.Functions.Exposure": "誰がこの機能を呼び出すことができますか？"
+}
