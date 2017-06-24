@@ -1,0 +1,92 @@
+{
+  "langName": "English",
+  "pageTitle": "HC Scaffold Quick Start",
+  "pageInstructions": "This utility will help you generate a Holochain Scaffold yaml file. With this file, you can generate the skeleton of a Holochain Application.",
+
+  "yaml-header": "This is a holochain scaffold yaml definition. http://ceptr.org/projects/holochain",
+
+  "button-menu": "Menu",
+  "button-language": "Language",
+  "button-newDocument": "New Document",
+  "button-upload": "Upload YAML/JSON",
+  "button-about": "About",
+  "button-addZome": "Add Zome",
+  "button-showHideYaml": "Show/Hide Yaml",
+  "button-downloadScaffoldYaml": "Download Scaffold Yaml",
+  "button-deleteZome": "Delete this Zome",
+  "button-addZomeEntry": "Add Zome Entry",
+  "button-deleteZomeEntry": "Delete this Zome Entry",
+  "button-addZomeFunction": "Add Zome Function",
+  "button-deleteZomeFunction": "Delete this Zome Function",
+
+  "field-name-scaffoldVersion": "Scaffold Version",
+  "field-desc-scaffoldVersion": "The hc-scaffold schema version of this file.",
+
+  "field-name-Version": "DNA File Version",
+  "field-desc-Version": "Version indicator for dna file changes",
+
+  "field-name-UUID": "DNA Unique ID",
+  "field-desc-UUID": "This ID distinguishes your app.",
+
+  "field-name-Name": "Application Name",
+  "field-desc-Name": "What would you like to call your holochain app?",
+
+  "field-name-Properties": "Properties",
+  "field-desc-Properties": "Application properties.",
+
+  "field-name-Properties.description": "Application Description",
+  "field-desc-Properties.description": "Briefly describe your holochain app.",
+
+  "field-name-Properties.language": "Language",
+  "field-desc-Properties.language": "The base language of this holochain app.",
+
+  "field-name-PropertiesSchemaFile": "Properties Schema File",
+  "field-desc-PropertiesSchemaFile": "Describes the entries in the Properties section of your dna file.",
+
+  "field-name-DHTConfig": "Distributed Hash Table Configuration",
+  "field-desc-DHTConfig": "I.e. what hash type to use.",
+
+  "field-name-Zomes": "Zomes",
+  "field-desc-Zomes": "List the Zomes your application will support.",
+
+  "field-name-Zomes.Name": "Zome Name",
+  "field-desc-Zomes.Name": "The name of this particular zome.",
+
+  "field-name-Zomes.Description": "Zome Description",
+  "field-desc-Zomes.Description": "Briefly describe this zome.",
+
+  "field-name-Zomes.NucleusType": "Nucleus Type",
+  "field-desc-Zomes.NucleusType": "What core language would you like to work in?",
+
+  "field-name-Zomes.CodeFile": "Code File",
+  "field-desc-Zomes.CodeFile": "Points to the core script code in which you app is implemented.",
+
+  "field-name-Zomes.Entries": "Zome Entries",
+  "field-desc-Zomes.Entries": "Data stored and tracked by your Zome.",
+
+  "field-name-Zomes.Entries.Name": "Name",
+  "field-desc-Zomes.Entries.Name": "The name of this entry.",
+
+  "field-name-Zomes.Entries.DataFormat": "Data Format",
+  "field-desc-Zomes.Entries.DataFormat": "What type of data should this entry store?",
+
+  "field-name-Zomes.Entries.Sharing": "Sharing",
+  "field-desc-Zomes.Entries.Sharing": "Should this entry be publicly accessible?",
+
+  "field-name-Zomes.Entries.Create": "Create",
+  "field-name-Zomes.Entries.Read": "Read",
+  "field-name-Zomes.Entries.Update": "Update",
+  "field-name-Zomes.Entries.Delete": "Delete",
+
+  "field-name-Zomes.Functions": "Zome Functions",
+  "field-desc-Zomes.Functions": "Tasks your zome can execute.",
+
+  "field-name-Zomes.Functions.Name": "Name",
+  "field-desc-Zomes.Functions.Name": "The name of this function.",
+
+  "field-name-Zomes.Functions.CallingType": "Calling Type",
+  "field-desc-Zomes.Functions.CallingType": "What format of data should be passed to this function?",
+
+  "field-name-Zomes.Functions.Exposure": "Exposure",
+  "field-desc-Zomes.Functions.Exposure": "Who can call this function?"
+}
