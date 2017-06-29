@@ -1,0 +1,92 @@
+{
+  "langName": "हिंदी",
+  "pageTitle": "एचसी एससीएफ़ॉल्ड शीघ्र प्रारंभ",
+  "pageInstructions": "यह उपयोगिता आपको एक एचसी स्कैफोल्ड़ .yaml फ़ाइल बनाने में मदद करेगी। इस फाइल के साथ, आप एक होलोकैन एप्लिकेशन के कंकाल उत्पन्न कर सकते हैं।",
+
+  "yaml-header": "यह एक एचसी स्कैफोल्ड़ .yaml परिभाषा है. http://ceptr.org/projects/holochain",
+
+  "button-menu": "मेन्यू",
+  "button-language": "भाषा",
+  "button-newDocument": "",
+  "button-upload": "अपलोड YAML/JSON",
+  "button-about": "बारे में",
+  "button-addZome": "जोड़ ज़ोम",
+  "button-showHideYaml": "दिखाना/छिपाना yaml",
+  "button-downloadScaffoldYaml": "डाउनलोड स्कैफोल्ड़ yaml",
+  "button-deleteZome": "इस ज़ूम को हटा दें",
+  "button-addZomeEntry": "ज़ूम प्रविष्टि जोड़ेंy",
+  "button-deleteZomeEntry": "इस ज़ूम प्रविष्टि को मिटाय दें",
+  "button-addZomeFunction": "ज़ूम कार्य जोड़ें",
+  "button-deleteZomeFunction": "इस ज़ूम फंक्शन को मिटाय",
+
+  "field-name-scaffoldVersion": "स्कैफोल्ड़   संस्करण ",
+  "field-desc-scaffoldVersion": "एचसी-स्कैफोल्ड़, इस फ़ाइल का स्कीमा संस्करण",
+
+  "field-name-Version": "डीएनए फ़ाइल संस्करण",
+  "field-desc-Version": "डीएनए में परिवर्तन के लिए संस्करण सूचक",
+
+  "field-name-UUID": "डीएनए अद्वितीय पहचान",
+  "field-desc-UUID": "यह पहचान दूसरों से आपके ऐप को अलग करती है। उदाहरण के लिए, किसी अन्य टीम से एक स्लैक टीम को बताएं जो एक ही कोड है।",
+
+  "field-name-Name": "आवेदन का नाम",
+  "field-desc-Name": "आप अपने होलोचैन ऐप को क्या नाम देना चाहेंगे?",
+
+  "field-name-Properties": "गुण",
+  "field-desc-Properties": "वे गुण जो आप सभी ज़ोम्स में उपलब्ध करना चाहते हैं।",
+
+  "field-name-Properties.description": "आवेदन विवरण",
+  "field-desc-Properties.description": "संक्षेप में अपने हॉलोचैन ऐप का वर्णन करें",
+
+  "field-name-Properties.language": "भाषा",
+  "field-desc-Properties.language": "इस होलोचैन ऐप का आधार (मानव) भाषा",
+
+  "field-name-PropertiesSchemaFile": "गुण स्कीमा फ़ाइल",
+  "field-desc-PropertiesSchemaFile": "अपने डीएनए फ़ाइल के गुण अनुभाग में प्रविष्टियों का वर्णन करें।",
+
+  "field-name-DHTConfig": "DHT सेटिंग्स",
+  "field-desc-DHTConfig": "अपने वितरित हैश तालिका के गुणों को कॉन्फ़िगर करेंा (जैसे हैश एल्गोरिथम, पड़ोस आकार, आदि).",
+
+  "field-name-Zomes": "ज़ॉमस",
+  "field-desc-Zomes": "ज़ॉमस को सूचीबद्ध करें, जो आपके आवेदन का समर्थन करेंगे।",
+
+  "field-name-Zomes.Name": "ज़ूम नाम",
+  "field-desc-Zomes.Name": "इस कोड मॉड्यूल का नाम",
+
+  "field-name-Zomes.Description": "ज़ूम विवरण",
+  "field-desc-Zomes.Description": "इस मॉड्यूल का क्या उद्देश्य है?",
+
+  "field-name-Zomes.NucleusType": "नाभिक प्रकार",
+  "field-desc-Zomes.NucleusType": "क्या स्क्रिप्टिंग भाषा आप में कोड करेंगे?",
+
+  "field-name-Zomes.CodeFile": "कोड फ़ाइल",
+  "field-desc-Zomes.CodeFile": "इस ज़ूम के लिए मुख्य स्क्रिप्ट फ़ाइल के लिए अंक",
+
+  "field-name-Zomes.Entries": "ज़ूम प्रविष्टियां",
+  "field-desc-Zomes.Entries": "आपके ज़ूम द्वारा संग्रहीत और ट्रैक किए गए डेटा",
+
+  "field-name-Zomes.Entries.Name": "नाम",
+  "field-desc-Zomes.Entries.Name": "इस प्रविष्टि का नाम",
+
+  "field-name-Zomes.Entries.DataFormat": "डाटा प्रारूप",
+  "field-desc-Zomes.Entries.DataFormat": "इस प्रविष्टि स्टोर को किस प्रकार के डेटा चाहिए?",
+
+  "field-name-Zomes.Entries.Sharing": "साझा करना",
+  "field-desc-Zomes.Entries.Sharing": "क्या इस प्रविष्टि को सार्वजनिक रूप से सुलभ होना चाहिए?",
+
+  "field-name-Zomes.Entries.Create": "सर्जन करना",
+  "field-name-Zomes.Entries.Read": "पढ़ना",
+  "field-name-Zomes.Entries.Update": "अद्यतन",
+  "field-name-Zomes.Entries.Delete": "मिटाना",
+
+  "field-name-Zomes.Functions": "ज़ूम कार्य",
+  "field-desc-Zomes.Functions": "कार्य जो आपके ज़ूमे एपीआई के नाम से कहा जा सकता है",
+
+  "field-name-Zomes.Functions.Name": "नाम",
+  "field-desc-Zomes.Functions.Name": "इस कार्य का नाम।",
+
+  "field-name-Zomes.Functions.CallingType": "बुलाने का प्रकार",
+  "field-desc-Zomes.Functions.CallingType": "इस समारोह में पारित मापदंडों के लिए डेटा प्रारूप",
+
+  "field-name-Zomes.Functions.Exposure": "अनावरण",
+  "field-desc-Zomes.Functions.Exposure": "इस फ़ंक्शन का स्तर उजागर हुआ है।"
+}
