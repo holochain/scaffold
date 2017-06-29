@@ -1,7 +1,7 @@
 {
   "langName": "Deutsch",
   "pageTitle": "HC Scaffold Schnell Start",
-  "pageInstructions": "Dieses Programm hilft dir eine Holochain Gerüst yaml Datei zu erstellen. Mit einer solchen Datei kannst du ein Skelett einer Holochain Anwendung erstellen.",
+  "pageInstructions": "Dieses Programm hilft dir eine yaml Holochain Gerüst-Datei zu erstellen. Mit einer solchen Datei kannst du einfach eine neues Holochain Anwendungs-Verzeichnis erstellen lassen.",
 
   "yaml-header": "Dies ist eine Holochain Scaffold yaml Definition. http://ceptr.org/projects/holochain",
 
@@ -15,9 +15,9 @@
   "button-downloadScaffoldYaml": "Gerüst Yaml herunterladen",
   "button-deleteZome": "Dieses Zome löschen",
   "button-addZomeEntry": "Zome Entry hinzufügen",
-  "button-deleteZomeEntry": "Diesen Zome Entry löschen",
-  "button-addZomeFunction": "Zome Function hinzufügen",
-  "button-deleteZomeFunction": "Diese Zome Function löschen",
+  "button-deleteZomeEntry": "Zome Entry löschen",
+  "button-addZomeFunction": "Zome Funktion hinzufügen",
+  "button-deleteZomeFunction": "Zome Function löschen",
 
   "field-name-scaffoldVersion": "Gerüst Version",
   "field-desc-scaffoldVersion": "Die hc-scaffold Schema Version dieser Datei.",
@@ -62,7 +62,7 @@
   "field-desc-Zomes.CodeFile": "Verweist auf die Skript-Datei in der deine Anwendung implementiert ist.",
 
   "field-name-Zomes.Entries": "Zome Entries",
-  "field-desc-Zomes.Entries": "Daten, die von diesem Zome gespeichet und verwaltet werden.",
+  "field-desc-Zomes.Entries": "Daten, die von diesem Zome gespeichert und verwaltet werden.",
 
   "field-name-Zomes.Entries.Name": "Name",
   "field-desc-Zomes.Entries.Name": "Name dieses Entrys.",
