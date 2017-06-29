@@ -1,0 +1,92 @@
+{
+  "langName": "বাংলা",
+  "pageTitle": "HC ভারা দ্রুত শুরু",
+  "pageInstructions": "এই উপযোগ will সাহায্য করব তোমার জেনারেট  Holochain ভারা yaml ফাইল. এই ফাইল এর সঙ্গে, আপনি করতে পারেন জেনারেট  কঙ্কাল Holochain আবেদনএর |",
+
+  "yaml-header": "এই holochain ভারা yaml সংজ্ঞা. http://ceptr.org/projects/holochain",
+
+  "button-menu": "মেনু",
+  "button-language": "ভাষা",
+  "button-newDocument": "নতুন দলিল",
+  "button-upload": "আপলোড YAML/JSON",
+  "button-about": "সম্বন্ধে",
+  "button-addZome": "যোগ Zome",
+  "button-showHideYaml": "প্রদর্শনী/লুকান Yaml",
+  "button-downloadScaffoldYaml": "ডাউনলোড ভারা Yaml",
+  "button-deleteZome": "মুছে ফেলা এই Zome",
+  "button-addZomeEntry": "Zome প্রবেশ যোগ",
+  "button-deleteZomeEntry": "অপসারণ এই Zome প্রবেশ",
+  "button-addZomeFunction": "যোগ Zome Function",
+  "button-deleteZomeFunction": "এটা মুছে ফেলুন Zome Function",
+
+  "field-name-scaffoldVersion": "ভারা Version",
+  "field-desc-scaffoldVersion": "দ্য hc-scaffold schema version এই এর ফাইল |",
+
+  "field-name-Version": "DNA ফাইল Version",
+  "field-desc-Version": "Versionএই এর সূচকটি পরিবর্তনগুলি জন্য DNA উপর",
+
+  "field-name-UUID": "DNA Unique ID",
+  "field-desc-UUID": "This ID differentiates your app from others. For example, to tell one Slack team from another which same code.",
+
+  "field-name-Name": "আবেদন নাম",
+  "field-desc-Name": "What would you like to call your holochain app?",
+
+  "field-name-Properties": "বৈশিষ্ট্য",
+  "field-desc-Properties": "বৈশিষ্ট্য আপনি প্রয়োজন সহজলভ্য দিয়ে সব Zomes.",
+
+  "field-name-Properties.description": "আবেদন বিবরণ",
+  "field-desc-Properties.description": "সংক্ষেপে বর্ণনা করা তোমার holochain app.",
+
+  "field-name-Properties.language": "ভাষা",
+  "field-desc-Properties.language": "ভিত্তি (মানবীয়) ভাষা holochain app এর",
+
+  "field-name-PropertiesSchemaFile": "বৈশিষ্ট্য Schema ফাইল বৈশিষ্ট্য",
+  "field-desc-PropertiesSchemaFile": "ব্যাখ্যা করা দ্য entries Properties উপর তোমার dna ফাইল উপর |",
+
+  "field-name-DHTConfig": "DHT সেটিংস",
+  "field-desc-DHTConfig": "কনফিগার করা বৈশিষ্ট্য তোমার Distributed Hash Table (উদাহরণ hash algorithm, প্রতিবেশী আয়তন, etc.).",
+
+  "field-name-Zomes": "Zomes",
+  "field-desc-Zomes": "তালিকা দ্য Zomes তোমার আবেদন সমর্থন|",
+
+  "field-name-Zomes.Name": "Zome নাম",
+  "field-desc-Zomes.Name": "এই code moduleএর নাম",
+
+  "field-name-Zomes.Description": "Zome বর্ণনা করা",
+  "field-desc-Zomes.Description": "এই moduleএর উদ্দেশ্য কি?",
+
+  "field-name-Zomes.NucleusType": "Nucleus আদর্শ",
+  "field-desc-Zomes.NucleusType": "কি scripting ভাষা আপনি code করব?",
+
+  "field-name-Zomes.CodeFile": "Code ফাইল",
+  "field-desc-Zomes.CodeFile": "পয়েন্ট to the প্রধান script থেকে ফাইল Zome জন্য",
+
+  "field-name-Zomes.Entries": "Zome এন্ট্রি",
+  "field-desc-Zomes.Entries": "উপাত্ত সঞ্চিত এবং ট্র্যাক দ্বারা তোমার Zome.",
+
+  "field-name-Zomes.Entries.Name": "নাম",
+  "field-desc-Zomes.Entries.Name": "এই নাম entryএর.",
+
+  "field-name-Zomes.Entries.DataFormat": "উপাত্ত Format",
+  "field-desc-Zomes.Entries.DataFormat": "কি data আদর্শ উচিত এই প্রবেশ রাখবো?",
+
+  "field-name-Zomes.Entries.Sharing": "ভাগ",
+  "field-desc-Zomes.Entries.Sharing": " এই entry প্রকাশ্যে প্রবেশযোগ্য উচিত কি?",
+
+  "field-name-Zomes.Entries.Create": "সৃষ্টি",
+  "field-name-Zomes.Entries.Read": "পড়া",
+  "field-name-Zomes.Entries.Update": "হালনাগাদ",
+  "field-name-Zomes.Entries.Delete": "মুছে",
+
+  "field-name-Zomes.Functions": "Zome ক্রিয়াকলাপ",
+  "field-desc-Zomes.Functions": "ক্রিয়াকলাপ যেটি তোমার Zome API করতে পারেন |",
+
+  "field-name-Zomes.Functions.Name": "নাম",
+  "field-desc-Zomes.Functions.Name": "এই functionএর নাম",
+
+  "field-name-Zomes.Functions.CallingType": "কলিং আদর্শ",
+  "field-desc-Zomes.Functions.CallingType": "উপাত্ত বিন্যাস parameters জন্য pass করব এই functionএর",
+
+  "field-name-Zomes.Functions.Exposure": "প্রকাশ",
+  "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়"
+}
