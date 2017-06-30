@@ -41,7 +41,7 @@ function main () {
       version: packageJson.version + '+' + hash,
       url: packageJson.homepage
     }, null, '  ')
-    fs.writeFileSync('quick/gen/version.js',
+    fs.writeFileSync('src/gen/version.js',
       "'use strict'\n" +
       'module.exports = exports = ' + data)
   })

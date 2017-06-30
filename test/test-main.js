@@ -5,7 +5,8 @@ const YAML = require('yaml-js')
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
-  scaffoldVersion: 'quick-start-0.0.1',
+  scaffoldVersion: '0.0.1',
+  generator: 'xxx',
   Version: 1,
   UUID: 'test-uuid',
   Name: 'test-name',
@@ -96,8 +97,8 @@ exports.phantomMochaReporter = function phantomMochaReporter (runner) {
 
 const expect = require('chai').expect
 
-const i18n = require('../lib/hc-i18n')
-i18n.loadStrings(require('../quick/gen/strings.js'))
+const i18n = require('../src/hc-i18n')
+i18n.loadStrings(require('../src/gen/strings.js'))
 const __ = i18n.getText
 
 const LANGS = ['en', 'ja']
@@ -176,6 +177,7 @@ describe('HC Scaffold Quick Start', () => {
           let yaml
           try {
             yaml = YAML.load(res[0].innerText)
+            yaml.generator = 'xxx' // ignore generator diffs
             expect(yaml).deep.equals(FIXTURE_1)
             done()
           } catch (e) {
