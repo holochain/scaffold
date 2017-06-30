@@ -1,6 +1,5 @@
 node_modules
-.hc-scaffold-quick-start.*
-.test.*
+.*.js
 .ninja_*
 build.ninja
 

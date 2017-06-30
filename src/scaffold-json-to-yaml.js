@@ -1,7 +1,8 @@
 'use strict'
 
-const i18n = require('../lib/hc-i18n')
+const i18n = require('./hc-i18n')
 const __ = i18n.getText
+const version = require('./gen/version')
 
 /**
  * Given a json dna blob, render yaml with comment annotations.
@@ -52,7 +53,8 @@ function _addCommentsToJson (json) {
   _c(root, '#', 'yaml-header')
 
   _f(root, 'scaffoldVersion')
-  root.scaffoldVersion = 'quick-start-0.0.1'
+  root.scaffoldVersion = '0.0.1'
+  root.generator = 'hc-scaffold:' + version.version
 
   _f(root, 'Version')
   root.Version = json.Version || 1

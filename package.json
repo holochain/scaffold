@@ -43,7 +43,7 @@
     },
     "ignore": [
       "dist",
-      "quick/gen"
+      "src/gen"
     ]
   }
 }

@@ -15,21 +15,19 @@ const path = isWindows ? require('path').win32 : require('path').posix
 
 // build system will execute these functions passing the second idx as params
 const BUILD_LIST = [
-  [writeVersion, ['quick/gen/version.js']],
-  [jsonPack, ['quick/gen/strings.js', 'quick/locale']],
-  [handlebars, ['quick/gen/templates.js', 'quick/templates']],
-  [browserify, ['dist/js/hc-scaffold-quick-start.js', 'quick/quick-main.js',
-    'hc_scaffold_quick_start', [
-      'lib/hc-i18n.js',
-      'quick/gen/templates.js',
-      'quick/gen/strings.js',
-      'quick/gen/version.js'
+  [writeVersion, ['src/gen/version.js']],
+  [jsonPack, ['src/gen/strings.js', 'src/locale']],
+  [handlebars, ['src/gen/templates.js', 'src/templates']],
+  [browserify, ['dist/js/hc-scaffold.js', 'src/main.js',
+    'hc_scaffold', [
+      'src/gen/templates.js',
+      'src/gen/strings.js',
+      'src/gen/version.js'
     ]
   ]],
   [browserify, ['dist/test/test.js', 'test/test-main.js',
-    'hc_scaffold_quick_start_test', [
-      'lib/hc-i18n.js',
-      'quick/gen/strings.js'
+    'hc_scaffold_test', [
+      'src/gen/strings.js'
     ]
   ]]
 ]

@@ -4,7 +4,7 @@
 
 const version = require('./gen/version')
 
-const i18n = require('../lib/hc-i18n')
+const i18n = require('./hc-i18n')
 i18n.loadStrings(require('./gen/strings'))
 const __ = i18n.getText
 
