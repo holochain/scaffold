@@ -27,6 +27,7 @@ const FIXTURE_1 = {
       Entries: [
         {
           Name: 'test-entry',
+          Required: true,
           DataFormat: 'json',
           Sharing: 'public',
           SchemaFile: 'test-entry.json',
@@ -63,7 +64,8 @@ const FIXTURE_1 = {
           CallingType: 'json',
           Exposure: 'public'
         }
-      ]
+      ],
+      ZomeCode: 'xxx'
     }
   ]
 }
@@ -101,7 +103,7 @@ const i18n = require('../src/hc-i18n')
 i18n.loadStrings(require('../src/gen/strings.js'))
 const __ = i18n.getText
 
-const LANGS = ['en', 'ja']
+// const LANGS = ['en', 'ja']
 
 // let testFrame
 
@@ -145,7 +147,7 @@ describe('HC Scaffold Quick Start', () => {
   })
 
   describe('translation check', () => {
-    for (let lang of LANGS) {
+    for (let lang of i18n.listLocales()) {
       it('"' + lang + '"', (done) => {
         i18n.setLocale(lang)
 
@@ -176,8 +178,19 @@ describe('HC Scaffold Quick Start', () => {
         waitExists('.yaml-display').then((res) => {
           let yaml
           try {
-            yaml = YAML.load(res[0].innerText)
-            yaml.generator = 'xxx' // ignore generator diffs
+            const editor = document.getElementById('test-frame')
+              .contentWindow.__hcScaffoldYamlDisplayEditor
+
+            yaml = YAML.load(editor.getValue())
+
+            // ignore generator diffs
+            yaml.generator = 'xxx'
+
+            for (let zome of yaml.Zomes) {
+              // ignore zome code for now
+              zome.ZomeCode = 'xxx'
+            }
+
             expect(yaml).deep.equals(FIXTURE_1)
             done()
           } catch (e) {

@@ -36,5 +36,14 @@ npm test
 npm start
 ```
 
+- The `npm test` command includes the browserify / minification step, after making any changes, run this to see them.
 - Please make sure `npm test` is successfull before submitting pull requests.
 - Please make sure to squash your changes before submitting / updating pull requests.
+
+## i18n / Languages
+
+- All language files are currently compiled into the minified release bundle. After changing a source language file (`src/locale/[iso-2-letter-language-code].json`), you will need to run `npm test` to build the bundle (see "Contributing" above).
+- Language json files must be saved as utf-8 encoding
+- Strings support sprintf-style replacements, e.g. 
+  - en `"foo %1$s %2$d"` could output a string like `"foo bar 3"` while
+  - ja `"%2$dご飯%1$s"` given the same input would output `"3ご飯bar"`

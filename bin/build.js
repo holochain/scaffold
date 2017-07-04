@@ -17,6 +17,7 @@ const path = isWindows ? require('path').win32 : require('path').posix
 const BUILD_LIST = [
   [writeVersion, ['src/gen/version.js']],
   [jsonPack, ['src/gen/strings.js', 'src/locale']],
+  [jsonPack, ['src/gen/schema.js', 'src/schema']],
   [handlebars, ['src/gen/templates.js', 'src/templates']],
   [browserify, ['dist/js/hc-scaffold.js', 'src/main.js',
     'hc_scaffold', [
@@ -44,7 +45,7 @@ function main () {
 # see bin/build.js
 
 rule writeversion
-  command = node ${path.normalize('build/write_version.js')}
+  command = node ${path.normalize('bin/build/write_version.js')}
 
 rule handlebars
   command = ${shell}${path.normalize('node_modules/.bin/handlebars')} $
@@ -61,7 +62,9 @@ rule browserify
     -e $in
 
 rule babel
-  command = ${shell}${path.normalize('node_modules/.bin/babel')} -o $out $in
+  command = ${shell}${path.normalize('node_modules/.bin/babel')} $
+    --compact false $
+    -o $out $in
 
 rule uglify
   command = ${shell}${path.normalize('node_modules/.bin/uglifyjs')} $
@@ -70,7 +73,7 @@ rule uglify
     $in
 
 rule jsonpack
-  command = node ${path.normalize('build/json_pack.js')} $out $in`)
+  command = node ${path.normalize('bin/build/json_pack.js')} $out $in`)
 
   // iterate through the BUILD_LIST executing sub functions
   const queue = BUILD_LIST.slice(0)

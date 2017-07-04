@@ -1,4 +1,4 @@
-<tr class="zome-entry-row">
+<tr class="zome-entry-row" id="{{id}}">
   <td>
     <a href="javascript:void(0)" data-hc-bind="click:$deleteZomeEntry" data-hc-id="{{id}}">
       <i class="material-icons">&#xE92B;</i><span>{{__ 'button-deleteZomeEntry'}}</span>
@@ -8,7 +8,7 @@
     <input type="text" data-hc-bind="change:$render keyup:$render" id="name-{{id}}" class="zome-entry-name" />
   </td>
   <td>
-    <select data-hc-bind="change:$render" class="zome-entry-data-format">
+    <select data-hc-bind="change:$render change:$entryRowType" data-hc-id="{{id}}" class="zome-entry-data-format">
       <option value="json" selected="selected">Json</option>
       <option value="links">Links</option>
       <option value="string">String</option>
@@ -31,5 +31,10 @@
   </td>
   <td>
     <input type="checkbox" data-hc-bind="change:$render" name="delete-{{id}}" class="zome-entry-delete" />
+  </td>
+  <td>
+    <a title="{{__ 'button-zomeEntryMore'}}" href="javascript:void(0)" data-hc-bind="click:$zomeEntryMore" data-hc-id="{{id}}" data-hc-zome-id="{{zome-id}}" class="no-text entry-more">
+      <i class="material-icons">&#xE5D3;</i>
+    </a>
   </td>
 </tr>
