@@ -90,6 +90,13 @@ form > input,
   border-radius: 0.5rem;
 }
 
+.instructions a {
+  display: inline-block;
+  border: none;
+  background: none;
+  text-decoration: underline;
+}
+
 fieldset {
   margin-top: 1rem;
   padding: 1rem;
@@ -172,6 +179,14 @@ th {
   padding: 0.5rem;
 }
 
+.zome-entry-row .entry-more {
+  display: none;
+}
+
+.zome-entry-row.type-json .entry-more {
+  display: inline-block;
+}
+
 .form-body > input[type="button"] {
 }
 
@@ -179,7 +194,7 @@ th {
   box-sizing: border-box;
 }
 
-.page.sidebar-hidden .yaml-display {
+.page.sidebar-hidden .yaml-wrapper {
   display: none;
 }
 
@@ -223,7 +238,7 @@ pre {
   font-family: 'Inconsolata', monospace;
 }
 
-.yaml-display {
+.yaml-wrapper {
   box-sizing: border-box;
   position: absolute;
   right: 0;
@@ -234,7 +249,13 @@ pre {
   border: 1px dashed #aaa;
 }
 
-.menu-bg {
+.yaml-display {
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+.menu-bg,
+.modal-bg {
   position: fixed;
   z-index: 50;
   top: 0;
@@ -262,4 +283,90 @@ pre {
 
 .menu-container > a {
   margin-top: 0.5rem;
+}
+
+.modal-wrap {
+  box-sizing: border-box;
+  padding: 1rem;
+  position: fixed;
+  top: 10%;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #aaa;
+  border-radius: 0.5rem;
+  background-color: #e0e0ff;
+  min-width: 60%;
+}
+
+.modal-button {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+}
+
+.modal-container > a:first-child {
+  margin-top: 0;
+}
+
+.modal-container > a {
+  margin-top: 0.5rem;
+}
+
+.javascript-wrap {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 4rem;
+  left: 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  border: 1px dashed #aaa;
+}
+
+.javascript-display {
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+/* -- entry advanced special setup -- */
+
+.entry-advanced-wrap {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.entry-advanced-top {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 12.5rem;
+}
+
+.entry-advanced-bottom {
+  position: absolute;
+  top: 12.5rem;
+  right: 0;
+  bottom: 4rem;
+  left: 0;
+}
+
+.json-schema-wrap {
+  top: 0.5rem;
+  right: 0;
+  left: 0;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  border: 1px dashed #aaa;
+}
+
+.json-schema-display {
+  height: 100%;
+  border-radius: 0.5rem;
 }

@@ -1,6 +1,6 @@
 'use strict'
 
-/* global hljs */
+/* global ace */
 
 const version = require('./gen/version')
 
@@ -16,10 +16,22 @@ require('./gen/templates')
 
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
+const CODE_GEN = {
+  js: require('./code/js')
+}
+
+const schema = require('./gen/schema')
+const JSON_SCHEMA_EXAMPLE = schema.example
+const JSON_SCHEMA_META = schema.schema
+
+const Ajv = require('ajv')
+const ajv = new Ajv()
+const jsonSchemaValidate = ajv.compile(JSON_SCHEMA_META)
+
 /**
  * Generates a holochain dna scaffold file.
  */
-class QuickStart {
+class HcScaffold {
   /**
    * Set up some default class vars
    */
@@ -56,6 +68,14 @@ class QuickStart {
       this.appDesc = this.ROOT.querySelector('#appdesc')
       this.zomesDiv = this.ROOT.querySelector('#zomes')
 
+      const editor = this.yamlDisplayEditor = ace.edit(this.yamlDisplay)
+      editor.$blockScrolling = Infinity
+      editor.setTheme('ace/theme/github')
+      editor.getSession().setMode('ace/mode/yaml')
+      editor.setReadOnly(true)
+
+      window.__hcScaffoldYamlDisplayEditor = editor
+
       let json
       try {
         json = JSON.parse(localStorage.getItem(SAVE_JSON_KEY))
@@ -65,6 +85,8 @@ class QuickStart {
       if (json) {
         this._loadJson(json)
       } else {
+        this.json = {}
+
         // otherwise show an empty ui
         this._displayYaml()
       }
@@ -151,6 +173,13 @@ class QuickStart {
   }
 
   /**
+   * Prevent dismiss by stopping propagation
+   */
+  $intercept (params, evtData) {
+    evtData.evt.stopPropagation()
+  }
+
+  /**
    * Re-render the popup menu with languages
    * TODO - if we get more than screen size here... i think it won't
    * scroll correctly...
@@ -230,10 +259,53 @@ class QuickStart {
   }
 
   /**
+   * View code, delete, etc
+   */
+  $zomeOptions (params, evtData) {
+    const wrap = this._genTemplates(this.ROOT, 'modal', {})
+    const cont = wrap.elems[0].querySelector('.modal-container')
+    this._genTemplates(cont, 'zome-options', {
+      'zome-id': params.id,
+      'menu-id': wrap.id
+    })
+  }
+
+  /**
+   * Show the code that was generated for this zome
+   */
+  $viewZomeCode (params, evtData) {
+    this._rmTemplate(params['menu-id'])
+    const wrap = this._genTemplates(this.ROOT, 'modal', {})
+    const cont = wrap.elems[0].querySelector('.modal-container')
+    const js = this._genTemplates(cont, 'zome-code', {}).parent
+      .querySelector('.javascript-display')
+
+    let code = ''
+    for (let zome of this.json.Zomes) {
+      if (zome.__tplId === params.id) {
+        code = zome.ZomeCode
+      }
+    }
+
+    const editor = ace.edit(js)
+    editor.$blockScrolling = Infinity
+    editor.setTheme('ace/theme/github')
+    editor.getSession().setMode('ace/mode/javascript')
+    editor.setReadOnly(true)
+    editor.setValue(code)
+    editor.clearSelection()
+  }
+
+  /**
    * Add a zome
    */
   $addZome (params, evtData) {
-    this._genTemplates(this.zomesDiv, 'zome', {})
+    const jsonZome = {}
+    this._addZome(jsonZome)
+    if (!this.json.Zomes) {
+      this.json.Zomes = []
+    }
+    this.json.Zomes.push(jsonZome)
     this._displayYaml()
   }
 
@@ -242,6 +314,7 @@ class QuickStart {
    */
   $deleteZome (params, evtData) {
     this._rmTemplate(params.id)
+    this._rmTemplate(params['menu-id'])
     this._displayYaml()
   }
 
@@ -249,7 +322,17 @@ class QuickStart {
    * Add an entry to the zome defined by (params.id)
    */
   $addZomeEntry (params, evtData) {
-    this._addZomeEntry(params.id)
+    const jsonEntry = {}
+    this._addZomeEntry(params.id, jsonEntry)
+    for (let zome of this.json.Zomes) {
+      if (zome.__tplId === params.id) {
+        if (!zome.Entries) {
+          zome.Entries = []
+        }
+        zome.Entries.push(jsonEntry)
+        break
+      }
+    }
     this._displayYaml()
   }
 
@@ -262,10 +345,100 @@ class QuickStart {
   }
 
   /**
+   * when the type changes, we need to show/hide the "more" button
+   */
+  $entryRowType (params, evtData) {
+    const row = this.templates[params.id].elems[0]
+    row.classList.remove('type-json')
+    row.classList.remove('type-links')
+    row.classList.remove('type-string')
+    row.classList.add('type-' + evtData.elem.value)
+  }
+
+  /**
+   * For "json" entry types, allow editing of the schema
+   */
+  $zomeEntryMore (params, evtData) {
+    let zomeRef
+    for (let zome of this.json.Zomes) {
+      if (zome.__tplId === params['zome-id']) {
+        zomeRef = zome
+        break
+      }
+    }
+    let entryRef = {}
+    for (let entry of zomeRef.Entries) {
+      if (entry.__tplId === params.id) {
+        entryRef = entry
+        break
+      }
+    }
+    const wrap = this._genTemplates(this.ROOT, 'modal', {})
+    const cont = wrap.elems[0].querySelector('.modal-container')
+    const tpl = this._genTemplates(cont, 'zome-entry-advanced', {
+      zomeName: zomeRef.Name || '',
+      entryName: entryRef.Name || '',
+      'zome-id': params['zome-id'],
+      'entry-id': params.id
+    })
+
+    let schema = entryRef.Schema
+    if (!schema) {
+      schema = JSON.parse(JSON.stringify(JSON_SCHEMA_EXAMPLE))
+      schema.id = 'http://example.com/' +
+        (zomeRef.Name || 'zome').replace(/\s/g, '').toLowerCase() + '/' +
+        (entryRef.Name || 'entry').replace(/\s/g, '').toLowerCase() +
+        '.json'
+      entryRef.Schema = schema
+      this._displayYaml()
+    }
+
+    const results = tpl.parent.querySelector('.results')
+
+    const json = tpl.parent.querySelector('.json-schema-display')
+    const editor = ace.edit(json)
+    editor.$blockScrolling = Infinity
+    editor.setTheme('ace/theme/github')
+    editor.getSession().setMode('ace/mode/json')
+    editor.setValue(JSON.stringify(schema, null, '  '))
+    editor.clearSelection()
+    editor.getSession().on('change', () => {
+      let newSchema
+      while (results.childNodes.length) {
+        results.removeChild(results.childNodes[0])
+      }
+      try {
+        newSchema = JSON.parse(editor.getValue())
+
+        const res = jsonSchemaValidate(newSchema)
+        if (!res) {
+          throw new Error(ajv.errorsText(jsonSchemaValidate.errors))
+        }
+      } catch (e) {
+        results.appendChild(document.createTextNode(e.toString()))
+        return
+      }
+      results.appendChild(document.createTextNode(__('notice-changesSaved')))
+      entryRef.Schema = newSchema
+      this._displayYaml()
+    })
+  }
+
+  /**
    * Add a function to the zome defined by (params.id)
    */
   $addZomeFunction (params, evtData) {
-    this._addZomeFunction(params.id)
+    const jsonFunc = {}
+    this._addZomeFunction(params.id, jsonFunc)
+    for (let zome of this.json.Zomes) {
+      if (zome.__tplId === params.id) {
+        if (!zome.Functions) {
+          zome.Functions = []
+        }
+        zome.Functions.push(jsonFunc)
+        break
+      }
+    }
     this._displayYaml()
   }
 
@@ -283,11 +456,8 @@ class QuickStart {
    * Generate yaml from the UI (dom) nodes, and display it in the sidebar
    */
   _displayYaml () {
-    while (this.yamlDisplay.childNodes.length) {
-      this.yamlDisplay.removeChild(this.yamlDisplay.childNodes[0])
-    }
-    this.yamlDisplay.appendChild(document.createTextNode(this._genYaml()))
-    hljs.highlightBlock(this.yamlDisplay)
+    this.yamlDisplayEditor.setValue(this._genYaml())
+    this.yamlDisplayEditor.clearSelection()
   }
 
   /**
@@ -303,21 +473,41 @@ class QuickStart {
   }
 
   /**
+   * Render an additional zome to our list
+   */
+  _addZome (zome) {
+    const tpl = this._genTemplates(this.zomesDiv, 'zome', {})
+    zome.__tplId = tpl.id
+    return tpl
+  }
+
+  /**
    * Render an additional entry into a zome by template id
    */
-  _addZomeEntry (zomeTemplateId) {
+  _addZomeEntry (zomeTemplateId, jsonEntry) {
     const parentTemplate = this.templates[zomeTemplateId]
-    return this._genTemplates(parentTemplate.parent.querySelector(
-      '#zomeentries-' + zomeTemplateId), 'zome-entry', {})
+    const tpl = this._genTemplates(parentTemplate.parent.querySelector(
+      '#zomeentries-' + zomeTemplateId), 'zome-entry', {
+        'zome-id': zomeTemplateId
+      }
+    )
+    tpl.elems[0].classList.add('type-json')
+    jsonEntry.__tplId = tpl.id
+    if (typeof jsonEntry.Required !== 'boolean') {
+      jsonEntry.Required = true
+    }
+    return tpl
   }
 
   /**
    * Render an additional function into a zome by template id
    */
-  _addZomeFunction (zomeTemplateId) {
+  _addZomeFunction (zomeTemplateId, jsonFunc) {
     const parentTemplate = this.templates[zomeTemplateId]
-    return this._genTemplates(parentTemplate.parent.querySelector(
+    const tpl = this._genTemplates(parentTemplate.parent.querySelector(
       '#zomefunctions-' + zomeTemplateId), 'zome-function', {})
+    jsonFunc.__tplId = tpl.id
+    return tpl
   }
 
   /**
@@ -325,25 +515,36 @@ class QuickStart {
    * Loads a json blob into UI (dom) elements
    */
   _loadJson (json) {
-    this.uuid = json.UUID
+    try {
+      this.json = json
 
-    this.appName.value = json.Name || ''
+      this.uuid = json.UUID
 
-    if (json.Properties) {
-      this.appDesc.value = json.Properties.description
+      this.appName.value = json.Name || ''
+
+      if (json.Properties) {
+        this.appDesc.value = json.Properties.description
+      }
+
+      for (let zome of json.Zomes) {
+        let tpl = this._addZome(zome)
+
+        tpl.elems[0].querySelector('.zomename').value = zome.Name
+        tpl.elems[0].querySelector('.zomedesc').value = zome.Description
+
+        this._loadJsonEntries(zome, tpl.id)
+        this._loadJsonFunctions(zome, tpl.id)
+      }
+
+      this._displayYaml()
+    } catch (e) {
+      // some loading error... clear, alert and reload
+      localStorage.removeItem(SAVE_JSON_KEY)
+
+      alert('error loading json: ' + e.toString())
+
+      location.reload()
     }
-
-    for (let zome of json.Zomes) {
-      let tpl = this._genTemplates(this.zomesDiv, 'zome', {})
-
-      tpl.elems[0].querySelector('.zomename').value = zome.Name
-      tpl.elems[0].querySelector('.zomedesc').value = zome.Description
-
-      this._loadJsonEntries(zome, tpl.id)
-      this._loadJsonFunctions(zome, tpl.id)
-    }
-
-    this._displayYaml()
   }
 
   /**
@@ -351,9 +552,10 @@ class QuickStart {
    */
   _loadJsonEntries (json, zomeTemplateId) {
     for (let entry of json.Entries) {
-      const tpl = this._addZomeEntry(zomeTemplateId)
+      const tpl = this._addZomeEntry(zomeTemplateId, entry)
 
       const row = tpl.elems[0]
+      row.classList.add('type-' + (entry.DataFormat || 'json'))
       row.querySelector('.zome-entry-name').value = entry.Name || ''
       row.querySelector('.zome-entry-data-format').value =
         entry.DataFormat || 'json'
@@ -382,7 +584,7 @@ class QuickStart {
         continue
       }
 
-      const tpl = this._addZomeFunction(zomeTemplateId)
+      const tpl = this._addZomeFunction(zomeTemplateId, func)
 
       const row = tpl.elems[0]
 
@@ -397,18 +599,21 @@ class QuickStart {
    * Then passes that through `toYaml` to append the annotation comments
    */
   _genYaml () {
-    let json = {}
+    const json = this.json
 
     json.UUID = this.uuid
 
     json.Name = this.appName.value
-    let props = json.Properties = {}
+    if (!json.Properties) {
+      json.Properties = {}
+    }
+    const props = json.Properties
 
     props.description = this.appDesc.value
 
     props.language = i18n.getLocale()
 
-    json.Zomes = this._genZomesJson()
+    this._genZomesJson()
 
     localStorage.setItem(SAVE_JSON_KEY, JSON.stringify(json))
 
@@ -422,31 +627,53 @@ class QuickStart {
     const zomes = this.zomesDiv.querySelectorAll('.zome')
     const data = []
 
+    const currentOrNew = (id) => {
+      for (let zome of this.json.Zomes) {
+        if (zome.__tplId === id) {
+          return zome
+        }
+      }
+      return {}
+    }
+
     for (let zome of zomes) {
-      const obj = {}
+      const obj = currentOrNew(zome.id)
 
       obj.Name = zome.querySelector('.zomename').value
       obj.Description = zome.querySelector('.zomedesc').value
 
-      obj.Entries = this._genZomeEntryJson(zome)
+      this._genZomeEntryJson(obj, zome)
 
-      obj.Functions = this._genZomeFunctionJson(zome)
+      this._genZomeFunctionJson(obj, zome)
+
+      obj.ZomeCode = CODE_GEN[obj.NucleusType || 'js'].generate({
+        entryNames: obj.Entries.map((e) => { return e.Name })
+      })
 
       data.push(obj)
     }
 
-    return data
+    this.json.Zomes = data
   }
 
   /**
    * Used by _genYaml to add entries to a zome
    */
-  _genZomeEntryJson (parent) {
+  _genZomeEntryJson (jsonZome, parent) {
     const rows = parent.querySelectorAll('.zome-entry-row')
     const data = []
 
+    const currentOrNew = (id) => {
+      for (let entry of jsonZome.Entries) {
+        if (entry.__tplId === id) {
+          return entry
+        }
+      }
+      return {}
+    }
+
     for (let row of rows) {
-      const obj = {}
+      const obj = currentOrNew(row.id)
 
       const name = row.querySelector('.zome-entry-name').value
       if (!name.trim().length) {
@@ -472,13 +699,13 @@ class QuickStart {
       data.push(obj)
     }
 
-    return data
+    jsonZome.Entries = data
   }
 
   /**
    * Used by _genYaml to add functions to a zome
    */
-  _genZomeFunctionJson (parent) {
+  _genZomeFunctionJson (jsonZome, parent) {
     const data = []
 
     const addFunction = (name, callingType, exposure, hint) => {
@@ -550,7 +777,7 @@ class QuickStart {
       )
     }
 
-    return data
+    jsonZome.Functions = data
   }
 
   /**
@@ -672,8 +899,7 @@ class QuickStart {
 }
 
 // entrypoint
-main()
-function main () {
-  let quickStart = new QuickStart()
-  quickStart.run()
-}
+;(function main () {
+  const instance = new HcScaffold()
+  instance.run()
+})()

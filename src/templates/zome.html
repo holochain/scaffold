@@ -1,6 +1,6 @@
-<fieldset class="zome">
-  <a href="javascript:void(0)" data-hc-bind="click:$deleteZome" data-hc-id="{{id}}">
-    <i class="material-icons">&#xE92B;</i><span>{{__ 'button-deleteZome'}}</span>
+<fieldset class="zome" id="{{id}}">
+  <a href="javascript:void(0)" data-hc-bind="click:$zomeOptions" data-hc-id="{{id}}">
+    <i class="material-icons">&#xE5D2;</i><span>{{__ 'button-zomeOptions'}}</span>
   </a>
   <fieldset>
     <legend>{{__ 'field-name-Zomes.Name'}}</legend>
@@ -25,6 +25,7 @@
         <th><i title="{{__ 'field-name-Zomes.Entries.Read'}}" class="material-icons">&#xE151;</i></th>
         <th><i title="{{__ 'field-name-Zomes.Entries.Update'}}" class="material-icons">&#xE150;</i></th>
         <th><i title="{{__ 'field-name-Zomes.Entries.Delete'}}" class="material-icons">&#xE14A;</i></th>
+        <td></td>
       </tr>
     </table>
     <a href="javascript:void(0)" data-hc-bind="click:$addZomeEntry" data-hc-id="{{id}}">

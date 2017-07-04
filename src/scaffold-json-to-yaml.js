@@ -137,6 +137,9 @@ function _addCommentsToZomes (json) {
     _f(obj, 'Zomes.Functions')
     obj.Functions = _addCommentsToZomeFunctions(zome.Functions)
 
+    _f(obj, 'Zomes.ZomeCode')
+    obj.ZomeCode = zome.ZomeCode || ''
+
     out.push(obj)
   }
 
@@ -160,6 +163,11 @@ function _addCommentsToZomeEntries (json) {
     obj.Name = name
     _c(obj, '<', 'field-desc-Zomes.Entries.Name')
 
+    obj.Required = (typeof entry.Required === 'boolean')
+      ? entry.Required
+      : true
+    _c(obj, '<', 'field-desc-Zomes.Entries.Required')
+
     const format = entry.DataFormat || 'json'
     obj.DataFormat = format
     _c(obj, '<', 'field-desc-Zomes.Entries.DataFormat')
@@ -169,6 +177,9 @@ function _addCommentsToZomeEntries (json) {
 
     if (format === 'json') {
       obj.SchemaFile = entry.SchemaFile || name + '.json'
+      if (entry.Schema) {
+        obj.Schema = entry.Schema
+      }
     }
 
     if (entry._) {

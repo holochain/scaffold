@@ -12,7 +12,7 @@ const PORT = 18181
 const path = require('path')
 const express = require('express')
 
-const exec = require('../build/exec-helper').exec
+const exec = require('./build/exec-helper').exec
 
 // the phantomjs node module just downloads a platform appropriate
 // binary and then provides a path to it. (phantomjs.path)
@@ -47,7 +47,7 @@ function main () {
       '--local-url-access=true',
       '--local-to-remote-url-access=true',
       '--web-security=false',
-      path.resolve('./build/phantom-runner.js'),
+      path.resolve('./bin/build/phantom-runner.js'),
       'http://127.0.0.1:' + PORT + '/test/test.html'
     ])
   })
