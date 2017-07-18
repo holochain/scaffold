@@ -103,10 +103,9 @@ const i18n = require('../src/hc-i18n')
 i18n.loadStrings(require('../src/gen/strings.js'))
 const __ = i18n.getText
 
-// const LANGS = ['en', 'ja']
-
-// let testFrame
-
+/**
+ * Wait until a querySelector returns results
+ */
 function waitExists (path) {
   return new Promise((resolve, reject) => {
     const start = Date.now()
@@ -123,7 +122,6 @@ function waitExists (path) {
 
       let res = frame.contentDocument.querySelectorAll(path)
       if (res.length) {
-        // testFrame = frame.contentDocument
         clearInterval(id)
         resolve(res)
       }
@@ -133,6 +131,12 @@ function waitExists (path) {
 
 function reload (query) {
   let frame = document.getElementById('test-frame')
+  if (frame.contentDocument && frame.contentDocument.body) {
+    let b = frame.contentDocument.body
+    while (b.childNodes.length) {
+      b.removeChild(b.childNodes[0])
+    }
+  }
   let url = '/index.html'
   if (query) {
     url += '?' + query
