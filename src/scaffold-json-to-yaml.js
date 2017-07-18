@@ -137,8 +137,8 @@ function _addCommentsToZomes (json) {
     _f(obj, 'Zomes.Functions')
     obj.Functions = _addCommentsToZomeFunctions(zome.Functions)
 
-    _f(obj, 'Zomes.ZomeCode')
-    obj.ZomeCode = zome.ZomeCode || ''
+    _f(obj, 'Zomes.Code')
+    obj.Code = zome.Code || ''
 
     out.push(obj)
   }

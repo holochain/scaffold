@@ -283,7 +283,7 @@ class HcScaffold {
     let code = ''
     for (let zome of this.json.Zomes) {
       if (zome.__tplId === params.id) {
-        code = zome.ZomeCode
+        code = zome.Code
       }
     }
 
@@ -646,7 +646,7 @@ class HcScaffold {
 
       this._genZomeFunctionJson(obj, zome)
 
-      obj.ZomeCode = CODE_GEN[obj.RibosomeType || 'js'].generate({
+      obj.Code = CODE_GEN[obj.RibosomeType || 'js'].generate({
         entryNames: obj.Entries.map((e) => { return e.Name })
       })
 
