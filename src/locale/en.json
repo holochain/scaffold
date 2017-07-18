@@ -63,8 +63,8 @@
   "field-name-Zomes.Description": "Zome Description",
   "field-desc-Zomes.Description": "What is the purpose of this module?",
 
-  "field-name-Zomes.NucleusType": "Nucleus Type",
-  "field-desc-Zomes.NucleusType": "What scripting language will you code in?",
+  "field-name-Zomes.RibosomeType": "Ribosome Type",
+  "field-desc-Zomes.RibosomeType": "What scripting language will you code in?",
 
   "field-name-Zomes.CodeFile": "Code File",
   "field-desc-Zomes.CodeFile": "Points to the main script file for this Zome.",

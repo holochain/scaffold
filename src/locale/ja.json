@@ -54,8 +54,8 @@
   "field-name-Zomes.Description": "ゾムの説明",
   "field-desc-Zomes.Description": "このゾムについて簡単に説明します。",
 
-  "field-name-Zomes.NucleusType": "核種",
-  "field-desc-Zomes.NucleusType": "どのようなコア言語で作業したいですか？",
+  "field-name-Zomes.RibosomeType": "核種",
+  "field-desc-Zomes.RibosomeType": "どのようなコア言語で作業したいですか？",
 
   "field-name-Zomes.CodeFile": "コード",
   "field-desc-Zomes.CodeFile": "あなたのアプリが実装されているコアスクリプトコードを指します。",

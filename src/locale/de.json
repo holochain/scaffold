@@ -55,8 +55,8 @@
   "field-name-Zomes.Description": "Zome Beschreibung",
   "field-desc-Zomes.Description": "Beschreibe dieses Zome kurz.",
 
-  "field-name-Zomes.NucleusType": "Nucleus Typ",
-  "field-desc-Zomes.NucleusType": "Welche Programmiersprache möchtest du für diesen Nucleus verwenden?",
+  "field-name-Zomes.RibosomeType": "Ribosome Typ",
+  "field-desc-Zomes.RibosomeType": "Welche Programmiersprache möchtest du für diesen Ribosome verwenden?",
 
   "field-name-Zomes.CodeFile": "Code Datei",
   "field-desc-Zomes.CodeFile": "Verweist auf die Skript-Datei in der deine Anwendung implementiert ist.",

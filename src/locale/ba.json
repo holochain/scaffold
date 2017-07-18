@@ -55,8 +55,8 @@
   "field-name-Zomes.Description": "Zome বর্ণনা করা",
   "field-desc-Zomes.Description": "এই moduleএর উদ্দেশ্য কি?",
 
-  "field-name-Zomes.NucleusType": "Nucleus আদর্শ",
-  "field-desc-Zomes.NucleusType": "কি scripting ভাষা আপনি code করব?",
+  "field-name-Zomes.RibosomeType": "Ribosome আদর্শ",
+  "field-desc-Zomes.RibosomeType": "কি scripting ভাষা আপনি code করব?",
 
   "field-name-Zomes.CodeFile": "Code ফাইল",
   "field-desc-Zomes.CodeFile": "পয়েন্ট to the প্রধান script থেকে ফাইল Zome জন্য",

@@ -117,8 +117,8 @@ function _addCommentsToZomes (json) {
     _f(obj, 'Zomes.Description')
     obj.Description = zome.Description || ''
 
-    _f(obj, 'Zomes.NucleusType')
-    obj.NucleusType = zome.NucleusType || 'js'
+    _f(obj, 'Zomes.RibosomeType')
+    obj.RibosomeType = zome.RibosomeType || 'js'
 
     _f(obj, 'Zomes.CodeFile')
     obj.CodeFile = zome.CodeFile || obj.Name.toLowerCase() + '.js'

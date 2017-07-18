@@ -55,8 +55,8 @@
   "field-name-Zomes.Description": "झूम वर्णन",
   "field-desc-Zomes.Description": "या मॉड्यूलचे काय कारण आहे??",
 
-  "field-name-Zomes.NucleusType": "केंद्रक प्रकार",
-  "field-desc-Zomes.NucleusType": "आपण कोणत्या स्क्रिप्टिंग भाषेत कोड करू शकाल?",
+  "field-name-Zomes.RibosomeType": "केंद्रक प्रकार",
+  "field-desc-Zomes.RibosomeType": "आपण कोणत्या स्क्रिप्टिंग भाषेत कोड करू शकाल?",
 
   "field-name-Zomes.CodeFile": "कोड फाइल",
   "field-desc-Zomes.CodeFile": "या झमेसाठी मुख्य स्क्रिप्ट फाइलसाठी पॉइंट्स.",

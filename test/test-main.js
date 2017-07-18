@@ -22,7 +22,7 @@ const FIXTURE_1 = {
     {
       Name: 'test-zome-name',
       Description: 'test-zome-description',
-      NucleusType: 'js',
+      RibosomeType: 'js',
       CodeFile: 'test-zome-name.js',
       Entries: [
         {
@@ -65,7 +65,7 @@ const FIXTURE_1 = {
           Exposure: 'public'
         }
       ],
-      ZomeCode: 'xxx'
+      Code: 'xxx'
     }
   ]
 }
@@ -188,7 +188,7 @@ describe('HC Scaffold Quick Start', () => {
 
             for (let zome of yaml.Zomes) {
               // ignore zome code for now
-              zome.ZomeCode = 'xxx'
+              zome.Code = 'xxx'
             }
 
             expect(yaml).deep.equals(FIXTURE_1)

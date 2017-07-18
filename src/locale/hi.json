@@ -55,8 +55,8 @@
   "field-name-Zomes.Description": "ज़ूम विवरण",
   "field-desc-Zomes.Description": "इस मॉड्यूल का क्या उद्देश्य है?",
 
-  "field-name-Zomes.NucleusType": "नाभिक प्रकार",
-  "field-desc-Zomes.NucleusType": "क्या स्क्रिप्टिंग भाषा आप में कोड करेंगे?",
+  "field-name-Zomes.RibosomeType": "नाभिक प्रकार",
+  "field-desc-Zomes.RibosomeType": "क्या स्क्रिप्टिंग भाषा आप में कोड करेंगे?",
 
   "field-name-Zomes.CodeFile": "कोड फ़ाइल",
   "field-desc-Zomes.CodeFile": "इस ज़ूम के लिए मुख्य स्क्रिप्ट फ़ाइल के लिए अंक",
