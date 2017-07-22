@@ -13,7 +13,7 @@ Please see the [holochain repository](http://github.com/metacurrency/holochain) 
 
 ## Usage
 
-To get started quickly, please see the [Hosted Version](https://neonphog.github.io/hc-scaffold/dist/) of this code.
+To get started quickly, please see the [Hosted Version](https://metacurrency.github.io/hc-scaffold/) of this code.
 
 To run locally:
 
@@ -44,6 +44,6 @@ npm start
 
 - All language files are currently compiled into the minified release bundle. After changing a source language file (`src/locale/[iso-2-letter-language-code].json`), you will need to run `npm test` to build the bundle (see "Contributing" above).
 - Language json files must be saved as utf-8 encoding
-- Strings support sprintf-style replacements, e.g. 
+- Strings support sprintf-style replacements, e.g.
   - en `"foo %1$s %2$d"` could output a string like `"foo bar 3"` while
   - ja `"%2$dご飯%1$s"` given the same input would output `"3ご飯bar"`
