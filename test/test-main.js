@@ -5,8 +5,9 @@ const YAML = require('yaml-js')
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
-  scaffoldVersion: '0.0.1',
+  scaffoldVersion: '0.0.2',
   generator: 'xxx',
+    DNA:  {
   Version: 1,
   UUID: 'test-uuid',
   Name: 'test-name',
@@ -68,6 +69,7 @@ const FIXTURE_1 = {
       Code: 'xxx'
     }
   ]
+    }
 }
 
 /* global callPhantom */
@@ -190,7 +192,7 @@ describe('HC Scaffold Quick Start', () => {
             // ignore generator diffs
             yaml.generator = 'xxx'
 
-            for (let zome of yaml.Zomes) {
+            for (let zome of yaml.DNA.Zomes) {
               // ignore zome code for now
               zome.Code = 'xxx'
             }

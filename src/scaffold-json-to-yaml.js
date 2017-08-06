@@ -42,7 +42,7 @@ exports.toYaml = function toYaml (json) {
 }
 
 /**
- * Add top-level dna properties
+ * Add top-level scaffold and dna properties
  */
 function _addCommentsToJson (json) {
   // make sure not to corrupt the input
@@ -53,51 +53,59 @@ function _addCommentsToJson (json) {
   _c(root, '#', 'yaml-header')
 
   _f(root, 'scaffoldVersion')
-  root.scaffoldVersion = '0.0.1'
+  root.scaffoldVersion = '0.0.2'
   root.generator = 'hc-scaffold:' + version.version
 
-  _f(root, 'Version')
-  root.Version = json.Version || 1
 
-  _f(root, 'UUID')
-  root.UUID = json.UUID || null
+  _f(root, 'DNA')
+  const dna = root.DNA = {}
 
-  _f(root, 'Name')
-  root.Name = json.Name || ''
+  if (!json.DNA) {
+      json.DNA = {}
+  }
 
-  _f(root, 'Properties')
-  const props = root.Properties = {}
+  _f(dna, 'Version')
+  dna.Version = json.DNA.Version || 1
 
-  if (!json.Properties) {
-    json.Properties = {}
+  _f(dna, 'UUID')
+  dna.UUID = json.DNA.UUID || null
+
+  _f(dna, 'Name')
+  dna.Name = json.DNA.Name || ''
+
+  _f(dna, 'Properties')
+  const props = dna.Properties = {}
+
+  if (!json.DNA.Properties) {
+    json.DNA.Properties = {}
   }
 
   _f(props, 'Properties.description')
-  props.description = json.Properties.description || ''
+  props.description = json.DNA.Properties.description || ''
 
   _f(props, 'Properties.language')
-  props.language = json.Properties.language || 'en'
+  props.language = json.DNA.Properties.language || 'en'
 
-  _f(root, 'PropertiesSchemaFile')
-  root.PropertiesSchemaFile = json.PropertiesSchemaFile ||
+  _f(dna, 'PropertiesSchemaFile')
+  dna.PropertiesSchemaFile = json.DNA.PropertiesSchemaFile ||
     'properties_schema.json'
 
-  _f(root, 'DHTConfig')
+  _f(dna, 'DHTConfig')
 
-  if (!json.DHTConfig) {
-    json.DHTConfig = {}
+  if (!json.DNA.DHTConfig) {
+    json.DNA.DHTConfig = {}
   }
 
-  root.DHTConfig = {
-    HashType: json.DHTConfig.HashType || 'sha2-256'
+  dna.DHTConfig = {
+    HashType: json.DNA.DHTConfig.HashType || 'sha2-256'
   }
 
-  if (!json.Zomes) {
-    json.Zomes = []
+  if (!json.DNA.Zomes) {
+    json.DNA.Zomes = []
   }
 
-  _f(root, 'Zomes')
-  root.Zomes = _addCommentsToZomes(json.Zomes)
+  _f(dna, 'Zomes')
+  dna.Zomes = _addCommentsToZomes(json.DNA.Zomes)
 
   return root
 }
