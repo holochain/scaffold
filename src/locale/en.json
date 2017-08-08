@@ -30,6 +30,9 @@
   "field-name-scaffoldVersion": "Scaffold Version",
   "field-desc-scaffoldVersion": "The hc-scaffold schema version of this file.",
 
+  "field-name-DNA": "Application DNA",
+  "field-desc-DNA": "The DNA specifies the entry structure and functions and configuration of your application",
+
   "field-name-Version": "DNA File Version",
   "field-desc-Version": "Version indicator for changes to DNA",
 

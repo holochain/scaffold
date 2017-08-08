@@ -24,6 +24,9 @@
   "field-name-scaffoldVersion": "足場のバージョン",
   "field-desc-scaffoldVersion": "このファイルのhc-scaffoldスキーマバージョン",
 
+  "field-name-DNA": "Application DNA",
+  "field-desc-DNA": "The DNA specifies the entry structure and functions and configuration of your application",
+
   "field-name-Version": "DNAファイルのバージョン",
   "field-desc-Version": "dnaファイルの変更のバージョンインジケータ",
 

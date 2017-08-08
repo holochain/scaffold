@@ -56,12 +56,11 @@ function _addCommentsToJson (json) {
   root.scaffoldVersion = '0.0.2'
   root.generator = 'hc-scaffold:' + version.version
 
-
   _f(root, 'DNA')
   const dna = root.DNA = {}
 
   if (!json.DNA) {
-      json.DNA = {}
+    json.DNA = {}
   }
 
   _f(dna, 'Version')

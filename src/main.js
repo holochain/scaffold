@@ -85,7 +85,7 @@ class HcScaffold {
       if (json) {
         this._loadJson(json)
       } else {
-        this.json = {DNA:{}}
+        this.json = {DNA: {}}
 
         // otherwise show an empty ui
         this._displayYaml()
@@ -302,7 +302,7 @@ class HcScaffold {
   $addZome (params, evtData) {
     const jsonZome = {}
     this._addZome(jsonZome)
-      if (!this.json.DNA.Zomes) {
+    if (!this.json.DNA.Zomes) {
       this.json.DNA.Zomes = []
     }
     this.json.DNA.Zomes.push(jsonZome)

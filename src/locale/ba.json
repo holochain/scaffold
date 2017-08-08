@@ -22,6 +22,9 @@
   "field-name-scaffoldVersion": "ভারা Version",
   "field-desc-scaffoldVersion": "দ্য hc-scaffold schema version এই এর ফাইল |",
 
+  "field-name-DNA": "Application DNA",
+  "field-desc-DNA": "The DNA specifies the entry structure and functions and configuration of your application",
+
   "field-name-Version": "DNA ফাইল Version",
   "field-desc-Version": "Versionএই এর সূচকটি পরিবর্তনগুলি জন্য DNA উপর",
 

@@ -22,6 +22,9 @@
   "field-name-scaffoldVersion": "Gerüst Version",
   "field-desc-scaffoldVersion": "Die hc-scaffold Schema Version dieser Datei.",
 
+  "field-name-DNA": "Application DNA",
+  "field-desc-DNA": "The DNA specifies the entry structure and functions and configuration of your application",
+
   "field-name-Version": "DNA Datei Version",
   "field-desc-Version": "Versionsanzeige DNA Datei Änderungen",
 
