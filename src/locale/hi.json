@@ -22,6 +22,9 @@
   "field-name-scaffoldVersion": "स्कैफोल्ड़   संस्करण ",
   "field-desc-scaffoldVersion": "एचसी-स्कैफोल्ड़, इस फ़ाइल का स्कीमा संस्करण",
 
+  "field-name-DNA": "Application DNA",
+  "field-desc-DNA": "The DNA specifies the entry structure and functions and configuration of your application",
+
   "field-name-Version": "डीएनए फ़ाइल संस्करण",
   "field-desc-Version": "डीएनए में परिवर्तन के लिए संस्करण सूचक",
 

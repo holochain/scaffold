@@ -4,7 +4,7 @@
   "description": "Cli and Web wizard for generating scaffolding for holochain applications.",
   "main": "index.js",
   "scripts": {
-    "test": "standard && node ./bin/build.js && ninja && node ./bin/exec-tests.js",
+    "test": "standard --fix && node ./bin/build.js && ninja && node ./bin/exec-tests.js",
     "start": "node ./bin/demo-server.js"
   },
   "repository": {
@@ -44,6 +44,7 @@
     },
     "ignore": [
       "dist",
+      "docs",
       "src/gen"
     ]
   }

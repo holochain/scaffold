@@ -5,69 +5,71 @@ const YAML = require('yaml-js')
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
-  scaffoldVersion: '0.0.1',
+  scaffoldVersion: '0.0.2',
   generator: 'xxx',
-  Version: 1,
-  UUID: 'test-uuid',
-  Name: 'test-name',
-  Properties: {
-    description: 'test-description',
-    language: 'en'
-  },
-  PropertiesSchemaFile: 'properties_schema.json',
-  DHTConfig: {
-    HashType: 'sha2-256'
-  },
-  Zomes: [
-    {
-      Name: 'test-zome-name',
-      Description: 'test-zome-description',
-      RibosomeType: 'js',
-      CodeFile: 'test-zome-name.js',
-      Entries: [
-        {
-          Name: 'test-entry',
-          Required: true,
-          DataFormat: 'json',
-          Sharing: 'public',
-          SchemaFile: 'test-entry.json',
-          _: 'crud'
-        }
-      ],
-      Functions: [
-        {
-          Name: 'test-entryCreate',
-          CallingType: 'json',
-          Exposure: 'public',
-          _: 'c:test-entry'
-        },
-        {
-          Name: 'test-entryRead',
-          CallingType: 'json',
-          Exposure: 'public',
-          _: 'r:test-entry'
-        },
-        {
-          Name: 'test-entryUpdate',
-          CallingType: 'json',
-          Exposure: 'public',
-          _: 'u:test-entry'
-        },
-        {
-          Name: 'test-entryDelete',
-          CallingType: 'json',
-          Exposure: 'public',
-          _: 'd:test-entry'
-        },
-        {
-          Name: 'test-function',
-          CallingType: 'json',
-          Exposure: 'public'
-        }
-      ],
-      Code: 'xxx'
-    }
-  ]
+  DNA: {
+    Version: 1,
+    UUID: 'test-uuid',
+    Name: 'test-name',
+    Properties: {
+      description: 'test-description',
+      language: 'en'
+    },
+    PropertiesSchemaFile: 'properties_schema.json',
+    DHTConfig: {
+      HashType: 'sha2-256'
+    },
+    Zomes: [
+      {
+        Name: 'test-zome-name',
+        Description: 'test-zome-description',
+        RibosomeType: 'js',
+        CodeFile: 'test-zome-name.js',
+        Entries: [
+          {
+            Name: 'test-entry',
+            Required: true,
+            DataFormat: 'json',
+            Sharing: 'public',
+            SchemaFile: 'test-entry.json',
+            _: 'crud'
+          }
+        ],
+        Functions: [
+          {
+            Name: 'test-entryCreate',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'c:test-entry'
+          },
+          {
+            Name: 'test-entryRead',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'r:test-entry'
+          },
+          {
+            Name: 'test-entryUpdate',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'u:test-entry'
+          },
+          {
+            Name: 'test-entryDelete',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'd:test-entry'
+          },
+          {
+            Name: 'test-function',
+            CallingType: 'json',
+            Exposure: 'public'
+          }
+        ],
+        Code: 'xxx'
+      }
+    ]
+  }
 }
 
 /* global callPhantom */
@@ -190,7 +192,7 @@ describe('HC Scaffold Quick Start', () => {
             // ignore generator diffs
             yaml.generator = 'xxx'
 
-            for (let zome of yaml.Zomes) {
+            for (let zome of yaml.DNA.Zomes) {
               // ignore zome code for now
               zome.Code = 'xxx'
             }

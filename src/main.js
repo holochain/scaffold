@@ -85,7 +85,7 @@ class HcScaffold {
       if (json) {
         this._loadJson(json)
       } else {
-        this.json = {}
+        this.json = {DNA: {}}
 
         // otherwise show an empty ui
         this._displayYaml()
@@ -122,7 +122,7 @@ class HcScaffold {
   }
 
   /**
-   * Allow users to upload json or yaml dna files.
+   * Allow users to upload json or yaml scaffold files.
    * Re-render based off their upload if it parses.
    */
   $upload (params, evtData) {
@@ -281,7 +281,7 @@ class HcScaffold {
       .querySelector('.javascript-display')
 
     let code = ''
-    for (let zome of this.json.Zomes) {
+    for (let zome of this.json.DNA.Zomes) {
       if (zome.__tplId === params.id) {
         code = zome.Code
       }
@@ -302,10 +302,10 @@ class HcScaffold {
   $addZome (params, evtData) {
     const jsonZome = {}
     this._addZome(jsonZome)
-    if (!this.json.Zomes) {
-      this.json.Zomes = []
+    if (!this.json.DNA.Zomes) {
+      this.json.DNA.Zomes = []
     }
-    this.json.Zomes.push(jsonZome)
+    this.json.DNA.Zomes.push(jsonZome)
     this._displayYaml()
   }
 
@@ -324,7 +324,7 @@ class HcScaffold {
   $addZomeEntry (params, evtData) {
     const jsonEntry = {}
     this._addZomeEntry(params.id, jsonEntry)
-    for (let zome of this.json.Zomes) {
+    for (let zome of this.json.DNA.Zomes) {
       if (zome.__tplId === params.id) {
         if (!zome.Entries) {
           zome.Entries = []
@@ -360,7 +360,7 @@ class HcScaffold {
    */
   $zomeEntryMore (params, evtData) {
     let zomeRef
-    for (let zome of this.json.Zomes) {
+    for (let zome of this.json.DNA.Zomes) {
       if (zome.__tplId === params['zome-id']) {
         zomeRef = zome
         break
@@ -430,7 +430,7 @@ class HcScaffold {
   $addZomeFunction (params, evtData) {
     const jsonFunc = {}
     this._addZomeFunction(params.id, jsonFunc)
-    for (let zome of this.json.Zomes) {
+    for (let zome of this.json.DNA.Zomes) {
       if (zome.__tplId === params.id) {
         if (!zome.Functions) {
           zome.Functions = []
@@ -518,15 +518,15 @@ class HcScaffold {
     try {
       this.json = json
 
-      this.uuid = json.UUID
+      this.uuid = json.DNA.UUID
 
-      this.appName.value = json.Name || ''
+      this.appName.value = json.DNA.Name || ''
 
-      if (json.Properties) {
-        this.appDesc.value = json.Properties.description
+      if (json.DNA.Properties) {
+        this.appDesc.value = json.DNA.Properties.description
       }
 
-      for (let zome of json.Zomes) {
+      for (let zome of json.DNA.Zomes) {
         let tpl = this._addZome(zome)
 
         tpl.elems[0].querySelector('.zomename').value = zome.Name
@@ -601,13 +601,17 @@ class HcScaffold {
   _genYaml () {
     const json = this.json
 
-    json.UUID = this.uuid
-
-    json.Name = this.appName.value
-    if (!json.Properties) {
-      json.Properties = {}
+    if (!json.DNA) {
+      json.DNA = {}
     }
-    const props = json.Properties
+
+    json.DNA.UUID = this.uuid
+
+    json.DNA.Name = this.appName.value
+    if (!json.DNA.Properties) {
+      json.DNA.Properties = {}
+    }
+    const props = json.DNA.Properties
 
     props.description = this.appDesc.value
 
@@ -628,7 +632,7 @@ class HcScaffold {
     const data = []
 
     const currentOrNew = (id) => {
-      for (let zome of this.json.Zomes) {
+      for (let zome of this.json.DNA.Zomes) {
         if (zome.__tplId === id) {
           return zome
         }
@@ -653,7 +657,7 @@ class HcScaffold {
       data.push(obj)
     }
 
-    this.json.Zomes = data
+    this.json.DNA.Zomes = data
   }
 
   /**
