@@ -1,36 +1,20 @@
 'use strict'
 module.exports = exports = {
   "example": {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "id": "http://example.com/example.json",
-    "type": "object",
-    "required": [
-      "age",
-      "name",
-      "tags"
-    ],
-    "properties": {
-      "age": {
-        "maximum": 120,
-        "minimum": 0,
-        "default": 0,
-        "type": "integer"
-      },
-      "name": {
-        "type": "string",
-        "pattern": ".+"
-      },
-      "tags": {
-        "default": [
-          "user"
-        ],
-        "items": {
-          "type": "string",
-          "pattern": ".+"
+     "title":"sampleEntry Schema",
+     "type":"object",
+     "properties":{  
+        "content":{  
+           "type":"string"
         },
-        "type": "array"
-      }
-    }
+        "timestamp":{  
+           "type":"integer"
+        }
+     },
+     "required":[  
+        "body",
+        "timestamp"
+     ]
   },
   "schema": {
     "$schema": "http://json-schema.org/draft-06/schema#",
