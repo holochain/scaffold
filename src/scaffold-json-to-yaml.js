@@ -185,7 +185,7 @@ function _addCommentsToZomeEntries (json) {
     if (format === 'json') {
       obj.SchemaFile = entry.SchemaFile || name + '.json'
       if (entry.Schema) {
-        obj.Schema = entry.Schema
+        obj.Schema = JSON.stringify(entry.Schema, null, 2)
       }
     }
 
