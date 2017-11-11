@@ -69,7 +69,24 @@ const FIXTURE_1 = {
         Code: 'xxx'
       }
     ]
-  }
+  },
+  'Tests': [
+    {
+      'Name': 'sample',
+      'Tests': [
+        {
+          'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing',
+          'FnName': 'sampleEntryCreate',
+          'Input': {
+            'body': 'this is the entry body',
+            'stamp': 12345
+          },
+          'Output': '"%h1%"',
+          'Exposure': 'public'
+        }
+      ]
+    }
+  ]
 }
 
 /* global callPhantom */

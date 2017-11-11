@@ -67,7 +67,9 @@ module.exports = exports = {
     "field-name-Zomes.Functions.CallingType": "কলিং আদর্শ",
     "field-desc-Zomes.Functions.CallingType": "উপাত্ত বিন্যাস parameters জন্য pass করব এই functionএর",
     "field-name-Zomes.Functions.Exposure": "প্রকাশ",
-    "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়"
+    "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   },
   "de": {
     "langName": "Deutsch",
@@ -136,7 +138,9 @@ module.exports = exports = {
     "field-name-Zomes.Functions.CallingType": "Calling Type",
     "field-desc-Zomes.Functions.CallingType": "Welches Datenformat soll an diese Funktion übergeben werden?",
     "field-name-Zomes.Functions.Exposure": "Exposure",
-    "field-desc-Zomes.Functions.Exposure": "Wer kann diese Funktione aufrufen?"
+    "field-desc-Zomes.Functions.Exposure": "Wer kann diese Funktione aufrufen?",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   },
   "en": {
     "langName": "English",
@@ -221,7 +225,9 @@ module.exports = exports = {
     "code-function-genesis": "Called only when your source chain is generated",
     "code-callout-validation": "validation functions for every DHT entry change",
     "code-function-pkg": "Called to get the data needed to validate",
-    "code-function-validate": "Called to validate any changes to the DHT"
+    "code-function-validate": "Called to validate any changes to the DHT",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   },
   "hi": {
     "langName": "हिंदी",
@@ -290,7 +296,9 @@ module.exports = exports = {
     "field-name-Zomes.Functions.CallingType": "बुलाने का प्रकार",
     "field-desc-Zomes.Functions.CallingType": "इस समारोह में पारित मापदंडों के लिए डेटा प्रारूप",
     "field-name-Zomes.Functions.Exposure": "अनावरण",
-    "field-desc-Zomes.Functions.Exposure": "इस फ़ंक्शन का स्तर उजागर हुआ है।"
+    "field-desc-Zomes.Functions.Exposure": "इस फ़ंक्शन का स्तर उजागर हुआ है।",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   },
   "ja": {
     "__notes__": "TODO - this file is google translated - need real translation",
@@ -358,7 +366,9 @@ module.exports = exports = {
     "field-name-Zomes.Functions.CallingType": "コールタイプ",
     "field-desc-Zomes.Functions.CallingType": "どのような形式のデータをこの関数に渡す必要がありますか？",
     "field-name-Zomes.Functions.Exposure": "暴露",
-    "field-desc-Zomes.Functions.Exposure": "誰がこの機能を呼び出すことができますか？"
+    "field-desc-Zomes.Functions.Exposure": "誰がこの機能を呼び出すことができますか？",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   },
   "mr": {
     "langName": "मराठी",
@@ -427,6 +437,8 @@ module.exports = exports = {
     "field-name-Zomes.Functions.CallingType": "कॉलिंग प्रकार",
     "field-desc-Zomes.Functions.CallingType": "या फंक्शनला पाठविलेल्या पॅरामिटर्ससाठी डेटा स्वरूप.",
     "field-name-Zomes.Functions.Exposure": "एक्सपोजर",
-    "field-desc-Zomes.Functions.Exposure": "या फंक्शनचा स्तर उघड झाला आहे."
+    "field-desc-Zomes.Functions.Exposure": "या फंक्शनचा स्तर उघड झाला आहे.",
+    "field-name-Tests": "Tests",
+    "field-desc-Tests": "Empty test for hcdev package"
   }
 }
