@@ -92,5 +92,8 @@
   "field-desc-Zomes.Functions.CallingType": "इस समारोह में पारित मापदंडों के लिए डेटा प्रारूप",
 
   "field-name-Zomes.Functions.Exposure": "अनावरण",
-  "field-desc-Zomes.Functions.Exposure": "इस फ़ंक्शन का स्तर उजागर हुआ है।"
+  "field-desc-Zomes.Functions.Exposure": "इस फ़ंक्शन का स्तर उजागर हुआ है।",
+
+  "field-name-Tests": "Tests",
+  "field-desc-Tests": "Empty test for hcdev package"
 }

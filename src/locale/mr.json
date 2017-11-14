@@ -91,5 +91,8 @@
   "field-desc-Zomes.Functions.CallingType": "या फंक्शनला पाठविलेल्या पॅरामिटर्ससाठी डेटा स्वरूप.",
 
   "field-name-Zomes.Functions.Exposure": "एक्सपोजर",
-  "field-desc-Zomes.Functions.Exposure": "या फंक्शनचा स्तर उघड झाला आहे."
+  "field-desc-Zomes.Functions.Exposure": "या फंक्शनचा स्तर उघड झाला आहे.",
+
+  "field-name-Tests": "Tests",
+  "field-desc-Tests": "Empty test for hcdev package"
 }

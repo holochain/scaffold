@@ -91,5 +91,8 @@
   "field-desc-Zomes.Functions.CallingType": "Welches Datenformat soll an diese Funktion übergeben werden?",
 
   "field-name-Zomes.Functions.Exposure": "Exposure",
-  "field-desc-Zomes.Functions.Exposure": "Wer kann diese Funktione aufrufen?"
+  "field-desc-Zomes.Functions.Exposure": "Wer kann diese Funktione aufrufen?",
+
+  "field-name-Tests": "Tests",
+  "field-desc-Tests": "Empty test for hcdev package"
 }

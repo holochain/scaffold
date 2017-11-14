@@ -111,5 +111,8 @@
   "code-function-genesis": "Called only when your source chain is generated",
   "code-callout-validation": "validation functions for every DHT entry change",
   "code-function-pkg": "Called to get the data needed to validate",
-  "code-function-validate": "Called to validate any changes to the DHT"
+  "code-function-validate": "Called to validate any changes to the DHT",
+
+  "field-name-Tests": "Tests",
+  "field-desc-Tests": "Empty test for hcdev package"
 }
