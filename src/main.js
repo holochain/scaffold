@@ -28,6 +28,7 @@ const Ajv = require('ajv')
 const ajv = new Ajv()
 const jsonSchemaValidate = ajv.compile(JSON_SCHEMA_META)
 
+let EntrySchemas = {}
 /**
  * Generates a holochain dna scaffold file.
  */
@@ -392,6 +393,7 @@ class HcScaffold {
         (entryRef.Name || 'entry').replace(/\s/g, '').toLowerCase() +
         '.json'
       entryRef.Schema = schema
+      EntrySchemas[entryRef.Name] = schema
       this._displayYaml()
     }
 
@@ -423,6 +425,7 @@ class HcScaffold {
 
       results.appendChild(document.createTextNode(__('notice-changesSaved')))
       entryRef.Schema = newSchema
+      EntrySchemas[entryRef.Name] = newSchema
       this._displayYaml()
     })
   }
@@ -690,6 +693,14 @@ class HcScaffold {
       obj.Name = name
       obj.DataFormat = row.querySelector('.zome-entry-data-format').value
       obj.Sharing = row.querySelector('.zome-entry-sharing').value
+      if(obj.DataFormat === 'json' && EntrySchemas[name]) {
+        obj.Schema = EntrySchemas[name]
+      }
+
+      if(typeof obj.Schema != 'object') {
+        obj.Schema = JSON.parse(obj.Schema)
+      }
+
 
       let hint = ''
       row.querySelector('.zome-entry-create').checked && (hint += 'c')
