@@ -11,8 +11,8 @@ module.exports = exports = {
            "type":"integer"
         }
      },
-     "required":[  
-        "body",
+     "required":[
+        "content",
         "timestamp"
      ]
   },
