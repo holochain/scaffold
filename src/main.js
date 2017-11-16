@@ -261,6 +261,15 @@ class HcScaffold {
     }, 300)
   }
 
+  $reloadLater (params, evtData) {
+    let timer
+    setTimeout(() => {
+      clearTimeout(timer)
+      this._displayYaml()
+      location.reload()
+    }, 1500)
+  }
+
   /**
    * View code, delete, etc
    */
@@ -393,9 +402,9 @@ class HcScaffold {
         (entryRef.Name || 'entry').replace(/\s/g, '').toLowerCase() +
         '.json'
       entryRef.Schema = schema
-      EntrySchemas[entryRef.Name] = schema
       this._displayYaml()
     }
+    EntrySchemas[entryRef.Name] = schema
 
     const results = tpl.parent.querySelector('.results')
 
@@ -698,7 +707,12 @@ class HcScaffold {
       }
 
       if(typeof obj.Schema != 'object') {
-        obj.Schema = JSON.parse(obj.Schema)
+        try{
+          obj.Schema = JSON.parse(obj.Schema)
+        }catch(e){
+          console.log("asdfadfs!!!")
+        }
+
       }
 
 
