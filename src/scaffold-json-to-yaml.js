@@ -106,6 +106,13 @@ function _addCommentsToJson (json) {
   _f(dna, 'Zomes')
   dna.Zomes = _addCommentsToZomes(json.DNA.Zomes)
 
+  _f(root, 'Tests')
+  root.Tests =
+  [ { 'Name': 'sample',
+    'Tests': [{'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing', 'FnName': 'sampleEntryCreate', 'Input': {'body': 'this is the entry body', 'stamp': 12345}, 'Output': '"%h1%"', 'Exposure': 'public'}]
+  }
+  ]
+
   return root
 }
 
@@ -185,7 +192,7 @@ function _addCommentsToZomeEntries (json) {
     if (format === 'json') {
       obj.SchemaFile = entry.SchemaFile || name + '.json'
       if (entry.Schema) {
-        obj.Schema = entry.Schema
+        obj.Schema = JSON.stringify(entry.Schema, null, 2)
       }
     }
 

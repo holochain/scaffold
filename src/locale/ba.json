@@ -91,5 +91,8 @@
   "field-desc-Zomes.Functions.CallingType": "উপাত্ত বিন্যাস parameters জন্য pass করব এই functionএর",
 
   "field-name-Zomes.Functions.Exposure": "প্রকাশ",
-  "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়"
+  "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়",
+
+  "field-name-Tests": "Tests",
+  "field-desc-Tests": "Empty test for hcdev package"
 }

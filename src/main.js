@@ -139,6 +139,7 @@ class HcScaffold {
       }
       reader.onload = () => {
         let json
+        console.log('loaded json string', json)
         try {
           json = JSON.parse(reader.result)
         } catch (e) { /* pass */ }
@@ -148,6 +149,7 @@ class HcScaffold {
         if (!json) {
           throw new Error('Error Parsing File: ' + i.files[0].name)
         }
+
         localStorage.setItem(SAVE_JSON_KEY, JSON.stringify(json))
         location.reload()
       }
@@ -418,6 +420,7 @@ class HcScaffold {
         results.appendChild(document.createTextNode(e.toString()))
         return
       }
+
       results.appendChild(document.createTextNode(__('notice-changesSaved')))
       entryRef.Schema = newSchema
       this._displayYaml()
