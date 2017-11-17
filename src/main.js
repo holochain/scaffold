@@ -28,6 +28,7 @@ const Ajv = require('ajv')
 const ajv = new Ajv()
 const jsonSchemaValidate = ajv.compile(JSON_SCHEMA_META)
 
+let EntrySchemas = {}
 /**
  * Generates a holochain dna scaffold file.
  */
@@ -260,6 +261,15 @@ class HcScaffold {
     }, 300)
   }
 
+  $reloadLater (params, evtData) {
+    let timer
+    setTimeout(() => {
+      clearTimeout(timer)
+      this._displayYaml()
+      location.reload()
+    }, 1500)
+  }
+
   /**
    * View code, delete, etc
    */
@@ -394,6 +404,7 @@ class HcScaffold {
       entryRef.Schema = schema
       this._displayYaml()
     }
+    EntrySchemas[entryRef.Name] = schema
 
     const results = tpl.parent.querySelector('.results')
 
@@ -423,6 +434,7 @@ class HcScaffold {
 
       results.appendChild(document.createTextNode(__('notice-changesSaved')))
       entryRef.Schema = newSchema
+      EntrySchemas[entryRef.Name] = newSchema
       this._displayYaml()
     })
   }
@@ -690,6 +702,19 @@ class HcScaffold {
       obj.Name = name
       obj.DataFormat = row.querySelector('.zome-entry-data-format').value
       obj.Sharing = row.querySelector('.zome-entry-sharing').value
+      if(obj.DataFormat === 'json' && EntrySchemas[name]) {
+        obj.Schema = EntrySchemas[name]
+      }
+
+      if(typeof obj.Schema != 'object') {
+        try{
+          obj.Schema = JSON.parse(obj.Schema)
+        }catch(e){
+          console.log("asdfadfs!!!")
+        }
+
+      }
+
 
       let hint = ''
       row.querySelector('.zome-entry-create').checked && (hint += 'c')
