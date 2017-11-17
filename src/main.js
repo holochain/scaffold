@@ -702,19 +702,16 @@ class HcScaffold {
       obj.Name = name
       obj.DataFormat = row.querySelector('.zome-entry-data-format').value
       obj.Sharing = row.querySelector('.zome-entry-sharing').value
-      if(obj.DataFormat === 'json' && EntrySchemas[name]) {
+      if (obj.DataFormat === 'json' && EntrySchemas[name]) {
         obj.Schema = EntrySchemas[name]
       }
 
-      if(typeof obj.Schema != 'object') {
-        try{
+      if (typeof obj.Schema !== 'object') {
+        try {
           obj.Schema = JSON.parse(obj.Schema)
-        }catch(e){
-          console.log("asdfadfs!!!")
+        } catch (e) {
         }
-
       }
-
 
       let hint = ''
       row.querySelector('.zome-entry-create').checked && (hint += 'c')

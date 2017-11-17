@@ -190,7 +190,7 @@ function _addCommentsToZomeEntries (json) {
     _c(obj, '<', 'field-desc-Zomes.Entries.Sharing')
 
     if (format === 'json') {
-      //obj.SchemaFile = entry.SchemaFile || name + '.json'
+      // obj.SchemaFile = entry.SchemaFile || name + '.json'
       obj.Schema = JSON.stringify(entry.Schema, null, 2)
     }
 
