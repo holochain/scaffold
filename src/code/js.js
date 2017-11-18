@@ -52,6 +52,10 @@ class JsCodeGen {
       'entryName', 'hash', 'pkg', 'sources'])
 
     this.src += '\n'
+    this._validate('validateLink', [
+      'linkEntryType', 'baseHash', 'links', 'pkg', 'sources'])
+
+    this.src += '\n'
     this._validatePkg('validatePutPkg')
 
     this.src += '\n'
