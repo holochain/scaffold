@@ -93,6 +93,6 @@
   "field-name-Zomes.Functions.Exposure": "एक्सपोजर",
   "field-desc-Zomes.Functions.Exposure": "या फंक्शनचा स्तर उघड झाला आहे.",
 
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Empty test for hcdev package"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Empty test sets for hcdev package"
 }

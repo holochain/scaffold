@@ -113,6 +113,6 @@
   "code-function-pkg": "Called to get the data needed to validate",
   "code-function-validate": "Called to validate any changes to the DHT",
 
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Empty test for hcdev package"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Empty test sets for hcdev package"
 }

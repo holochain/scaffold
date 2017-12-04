@@ -52,9 +52,9 @@ function _addCommentsToJson (json) {
 
   _c(root, '#', 'yaml-header')
 
-  _f(root, 'scaffoldVersion')
-  root.scaffoldVersion = '0.0.2'
-  root.generator = 'hc-scaffold:' + version.version
+  _f(root, 'Version')
+  root.Version = '0.0.1'
+  root.Generator = 'hc-scaffold:' + version.version
 
   _f(root, 'DNA')
   const dna = root.DNA = {}
@@ -106,11 +106,12 @@ function _addCommentsToJson (json) {
   _f(dna, 'Zomes')
   dna.Zomes = _addCommentsToZomes(json.DNA.Zomes)
 
-  _f(root, 'Tests')
-  root.Tests =
+  _f(root, 'TestSets')
+  root.TestSets =
   [ { 'Name': 'sample',
-    'Tests': [{'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing', 'FnName': 'sampleEntryCreate', 'Input': {'body': 'this is the entry body', 'stamp': 12345}, 'Output': '"%h1%"', 'Exposure': 'public'}]
-  }
+    'TestSet': {
+      'Tests': [{'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing', 'FnName': 'sampleEntryCreate', 'Input': {'body': 'this is the entry body', 'stamp': 12345}, 'Output': '%h1%', 'Exposure': 'public'}]
+    }}
   ]
 
   return root
