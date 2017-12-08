@@ -5,8 +5,8 @@ const YAML = require('yaml-js')
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
-  scaffoldVersion: '0.0.2',
-  generator: 'xxx',
+  Version: '0.0.1',
+  Generator: 'xxx',
   DNA: {
     Version: 1,
     UUID: 'test-uuid',
@@ -31,7 +31,6 @@ const FIXTURE_1 = {
             Required: true,
             DataFormat: 'json',
             Sharing: 'public',
-            SchemaFile: 'test-entry.json',
             _: 'crud'
           }
         ],
@@ -70,21 +69,23 @@ const FIXTURE_1 = {
       }
     ]
   },
-  'Tests': [
+  'TestSets': [
     {
       'Name': 'sample',
-      'Tests': [
-        {
-          'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing',
-          'FnName': 'sampleEntryCreate',
-          'Input': {
-            'body': 'this is the entry body',
-            'stamp': 12345
-          },
-          'Output': '"%h1%"',
-          'Exposure': 'public'
-        }
-      ]
+      'TestSet': {
+        'Tests': [
+          {
+            'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing',
+            'FnName': 'sampleEntryCreate',
+            'Input': {
+              'body': 'this is the entry body',
+              'stamp': 12345
+            },
+            'Output': '%h1%',
+            'Exposure': 'public'
+          }
+        ]
+      }
     }
   ]
 }
@@ -207,7 +208,7 @@ describe('HC Scaffold Quick Start', () => {
             yaml = YAML.load(editor.getValue())
 
             // ignore generator diffs
-            yaml.generator = 'xxx'
+            yaml.Generator = 'xxx'
 
             for (let zome of yaml.DNA.Zomes) {
               // ignore zome code for now

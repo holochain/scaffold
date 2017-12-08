@@ -93,6 +93,6 @@
   "field-name-Zomes.Functions.Exposure": "Exposure",
   "field-desc-Zomes.Functions.Exposure": "Wer kann diese Funktione aufrufen?",
 
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Empty test for hcdev package"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Empty test sets for hcdev package"
 }

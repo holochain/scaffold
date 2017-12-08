@@ -93,6 +93,6 @@
   "field-name-Zomes.Functions.Exposure": "প্রকাশ",
   "field-desc-Zomes.Functions.Exposure": "উচ্চতা কোথায় function উদ্ভাসিত হয়",
 
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Empty test for hcdev package"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Empty test sets for hcdev package"
 }

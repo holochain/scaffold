@@ -82,6 +82,6 @@
   "code-callout-validation": "funciones de validación por cada cambió en la entrada del DHT",
   "code-function-pkg": "Llamado a obtener los datos necesitados para validar",
   "code-function-validate": "Llamado a validar cualquier cambio al DHT",
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Tests vacios para el paquete hcdev"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Tests vacios para el paquete hcdev"
 }

@@ -92,6 +92,6 @@
   "field-name-Zomes.Functions.Exposure": "暴露",
   "field-desc-Zomes.Functions.Exposure": "誰がこの機能を呼び出すことができますか？",
 
-  "field-name-Tests": "Tests",
-  "field-desc-Tests": "Empty test for hcdev package"
+  "field-name-TestSets": "TestSets",
+  "field-desc-TestSets": "Empty test sets for hcdev package"
 }
