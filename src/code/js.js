@@ -53,7 +53,7 @@ class JsCodeGen {
 
     this.src += '\n'
     this._validate('validateLink', [
-      'linkEntryType', 'baseHash', 'links', 'pkg', 'sources'])
+      'entryName', 'baseHash', 'links', 'pkg', 'sources'])
 
     this.src += '\n'
     this._validatePkg('validatePutPkg')
@@ -63,6 +63,9 @@ class JsCodeGen {
 
     this.src += '\n'
     this._validatePkg('validateDelPkg')
+
+    this.src += '\n'
+    this._validatePkg('validateLinkPkg')
 
     return this.src
   }
@@ -120,7 +123,7 @@ class JsCodeGen {
       params,
       () => {
         this._switch('entryName', this.entryNames, (comp) => {
-          this.src += this._indent('// validation code here\nreturn false;') + '\n'
+          this.src += this._indent('// validation code here\nreturn true;') + '\n'
         }, () => {
           this.src += this._indent('// invalid entry name!!\nreturn false;') + '\n'
         })
