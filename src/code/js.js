@@ -103,16 +103,16 @@ class JsCodeGen {
           hdr.push('@param {string} hash - the hash of the entry to remove')
           break
         case 'header':
-          hdr.push('@param {?} header - ?')
+          hdr.push('@param {object} header - header for the entry containing properties EntryLink, Time, and Type')
           break
         case 'replaces':
-          hdr.push('@param {*} replaces - the hash for the entry being updated')
+          hdr.push('@param {string} replaces - the hash for the entry being updated')
           break
         case 'pkg':
           hdr.push('@param {*} pkg - the extra data provided by the validate[X]Pkg methods')
           break
         case 'sources':
-          hdr.push('@param {?} sources - ?')
+          hdr.push('@param {object} sources - an array of strings containing the keys of any authors of this entry')
           break
       }
     }
