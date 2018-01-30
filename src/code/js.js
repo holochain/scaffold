@@ -28,7 +28,7 @@ class JsCodeGen {
       '@return {boolean} success'
     ].join('\n'))
     this._function('genesis', [], () => {
-      this.src += this._indent('// any genesis code here\nreturn true;') + '\n'
+      this.src += this._indent('return true;') + '\n'
     })
 
     this.src += '\n'
@@ -93,8 +93,8 @@ class JsCodeGen {
     const hdr = [__('code-function-validate')]
     for (let param of params) {
       switch (param) {
-        case 'entryName':
-          hdr.push('@param {string} entryName - the name of entry being modified')
+        case 'entryType':
+          hdr.push('@param {string} entryType - the type of entry')
           break
         case 'entry':
           hdr.push('@param {*} entry - the entry data to be set')
@@ -106,10 +106,10 @@ class JsCodeGen {
           hdr.push('@param {?} header - ?')
           break
         case 'replaces':
-          hdr.push('@param {*} replaces - the old entry data')
+          hdr.push('@param {*} replaces - the hash for the entry being updated')
           break
         case 'pkg':
-          hdr.push('@param {?} pkg - ?')
+          hdr.push('@param {*} pkg - the extra data provided by the validate[X]Pkg methods')
           break
         case 'sources':
           hdr.push('@param {?} sources - ?')
@@ -123,9 +123,9 @@ class JsCodeGen {
       params,
       () => {
         this._switch('entryName', this.entryNames, (comp) => {
-          this.src += this._indent('// validation code here\nreturn true;') + '\n'
+          this.src += this._indent('// validation code here\nreturn false;') + '\n'
         }, () => {
-          this.src += this._indent('// invalid entry name!!\nreturn false;') + '\n'
+          this.src += this._indent('// invalid entry name\nreturn false;') + '\n'
         })
       }
     )
