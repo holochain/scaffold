@@ -30,35 +30,10 @@ const FIXTURE_1 = {
             Name: 'test-entry',
             Required: true,
             DataFormat: 'json',
-            Sharing: 'public',
-            _: 'crud'
+            Sharing: 'public'
           }
         ],
         Functions: [
-          {
-            Name: 'test-entryCreate',
-            CallingType: 'json',
-            Exposure: 'public',
-            _: 'c:test-entry'
-          },
-          {
-            Name: 'test-entryRead',
-            CallingType: 'json',
-            Exposure: 'public',
-            _: 'r:test-entry'
-          },
-          {
-            Name: 'test-entryUpdate',
-            CallingType: 'json',
-            Exposure: 'public',
-            _: 'u:test-entry'
-          },
-          {
-            Name: 'test-entryDelete',
-            CallingType: 'json',
-            Exposure: 'public',
-            _: 'd:test-entry'
-          },
           {
             Name: 'test-function',
             CallingType: 'json',

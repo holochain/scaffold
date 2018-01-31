@@ -10,6 +10,7 @@ class JsCodeGen {
    * prepare some options for code generation
    */
   constructor (opt) {
+    this.functions = opt.functions || []
     this.entryNames = opt.entryNames || []
     this.indent = opt.indent || 2
   }
@@ -23,12 +24,40 @@ class JsCodeGen {
 
     this._callout([ __('code-callout-header') ].join('\n'))
 
+    this._callout([
+      __('code-callout-functions')
+    ].join('\n'))
+
+    this.src += '\n'
+    this.functions.forEach(fn => {
+      if (fn._) {
+        // CRUD function definition
+        let actionDefinition = fn._.split(':')
+        let action = actionDefinition[0]
+        let entryName = actionDefinition[1]
+        this._addCrudCode(fn.Name, action, entryName)
+      } else {
+        // unknown custom function definition
+        let inputName = fn.CallingType === 'string' ? 'text' : 'params'
+        let returnName = fn.CallingType === 'string' ? '"a string"' : '{}'
+        this._function(fn.Name, [inputName], () => {
+          this.src += this._indent('// your custom code here') + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+      }
+      this.src += '\n\n'
+    })
+
+    this._callout([
+      __('code-callout-genesis')
+    ].join('\n'))
+
     this._header([
       __('code-function-genesis'),
       '@return {boolean} success'
     ].join('\n'))
     this._function('genesis', [], () => {
-      this.src += this._indent('// any genesis code here\nreturn true;') + '\n'
+      this.src += this._indent('return true;') + '\n'
     })
 
     this.src += '\n'
@@ -53,7 +82,7 @@ class JsCodeGen {
 
     this.src += '\n'
     this._validate('validateLink', [
-      'linkEntryType', 'baseHash', 'links', 'pkg', 'sources'])
+      'entryName', 'baseHash', 'links', 'pkg', 'sources'])
 
     this.src += '\n'
     this._validatePkg('validatePutPkg')
@@ -64,10 +93,57 @@ class JsCodeGen {
     this.src += '\n'
     this._validatePkg('validateDelPkg')
 
+    this.src += '\n'
+    this._validatePkg('validateLinkPkg')
+
     return this.src
   }
 
   // -- private -- //
+
+  /**
+   *
+   */
+  _addCrudCode (fnName, action, entryName) {
+    let inputName, returnName
+    switch (action) {
+      case 'c':
+        inputName = entryName + 'Entry'
+        returnName = entryName + 'Hash'
+        this._function(fnName, [inputName], () => {
+          let commit = 'var ' + returnName + ' = '
+          commit += 'commit("' + entryName + '", ' + inputName + ');'
+          this.src += this._indent(commit) + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+        break
+      case 'r':
+        inputName = entryName + 'Hash'
+        this._function(fnName, [inputName], () => {
+          this.src += this._indent('var ' + entryName + ' = get(' + inputName + ');') + '\n'
+          this.src += this._indent('return ' + entryName + ';') + '\n'
+        })
+        break
+      case 'u':
+        returnName = entryName + 'Hash'
+        this._function(fnName, ['params'], () => {
+          this.src += this._indent('var replaces = params.replaces;') + '\n'
+          this.src += this._indent('var newEntry = params.newEntry;') + '\n'
+          let update = 'var ' + returnName + ' = '
+          update += 'update("' + entryName + '", newEntry, replaces);'
+          this.src += this._indent(update) + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+        break
+      case 'd':
+        inputName = entryName + 'Hash'
+        this._function(fnName, [], () => {
+          this.src += this._indent('var result = remove(' + inputName + ');') + '\n'
+          this.src += this._indent('return result;') + '\n'
+        })
+        break
+    }
+  }
 
   /**
    * write out a package function
@@ -91,25 +167,31 @@ class JsCodeGen {
     for (let param of params) {
       switch (param) {
         case 'entryName':
-          hdr.push('@param {string} entryName - the name of entry being modified')
+          hdr.push('@param {string} entryName - the type of entry')
           break
         case 'entry':
           hdr.push('@param {*} entry - the entry data to be set')
+          break
+        case 'baseHash':
+          hdr.push('@param {string} baseHash - the hash of the base entry being linked')
+          break
+        case 'links':
+          hdr.push('@param {?} links - ?')
           break
         case 'hash':
           hdr.push('@param {string} hash - the hash of the entry to remove')
           break
         case 'header':
-          hdr.push('@param {?} header - ?')
+          hdr.push('@param {object} header - header for the entry containing properties EntryLink, Time, and Type')
           break
         case 'replaces':
-          hdr.push('@param {*} replaces - the old entry data')
+          hdr.push('@param {string} replaces - the hash for the entry being updated')
           break
         case 'pkg':
-          hdr.push('@param {?} pkg - ?')
+          hdr.push('@param {*} pkg - the extra data provided by the validate[X]Pkg methods')
           break
         case 'sources':
-          hdr.push('@param {?} sources - ?')
+          hdr.push('@param {object} sources - an array of strings containing the keys of any authors of this entry')
           break
       }
     }
@@ -120,9 +202,12 @@ class JsCodeGen {
       params,
       () => {
         this._switch('entryName', this.entryNames, (comp) => {
-          this.src += this._indent('// validation code here\nreturn false;') + '\n'
+          this.src += this._indent('// be sure to consider many edge cases for validating') + '\n'
+          this.src += this._indent('// do not just flip this to true without considering what that means') + '\n'
+          this.src += this._indent('// the action will ONLY be successfull if this returns true, so watch out!') + '\n'
+          this.src += this._indent('return false;') + '\n'
         }, () => {
-          this.src += this._indent('// invalid entry name!!\nreturn false;') + '\n'
+          this.src += this._indent('// invalid entry name\nreturn false;') + '\n'
         })
       }
     )
