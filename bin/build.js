@@ -49,11 +49,10 @@ rule writeversion
 
 rule handlebars
   command = ${shell}${path.normalize('node_modules/.bin/handlebars')} $
+    $in $
     --output $out $
     --commonjs "handlebars/runtime" $
     --extension html $
-    --min $
-    $in
 
 rule browserify
   command = ${shell}${path.normalize('node_modules/.bin/browserify')} $

@@ -666,7 +666,12 @@ class HcScaffold {
       this._genZomeFunctionJson(obj, zome)
 
       obj.Code = CODE_GEN[obj.RibosomeType || 'js'].generate({
-        entryNames: obj.Entries.map((e) => { return e.Name })
+        entryNames: obj.Entries.map((e) => { return e.Name }),
+        functions: obj.Functions
+      })
+
+      obj.Functions.forEach(f => {
+        delete f._
       })
 
       data.push(obj)

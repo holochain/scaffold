@@ -10,6 +10,7 @@ class JsCodeGen {
    * prepare some options for code generation
    */
   constructor (opt) {
+    this.functions = opt.functions || []
     this.entryNames = opt.entryNames || []
     this.indent = opt.indent || 2
   }
@@ -22,6 +23,34 @@ class JsCodeGen {
     this.depth = 0
 
     this._callout([ __('code-callout-header') ].join('\n'))
+
+    this._callout([
+      __('code-callout-functions')
+    ].join('\n'))
+
+    this.src += '\n'
+    this.functions.forEach(fn => {
+      if (fn._) {
+        // CRUD function definition
+        let actionDefinition = fn._.split(':')
+        let action = actionDefinition[0]
+        let entryName = actionDefinition[1]
+        this._addCrudCode(fn.Name, action, entryName)
+      } else {
+        // unknown custom function definition
+        let inputName = fn.CallingType === 'string' ? 'text' : 'params'
+        let returnName = fn.CallingType === 'string' ? '"a string"' : '{}'
+        this._function(fn.Name, [inputName], () => {
+          this.src += this._indent('// your custom code here') + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+      }
+      this.src += '\n\n'
+    })
+
+    this._callout([
+      __('code-callout-genesis')
+    ].join('\n'))
 
     this._header([
       __('code-function-genesis'),
@@ -73,6 +102,50 @@ class JsCodeGen {
   // -- private -- //
 
   /**
+   *
+   */
+  _addCrudCode (fnName, action, entryName) {
+    let inputName, returnName
+    switch (action) {
+      case 'c':
+        inputName = entryName + 'Entry'
+        returnName = entryName + 'Hash'
+        this._function(fnName, [inputName], () => {
+          let commit = 'var ' + returnName + ' = '
+          commit += 'commit("' + entryName + '", ' + inputName + ');'
+          this.src += this._indent(commit) + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+        break
+      case 'r':
+        inputName = entryName + 'Hash'
+        this._function(fnName, [inputName], () => {
+          this.src += this._indent('var ' + entryName + ' = get(' + inputName + ');') + '\n'
+          this.src += this._indent('return ' + entryName + ';') + '\n'
+        })
+        break
+      case 'u':
+        returnName = entryName + 'Hash'
+        this._function(fnName, ['params'], () => {
+          this.src += this._indent('var replaces = params.replaces;') + '\n'
+          this.src += this._indent('var newEntry = params.newEntry;') + '\n'
+          let update = 'var ' + returnName + ' = '
+          update += 'update("' + entryName + '", newEntry, replaces);'
+          this.src += this._indent(update) + '\n'
+          this.src += this._indent('return ' + returnName + ';') + '\n'
+        })
+        break
+      case 'd':
+        inputName = entryName + 'Hash'
+        this._function(fnName, [], () => {
+          this.src += this._indent('var result = remove(' + inputName + ');') + '\n'
+          this.src += this._indent('return result;') + '\n'
+        })
+        break
+    }
+  }
+
+  /**
    * write out a package function
    */
   _validatePkg (fname) {
@@ -93,11 +166,17 @@ class JsCodeGen {
     const hdr = [__('code-function-validate')]
     for (let param of params) {
       switch (param) {
-        case 'entryType':
-          hdr.push('@param {string} entryType - the type of entry')
+        case 'entryName':
+          hdr.push('@param {string} entryName - the type of entry')
           break
         case 'entry':
           hdr.push('@param {*} entry - the entry data to be set')
+          break
+        case 'baseHash':
+          hdr.push('@param {string} baseHash - the hash of the base entry being linked')
+          break
+        case 'links':
+          hdr.push('@param {?} links - ?')
           break
         case 'hash':
           hdr.push('@param {string} hash - the hash of the entry to remove')
@@ -123,7 +202,10 @@ class JsCodeGen {
       params,
       () => {
         this._switch('entryName', this.entryNames, (comp) => {
-          this.src += this._indent('// validation code here\nreturn false;') + '\n'
+          this.src += this._indent('// be sure to consider many edge cases for validating') + '\n'
+          this.src += this._indent('// do not just flip this to true without considering what that means') + '\n'
+          this.src += this._indent('// the action will ONLY be successfull if this returns true, so watch out!') + '\n'
+          this.src += this._indent('return false;') + '\n'
         }, () => {
           this.src += this._indent('// invalid entry name\nreturn false;') + '\n'
         })
