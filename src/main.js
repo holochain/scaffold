@@ -670,10 +670,6 @@ class HcScaffold {
         functions: obj.Functions
       })
 
-      obj.Functions.forEach(f => {
-        delete f._
-      })
-
       data.push(obj)
     }
 

@@ -30,10 +30,23 @@ const FIXTURE_1 = {
             Name: 'test-entry',
             Required: true,
             DataFormat: 'json',
-            Sharing: 'public'
+            Sharing: 'public',
+            _: 'cr'
           }
         ],
         Functions: [
+          {
+            Name: 'test-entryCreate',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'c:test-entry'
+          },
+          {
+            Name: 'test-entryRead',
+            CallingType: 'json',
+            Exposure: 'public',
+            _: 'r:test-entry'
+          },
           {
             Name: 'test-function',
             CallingType: 'json',
@@ -105,7 +118,7 @@ function waitExists (path) {
   return new Promise((resolve, reject) => {
     const start = Date.now()
     let id = setInterval(() => {
-      if (Date.now() - start >= 1000) {
+      if (Date.now() - start >= 3000) {
         clearInterval(id)
         reject(new Error('timeout'))
       }
