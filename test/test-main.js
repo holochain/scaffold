@@ -59,18 +59,33 @@ const FIXTURE_1 = {
   },
   'TestSets': [
     {
-      'Name': 'sample',
+      'Name': 'test-zome-name',
       'TestSet': {
         'Tests': [
           {
-            'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing',
-            'FnName': 'sampleEntryCreate',
+            'Convey': 'auto-generated test for test-entryCreate',
+            'Zome': 'test-zome-name',
+            'FnName': 'test-entryCreate',
             'Input': {
-              'body': 'this is the entry body',
-              'stamp': 12345
+              'test': 'test'
             },
-            'Output': '%h1%',
-            'Exposure': 'public'
+            'Output': '%h%'
+          },
+          {
+            'Convey': 'auto-generated test for test-entryRead',
+            'Zome': 'test-zome-name',
+            'FnName': 'test-entryRead',
+            'Input': '%h%',
+            'Output': {
+              'test': 'test'
+            }
+          },
+          {
+            'Convey': 'auto-generated test for test-function',
+            'Zome': 'test-zome-name',
+            'FnName': 'test-function',
+            'Input': '',
+            'Output': ''
           }
         ]
       }
