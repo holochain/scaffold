@@ -503,8 +503,8 @@ class HcScaffold {
     const parentTemplate = this.templates[zomeTemplateId]
     const tpl = this._genTemplates(parentTemplate.parent.querySelector(
       '#zomeentries-' + zomeTemplateId), 'zome-entry', {
-        'zome-id': zomeTemplateId
-      }
+      'zome-id': zomeTemplateId
+    }
     )
     tpl.elems[0].classList.add('type-json')
     jsonEntry.__tplId = tpl.id

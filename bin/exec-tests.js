@@ -16,7 +16,7 @@ const exec = require('./build/exec-helper').exec
 
 // the phantomjs node module just downloads a platform appropriate
 // binary and then provides a path to it. (phantomjs.path)
-const phantomjs = require('phantomjs')
+const phantomjs = require('phantomjs-prebuilt')
 
 // entrypoint
 main()
