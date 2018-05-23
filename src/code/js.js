@@ -125,20 +125,19 @@ class JsCodeGen {
         })
         break
       case 'u':
-        returnName = entryName + 'Hash'
-        this._function(fnName, ['params'], () => {
-          this.src += this._indent('var replaces = params.replaces;') + '\n'
-          this.src += this._indent('var newEntry = params.newEntry;') + '\n'
-          let update = 'var ' + returnName + ' = '
-          update += 'update("' + entryName + '", newEntry, replaces);'
+        inputName = entryName + 'Hash'
+        returnName = entryName + 'OutHash'
+        this._function(fnName, [inputName], () => {
+          let update = 'var ' + returnName + ' = update("'
+          update += entryName + '", "newValue", ' + inputName + ');'
           this.src += this._indent(update) + '\n'
           this.src += this._indent('return ' + returnName + ';') + '\n'
         })
         break
       case 'd':
         inputName = entryName + 'Hash'
-        this._function(fnName, [], () => {
-          this.src += this._indent('var result = remove(' + inputName + ');') + '\n'
+        this._function(fnName, [inputName], () => {
+          this.src += this._indent('var result = remove(' + inputName + ', "");') + '\n'
           this.src += this._indent('return result;') + '\n'
         })
         break

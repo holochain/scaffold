@@ -40,6 +40,8 @@ templates['menu'] = template({"compiler":[7,">= 4.0.0"],"main":function(containe
     + alias4((helpers.__ || (depth0 && depth0.__) || alias2).call(alias1,"button-upload",{"name":"__","hash":{},"data":data}))
     + "</span>\n    </a>\n    <a href=\"javascript:void(0)\" data-hc-bind=\"click:$downloadYaml\">\n      <i class=\"material-icons\">&#xE2C4;</i><span>"
     + alias4((helpers.__ || (depth0 && depth0.__) || alias2).call(alias1,"button-downloadScaffoldYaml",{"name":"__","hash":{},"data":data}))
+    + "</span>\n    </a>\n    <a href=\"javascript:void(0)\" data-hc-bind=\"click:$downloadArchive\">\n      <i class=\"material-icons\">&#xE149;</i><span>"
+    + alias4((helpers.__ || (depth0 && depth0.__) || alias2).call(alias1,"button-downloadScaffoldArchive",{"name":"__","hash":{},"data":data}))
     + "</span>\n    </a>\n    <a href=\"javascript:void(0)\" data-hc-bind=\"click:$about\" data-hc-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\">\n      <i class=\"material-icons\">&#xE88E;</i><span>"

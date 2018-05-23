@@ -14,6 +14,8 @@ const YAML = require('yaml-js')
 const handlebars = require('handlebars/runtime')
 require('./gen/templates')
 
+const JSZip = require('jszip')
+
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const CODE_GEN = {
@@ -238,15 +240,65 @@ class HcScaffold {
   $downloadYaml (params, evtData) {
     let data = this._genYaml()
     data = new Blob([data], {type: 'application/yaml'})
-    data = URL.createObjectURL(data)
-    let a = document.createElement('a')
-    a.style.display = 'none'
-    a.href = data
-    a.download = 'hc-scaffold.yml'
-    this.ROOT.appendChild(a)
-    a.click()
-    this.ROOT.removeChild(a)
-    URL.revokeObjectURL(data)
+    this._triggerDownload(data, 'hc-scaffold.yml')
+  }
+
+  /**
+   * Trigger download of zip archive folder structure for app
+   */
+  $downloadArchive (params, evtData) {
+    const yaml = this._genYaml()
+    const json = YAML.load(yaml)
+
+    const zip = new JSZip()
+    const project = zip.folder(json.DNA.Name)
+
+    project.file('hc-scaffold.yml', yaml)
+
+    const dnaDir = project.folder('dna')
+
+    dnaDir.file('properties_schema.json', JSON.stringify({
+      title: 'Properties Schema',
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string'
+        },
+        language: {
+          type: 'string'
+        }
+      }
+    }, null, '  '))
+
+    for (let zome of json.DNA.Zomes) {
+      const zomeDir = dnaDir.folder(zome.Name)
+      const code = zome.Code
+      delete zome.Code
+      zomeDir.file(zome.CodeFile, code)
+
+      for (let entry of zome.Entries) {
+        delete entry._
+      }
+
+      for (let fn of zome.Functions) {
+        delete fn._
+      }
+    }
+
+    const testDir = project.folder('test')
+
+    for (let test of json.TestSets) {
+      testDir.file(test.Name.toLowerCase() + '.json', JSON.stringify(
+        test.TestSet, null, '  '))
+    }
+
+    delete json.TestSets
+
+    dnaDir.file('dna.json', JSON.stringify(json.DNA, null, '  '))
+
+    zip.generateAsync({type: 'blob'}).then((content) => {
+      this._triggerDownload(content, 'hc-scaffold.zip')
+    })
   }
 
   /**
@@ -261,6 +313,9 @@ class HcScaffold {
     }, 300)
   }
 
+  /**
+   * Debounce for reloading
+   */
   $reloadLater (params, evtData) {
     let timer
     setTimeout(() => {
@@ -468,6 +523,21 @@ class HcScaffold {
   // -- private -- //
 
   /**
+   * Given a blob and a filename, trigger a client-side download
+   */
+  _triggerDownload (blob, filename) {
+    const data = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = data
+    a.download = filename
+    this.ROOT.appendChild(a)
+    a.click()
+    this.ROOT.removeChild(a)
+    URL.revokeObjectURL(data)
+  }
+
+  /**
    * Generate yaml from the UI (dom) nodes, and display it in the sidebar
    */
   _displayYaml () {
@@ -503,8 +573,8 @@ class HcScaffold {
     const parentTemplate = this.templates[zomeTemplateId]
     const tpl = this._genTemplates(parentTemplate.parent.querySelector(
       '#zomeentries-' + zomeTemplateId), 'zome-entry', {
-        'zome-id': zomeTemplateId
-      }
+      'zome-id': zomeTemplateId
+    }
     )
     tpl.elems[0].classList.add('type-json')
     jsonEntry.__tplId = tpl.id
@@ -633,6 +703,8 @@ class HcScaffold {
     props.language = i18n.getLocale()
 
     this._genZomesJson()
+
+    this._genTestJson()
 
     localStorage.setItem(SAVE_JSON_KEY, JSON.stringify(json))
 
@@ -808,6 +880,62 @@ class HcScaffold {
     }
 
     jsonZome.Functions = data
+  }
+
+  /**
+   * Generate tests for auto-generated crud functions
+   * and test placeholders for custom functions
+   */
+  _genTestJson () {
+    const sets = this.json.TestSets = []
+
+    for (let zome of this.json.DNA.Zomes) {
+      const set = {
+        Name: zome.Name,
+        TestSet: {
+          Tests: []
+        }
+      }
+
+      for (let fn of zome.Functions) {
+        const testObj = {
+          Convey: 'auto-generated test for ' + fn.Name,
+          Zome: zome.Name,
+          FnName: fn.Name
+        }
+
+        let val = fn.CallingType === 'json' ? { test: 'test' } : 'test'
+
+        switch ((fn._ || '')[0]) {
+          case 'c':
+            testObj.Input = val
+            testObj.Output = '%h%'
+            break
+          case 'r':
+            testObj.Input = '%h%'
+            testObj.Output = val
+            break
+          case 'u':
+            testObj.Input = '%h%'
+            testObj.Output = '%h%'
+            break
+          case 'd':
+            testObj.Input = '%h%'
+            testObj.Output = '%h%'
+            break
+          default:
+            testObj.Input = ''
+            testObj.Output = ''
+            break
+        }
+
+        set.TestSet.Tests.push(testObj)
+      }
+
+      if (set.TestSet.Tests.length > 0) {
+        sets.push(set)
+      }
+    }
   }
 
   /**

@@ -158,6 +158,7 @@ module.exports = exports = {
     "button-addZome": "Add Zome",
     "button-showHideYaml": "Show/Hide Yaml",
     "button-downloadScaffoldYaml": "Download Scaffold Yaml",
+    "button-downloadScaffoldArchive": "Download Scaffold Zip Archive",
     "button-deleteZome": "Delete this Zome",
     "button-addZomeEntry": "Add Zome Entry",
     "button-deleteZomeEntry": "Remove",
@@ -229,7 +230,19 @@ module.exports = exports = {
     "code-function-pkg": "Called to get the data needed to validate",
     "code-function-validate": "Called to validate any changes to the local chain or DHT",
     "field-name-TestSets": "TestSets",
-    "field-desc-TestSets": "Empty test sets for hcdev package"
+    "field-desc-TestSets": "Auto-Generated test sets for hcdev package",
+    "field-name-TestSets.Name": "Name",
+    "field-desc-TestSets.Name": "Name of the Test Set",
+    "field-name-TestSets.Convey": "Convey",
+    "field-desc-TestSets.Convey": "Description of this test",
+    "field-name-TestSets.Zome": "Zome",
+    "field-desc-TestSets.Zome": "The zome this test is related to",
+    "field-name-TestSets.FnName": "Function Name",
+    "field-desc-TestSets.FnName": "The function to test",
+    "field-name-TestSets.Input": "Input",
+    "field-desc-TestSets.Input": "Input sent to the function",
+    "field-name-TestSets.Output": "Output",
+    "field-desc-TestSets.Output": "Output from the function to validate"
   },
   "es": {
     "langName": "Español",

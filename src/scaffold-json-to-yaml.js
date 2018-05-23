@@ -107,12 +107,7 @@ function _addCommentsToJson (json) {
   dna.Zomes = _addCommentsToZomes(json.DNA.Zomes)
 
   _f(root, 'TestSets')
-  root.TestSets =
-  [ { 'Name': 'sample',
-    'TestSet': {
-      'Tests': [{'Convey': 'This is an empty test that will break. Holochain is test driven, please see: https://github.com/metacurrency/holochain/wiki/App-Testing', 'FnName': 'sampleEntryCreate', 'Input': {'body': 'this is the entry body', 'stamp': 12345}, 'Output': '%h1%', 'Exposure': 'public'}]
-    }}
-  ]
+  root.TestSets = _addCommentsToTests(json.TestSets)
 
   return root
 }
@@ -230,6 +225,47 @@ function _addCommentsToZomeFunctions (json) {
 
     if (func._) {
       obj._ = func._
+    }
+
+    out.push(obj)
+  }
+
+  return out
+}
+
+/**
+ * run through the test definitions
+ */
+function _addCommentsToTests (json) {
+  const out = []
+
+  for (let set of json) {
+    const obj = {}
+
+    _f(obj, 'TestSets.Name')
+    obj.Name = set.Name || ''
+
+    obj.TestSet = {}
+    const tests = obj.TestSet.Tests = []
+    for (let test of set.TestSet.Tests) {
+      const tobj = {}
+
+      _f(tobj, 'TestSets.Convey')
+      tobj.Convey = test.Convey || ''
+
+      _f(tobj, 'TestSets.Zome')
+      tobj.Zome = test.Zome || ''
+
+      _f(tobj, 'TestSets.FnName')
+      tobj.FnName = test.FnName || ''
+
+      _f(tobj, 'TestSets.Input')
+      tobj.Input = test.Input || ''
+
+      _f(tobj, 'TestSets.Output')
+      tobj.Output = test.Output || ''
+
+      tests.push(tobj)
     }
 
     out.push(obj)
