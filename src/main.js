@@ -15,6 +15,7 @@ const handlebars = require('handlebars/runtime')
 require('./gen/templates')
 
 const JSZip = require('jszip')
+const openApiGen = require('@holochain/dna-to-openapi')
 
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
@@ -270,6 +271,8 @@ class HcScaffold {
       }
     }, null, '  '))
 
+    const schemas = {}
+
     for (let zome of json.DNA.Zomes) {
       const zomeDir = dnaDir.folder(zome.Name)
       const code = zome.Code
@@ -278,6 +281,18 @@ class HcScaffold {
 
       for (let entry of zome.Entries) {
         delete entry._
+
+        if ('Schema' in entry) {
+          if (!(zome.Name in schemas)) {
+            schemas[zome.Name] = {}
+          }
+          const zomeDef = schemas[zome.Name]
+          entry.SchemaFile = entry.Name.replace(' ', '_') + '.json'
+          zomeDef[entry.SchemaFile] = JSON.parse(entry.Schema)
+
+          zomeDir.file(entry.SchemaFile, entry.Schema)
+          delete entry.Schema
+        }
       }
 
       for (let fn of zome.Functions) {
@@ -293,6 +308,23 @@ class HcScaffold {
     }
 
     delete json.TestSets
+
+    const openApiOpts = {
+      schemas: schemas
+    }
+
+    const lintResults = openApiGen.lint(json.DNA, openApiOpts)
+
+    if (lintResults.errors.length > 0) {
+      throw new Error(JSON.stringify(lintResults, null, '  '))
+    }
+
+    const specJson = openApiGen.convert(json.DNA, openApiOpts).result
+    const swaggerHtml = openApiGen.genDocs(specJson)
+
+    const uiDir = project.folder('ui')
+    uiDir.file('open-api-spec.json', JSON.stringify(specJson, null, '  '))
+    uiDir.file('open-api-docs.html', swaggerHtml)
 
     dnaDir.file('dna.json', JSON.stringify(json.DNA, null, '  '))
 
