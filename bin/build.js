@@ -19,14 +19,14 @@ const BUILD_LIST = [
   [jsonPack, ['src/gen/strings.js', 'src/locale']],
   [jsonPack, ['src/gen/schema.js', 'src/schema']],
   [handlebars, ['src/gen/templates.js', 'src/templates']],
-  [browserify, ['dist/js/hc-scaffold.js', 'src/main.js',
+  [browserify, ['docs/js/hc-scaffold.js', 'src/main.js',
     'hc_scaffold', [
       'src/gen/templates.js',
       'src/gen/strings.js',
       'src/gen/version.js'
     ]
   ]],
-  [browserify, ['dist/test/test.js', 'test/test-main.js',
+  [browserify, ['docs/test/test.js', 'test/test-main.js',
     'hc_scaffold_test', [
       'src/gen/strings.js'
     ]
