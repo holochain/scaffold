@@ -13,7 +13,7 @@ main()
 
 /**
  * Start up an express webserver
- * serve the dist folder
+ * serve the docs folder
  * open a browser pointing to the server
  */
 function main () {
@@ -27,7 +27,7 @@ function main () {
     next()
   })
 
-  app.use(express.static(path.resolve(__dirname, '../dist')))
+  app.use(express.static(path.resolve(__dirname, '../docs')))
 
   app.listen(PORT, () => {
     console.log('server started at http://127.0.0.1:' + PORT)

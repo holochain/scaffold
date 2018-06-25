@@ -48,7 +48,6 @@
       "browser": true
     },
     "ignore": [
-      "dist",
       "docs",
       "src/gen"
     ]

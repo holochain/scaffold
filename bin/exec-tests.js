@@ -2,8 +2,8 @@
 
 'use strict'
 
-/* Start up a webserver hosting the dist folder,
- * Run the tests (dist/test/test.html) through phantomjs
+/* Start up a webserver hosting the docs folder,
+ * Run the tests (docs/test/test.html) through phantomjs
  * using build/phantom-runner.js
  */
 
@@ -31,7 +31,7 @@ function main () {
     next()
   })
 
-  app.use(express.static(path.resolve(__dirname, '../dist')))
+  app.use(express.static(path.resolve(__dirname, '../docs')))
 
   app.listen(PORT, () => {
     console.log('server started at http://127.0.0.1:' + PORT)
