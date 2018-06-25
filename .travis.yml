@@ -2,3 +2,8 @@ language: node_js
 node_js:
   - "8"
   - "10"
+before_install:
+  - sudo apt-get install -y ninja-build
+addons:
+  apt:
+    update: true
