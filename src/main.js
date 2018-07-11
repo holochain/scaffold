@@ -2,6 +2,7 @@
 
 /* global ace */
 
+const constants = require('../constants')
 const version = require('./gen/version')
 
 const i18n = require('./hc-i18n')
@@ -936,16 +937,17 @@ class HcScaffold {
           FnName: fn.Name
         }
 
-        let val = fn.CallingType === 'json' ? { test: 'test' } : 'test'
+        const crudVal = fn.CallingType === 'json' ? constants.TEST_JSON_PAYLOAD : constants.TEST_STRING_PAYLOAD
+        const fnVal = fn.CallingType === 'json' ? constants.TEST_FN_OUTPUT_JSON : constants.TEST_FN_OUTPUT_STRING
 
         switch ((fn._ || '')[0]) {
           case 'c':
-            testObj.Input = val
+            testObj.Input = crudVal
             testObj.Output = '%h%'
             break
           case 'r':
             testObj.Input = '%h%'
-            testObj.Output = val
+            testObj.Output = crudVal
             break
           case 'u':
             testObj.Input = '%h%'
@@ -957,7 +959,7 @@ class HcScaffold {
             break
           default:
             testObj.Input = ''
-            testObj.Output = ''
+            testObj.Output = fnVal
             break
         }
 

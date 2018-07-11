@@ -2,6 +2,11 @@
 
 const YAML = require('yaml-js')
 
+const {
+  TEST_JSON_PAYLOAD,
+  TEST_FN_OUTPUT_JSON
+} = require('../constants')
+
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
@@ -66,9 +71,7 @@ const FIXTURE_1 = {
             'Convey': 'auto-generated test for test-entryCreate',
             'Zome': 'test-zome-name',
             'FnName': 'test-entryCreate',
-            'Input': {
-              'test': 'test'
-            },
+            'Input': TEST_JSON_PAYLOAD,
             'Output': '%h%'
           },
           {
@@ -76,16 +79,14 @@ const FIXTURE_1 = {
             'Zome': 'test-zome-name',
             'FnName': 'test-entryRead',
             'Input': '%h%',
-            'Output': {
-              'test': 'test'
-            }
+            'Output': TEST_JSON_PAYLOAD
           },
           {
             'Convey': 'auto-generated test for test-function',
             'Zome': 'test-zome-name',
             'FnName': 'test-function',
             'Input': '',
-            'Output': ''
+            'Output': TEST_FN_OUTPUT_JSON
           }
         ]
       }
