@@ -36,7 +36,7 @@ class JsCodeGen {
         const actionDefinition = fn._.split(':')
         const action = actionDefinition[0]
         const entryName = actionDefinition[1]
-        const sampleValue = this.sampleEntryValues[entryName] || '???'
+        const sampleValue = this.sampleEntryValues[entryName] || {}
         this._addCrudCode(fn.Name, action, entryName, sampleValue)
       } else {
         // unknown custom function definition
@@ -131,6 +131,7 @@ class JsCodeGen {
         returnName = entryName + 'OutHash'
         this._function(fnName, [inputName], () => {
           // TODO: properly pretty-print and indent sampleValue
+          sampleValue.extraField = true // so that there is something to update
           this.src += this._indent(`var sampleValue=${JSON.stringify(sampleValue)};`) + '\n'
           let update = 'var ' + returnName + ' = update("'
           update += entryName + '", sampleValue, ' + inputName + ');'

@@ -844,7 +844,7 @@ class HcScaffold {
   _genZomeFunctionJson (jsonZome, parent) {
     const data = []
 
-    const addFunction = (name, callingType, exposure, hint, entryName) => {
+    const addFunction = (name, callingType, exposure, entryName, hint) => {
       const obj = {
         Name: name,
         CallingType: callingType,
@@ -868,38 +868,42 @@ class HcScaffold {
       }
 
       if (row.querySelector('.zome-entry-create').checked) {
-        addFunction(name + 'Create',
+        addFunction(
+          name + 'Create',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'c:' + name,
-          name
+          name,
+          'c:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-read').checked) {
-        addFunction(name + 'Read',
+        addFunction(
+          name + 'Read',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'r:' + name,
-          name
+          name,
+          'r:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-update').checked) {
-        addFunction(name + 'Update',
+        addFunction(
+          name + 'Update',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'u:' + name,
-          name
+          name,
+          'u:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-delete').checked) {
-        addFunction(name + 'Delete',
+        addFunction(
+          name + 'Delete',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'd:' + name,
-          name
+          name,
+          'd:' + name
         )
       }
     }
