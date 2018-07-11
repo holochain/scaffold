@@ -4,8 +4,8 @@ const TEST_FN_OUTPUT_JSON = {}
 
 const TEST_STRING_PAYLOAD = 'test'
 const TEST_JSON_PAYLOAD = {
-  'age': 67,
-  'name': 'any string',
+  'age': 0,
+  'name': 'Moniker',
   'tags': ['user']
 }
 
