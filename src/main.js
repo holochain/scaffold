@@ -773,7 +773,7 @@ class HcScaffold {
       obj.Code = CODE_GEN[obj.RibosomeType || 'js'].generate({
         entryNames: obj.Entries.map((e) => { return e.Name }),
         functions: obj.Functions,
-        sampleEntryValues: this._genSampleJsonData(obj)
+        sampleEntryValues: this._genSampleEntryJson(obj)
       })
 
       data.push(obj)
@@ -926,7 +926,17 @@ class HcScaffold {
     jsonZome.Functions = data
   }
 
-  _genSampleJsonData (zome) {
+  /**
+   * Creates sample entry data which will pass validation for each entry type
+   * An object is constructed by recursing over a zome's schema's example values
+   * (which are populated automatically if generating the schema via https://jsonschema.net/)
+   * and marshalling them into the right shape.
+   *
+   * The return value is an object keyed by entry name, where each value is a valid sample entry
+   * @param  {[type]} zome [description]
+   * @return {[type]}      [description]
+   */
+  _genSampleEntryJson (zome) {
     const createSampleValue = (def) => {
       switch (def.type) {
         case 'object':
@@ -978,7 +988,7 @@ class HcScaffold {
         }
       }
 
-      const testJsonPayload = this._genSampleJsonData(zome)
+      const testJsonPayload = this._genSampleEntryJson(zome)
 
       for (let fn of zome.Functions) {
         const testObj = {
