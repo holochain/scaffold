@@ -6,6 +6,7 @@
   "scripts": {
     "test": "standard --fix && node ./bin/build.js && ninja && node ./bin/exec-tests.js",
     "start": "node ./bin/demo-server.js",
+    "start:build": "standard --fix && node ./bin/build.js && ninja && node ./bin/demo-server.js",
     "clean": "ninja -t clean"
   },
   "repository": {

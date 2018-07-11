@@ -772,7 +772,8 @@ class HcScaffold {
 
       obj.Code = CODE_GEN[obj.RibosomeType || 'js'].generate({
         entryNames: obj.Entries.map((e) => { return e.Name }),
-        functions: obj.Functions
+        functions: obj.Functions,
+        sampleEntryValues: this._genSampleJsonData(obj)
       })
 
       data.push(obj)
@@ -843,11 +844,12 @@ class HcScaffold {
   _genZomeFunctionJson (jsonZome, parent) {
     const data = []
 
-    const addFunction = (name, callingType, exposure, hint) => {
+    const addFunction = (name, callingType, exposure, hint, entryName) => {
       const obj = {
         Name: name,
         CallingType: callingType,
-        Exposure: exposure
+        Exposure: exposure,
+        EntryName: entryName
       }
 
       if (hint) {
@@ -869,7 +871,8 @@ class HcScaffold {
         addFunction(name + 'Create',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'c:' + name
+          'c:' + name,
+          name
         )
       }
 
@@ -877,7 +880,8 @@ class HcScaffold {
         addFunction(name + 'Read',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'r:' + name
+          'r:' + name,
+          name
         )
       }
 
@@ -885,7 +889,8 @@ class HcScaffold {
         addFunction(name + 'Update',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'u:' + name
+          'u:' + name,
+          name
         )
       }
 
@@ -893,7 +898,8 @@ class HcScaffold {
         addFunction(name + 'Delete',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
-          'd:' + name
+          'd:' + name,
+          name
         )
       }
     }
@@ -908,11 +914,49 @@ class HcScaffold {
       addFunction(
         name,
         row.querySelector('.zome-function-calling-type').value,
-        row.querySelector('.zome-function-exposure').value
+        row.querySelector('.zome-function-exposure').value,
+        name
       )
     }
 
     jsonZome.Functions = data
+  }
+
+  _genSampleJsonData (zome) {
+    const createSampleValue = (def) => {
+      switch (def.type) {
+        case 'object':
+          const data = {}
+          Object.entries(def.properties).forEach(([key, val]) => {
+            data[key] = createSampleValue(val)
+          })
+          return data
+        case 'array':
+          return [createSampleValue(def.items)]
+        default:
+          if (def.examples) {
+            return def.examples[0]
+          } else {
+            switch (def.type) {
+              case 'string': return 'a string'
+              case 'integer': return 0
+              case 'number': return 0.0
+              case 'boolean': return true
+              default: return null
+            }
+          }
+      }
+    }
+
+    const data = {}
+
+    zome.Entries.forEach(entry => {
+      if (entry.Schema) {
+        data[entry.Name] = createSampleValue(entry.Schema)
+      }
+    })
+
+    return data
   }
 
   /**
@@ -930,14 +974,16 @@ class HcScaffold {
         }
       }
 
+      const testJsonPayload = this._genSampleJsonData(zome)
+
       for (let fn of zome.Functions) {
         const testObj = {
           Convey: 'auto-generated test for ' + fn.Name,
           Zome: zome.Name,
           FnName: fn.Name
         }
-
-        const crudVal = fn.CallingType === 'json' ? constants.TEST_JSON_PAYLOAD : constants.TEST_STRING_PAYLOAD
+        const {EntryName} = fn
+        const crudVal = fn.CallingType === 'json' ? testJsonPayload[EntryName] : constants.TEST_STRING_PAYLOAD
         const fnVal = fn.CallingType === 'json' ? constants.TEST_FN_OUTPUT_JSON : constants.TEST_FN_OUTPUT_STRING
 
         switch ((fn._ || '')[0]) {
