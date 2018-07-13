@@ -12,6 +12,7 @@ class JsCodeGen {
   constructor (opt) {
     this.functions = opt.functions || []
     this.entryNames = opt.entryNames || []
+    this.sampleEntryValues = opt.sampleEntryValues || {}
     this.indent = opt.indent || 2
   }
 
@@ -32,14 +33,15 @@ class JsCodeGen {
     this.functions.forEach(fn => {
       if (fn._) {
         // CRUD function definition
-        let actionDefinition = fn._.split(':')
-        let action = actionDefinition[0]
-        let entryName = actionDefinition[1]
-        this._addCrudCode(fn.Name, action, entryName)
+        const actionDefinition = fn._.split(':')
+        const action = actionDefinition[0]
+        const entryName = actionDefinition[1]
+        const sampleValue = this.sampleEntryValues[entryName] || {}
+        this._addCrudCode(fn.Name, action, entryName, sampleValue)
       } else {
         // unknown custom function definition
-        let inputName = fn.CallingType === 'string' ? 'text' : 'params'
-        let returnName = fn.CallingType === 'string' ? '"a string"' : '{}'
+        const inputName = fn.CallingType === 'string' ? 'text' : 'params'
+        const returnName = fn.CallingType === 'string' ? '"a string"' : '{}'
         this._function(fn.Name, [inputName], () => {
           this.src += this._indent('// your custom code here') + '\n'
           this.src += this._indent('return ' + returnName + ';') + '\n'
@@ -104,7 +106,7 @@ class JsCodeGen {
   /**
    *
    */
-  _addCrudCode (fnName, action, entryName) {
+  _addCrudCode (fnName, action, entryName, sampleValue) {
     let inputName, returnName
     switch (action) {
       case 'c':
@@ -128,8 +130,11 @@ class JsCodeGen {
         inputName = entryName + 'Hash'
         returnName = entryName + 'OutHash'
         this._function(fnName, [inputName], () => {
+          // TODO: properly pretty-print and indent sampleValue
+          sampleValue.extraField = true // so that there is something to update
+          this.src += this._indent(`var sampleValue=${JSON.stringify(sampleValue)};`) + '\n'
           let update = 'var ' + returnName + ' = update("'
-          update += entryName + '", "newValue", ' + inputName + ');'
+          update += entryName + '", sampleValue, ' + inputName + ');'
           this.src += this._indent(update) + '\n'
           this.src += this._indent('return ' + returnName + ';') + '\n'
         })

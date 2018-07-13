@@ -2,6 +2,7 @@
 
 /* global ace */
 
+const constants = require('../constants')
 const version = require('./gen/version')
 
 const i18n = require('./hc-i18n')
@@ -771,7 +772,8 @@ class HcScaffold {
 
       obj.Code = CODE_GEN[obj.RibosomeType || 'js'].generate({
         entryNames: obj.Entries.map((e) => { return e.Name }),
-        functions: obj.Functions
+        functions: obj.Functions,
+        sampleEntryValues: this._genSampleEntryJson(obj)
       })
 
       data.push(obj)
@@ -842,11 +844,12 @@ class HcScaffold {
   _genZomeFunctionJson (jsonZome, parent) {
     const data = []
 
-    const addFunction = (name, callingType, exposure, hint) => {
+    const addFunction = (name, callingType, exposure, entryName, hint) => {
       const obj = {
         Name: name,
         CallingType: callingType,
-        Exposure: exposure
+        Exposure: exposure,
+        EntryName: entryName
       }
 
       if (hint) {
@@ -865,33 +868,41 @@ class HcScaffold {
       }
 
       if (row.querySelector('.zome-entry-create').checked) {
-        addFunction(name + 'Create',
+        addFunction(
+          name + 'Create',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
+          name,
           'c:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-read').checked) {
-        addFunction(name + 'Read',
+        addFunction(
+          name + 'Read',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
+          name,
           'r:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-update').checked) {
-        addFunction(name + 'Update',
+        addFunction(
+          name + 'Update',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
+          name,
           'u:' + name
         )
       }
 
       if (row.querySelector('.zome-entry-delete').checked) {
-        addFunction(name + 'Delete',
+        addFunction(
+          name + 'Delete',
           row.querySelector('.zome-entry-data-format').value,
           row.querySelector('.zome-entry-sharing').value,
+          name,
           'd:' + name
         )
       }
@@ -907,11 +918,59 @@ class HcScaffold {
       addFunction(
         name,
         row.querySelector('.zome-function-calling-type').value,
-        row.querySelector('.zome-function-exposure').value
+        row.querySelector('.zome-function-exposure').value,
+        name
       )
     }
 
     jsonZome.Functions = data
+  }
+
+  /**
+   * Creates sample entry data which will pass validation for each entry type
+   * An object is constructed by recursing over a zome's schema's example values
+   * (which are populated automatically if generating the schema via https://jsonschema.net/)
+   * and marshalling them into the right shape.
+   *
+   * The return value is an object keyed by entry name, where each value is a valid sample entry
+   * @param  {[type]} zome [description]
+   * @return {[type]}      [description]
+   */
+  _genSampleEntryJson (zome) {
+    const createSampleValue = (def) => {
+      switch (def.type) {
+        case 'object':
+          const data = {}
+          Object.entries(def.properties).forEach(([key, val]) => {
+            data[key] = createSampleValue(val)
+          })
+          return data
+        case 'array':
+          return [createSampleValue(def.items)]
+        default:
+          if (def.examples) {
+            return def.examples[0]
+          } else {
+            switch (def.type) {
+              case 'string': return 'a string'
+              case 'integer': return 0
+              case 'number': return 0.0
+              case 'boolean': return true
+              default: return null
+            }
+          }
+      }
+    }
+
+    const data = {}
+
+    zome.Entries.forEach(entry => {
+      if (entry.Schema) {
+        data[entry.Name] = createSampleValue(entry.Schema)
+      }
+    })
+
+    return data
   }
 
   /**
@@ -929,23 +988,26 @@ class HcScaffold {
         }
       }
 
+      const testJsonPayload = this._genSampleEntryJson(zome)
+
       for (let fn of zome.Functions) {
         const testObj = {
           Convey: 'auto-generated test for ' + fn.Name,
           Zome: zome.Name,
           FnName: fn.Name
         }
-
-        let val = fn.CallingType === 'json' ? { test: 'test' } : 'test'
+        const {EntryName} = fn
+        const crudVal = fn.CallingType === 'json' ? testJsonPayload[EntryName] : constants.TEST_STRING_PAYLOAD
+        const fnVal = fn.CallingType === 'json' ? constants.TEST_FN_OUTPUT_JSON : constants.TEST_FN_OUTPUT_STRING
 
         switch ((fn._ || '')[0]) {
           case 'c':
-            testObj.Input = val
+            testObj.Input = crudVal
             testObj.Output = '%h%'
             break
           case 'r':
             testObj.Input = '%h%'
-            testObj.Output = val
+            testObj.Output = crudVal
             break
           case 'u':
             testObj.Input = '%h%'
@@ -957,7 +1019,7 @@ class HcScaffold {
             break
           default:
             testObj.Input = ''
-            testObj.Output = ''
+            testObj.Output = fnVal
             break
         }
 

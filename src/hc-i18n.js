@@ -3,7 +3,7 @@
 /* i18n translation handler helper
  * This works as a singleton.
  * Load up your strings with `loadStrings`
- * Set your local with `setLocale('ja')`
+ * Set your locale with `setLocale('ja')`
  * get a string with `getText('stringid', 'param1', 4, 32.4, 'etc..')`
  */
 

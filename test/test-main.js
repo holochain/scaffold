@@ -2,6 +2,10 @@
 
 const YAML = require('yaml-js')
 
+const {
+  TEST_FN_OUTPUT_JSON
+} = require('../constants')
+
 const SAVE_JSON_KEY = 'hc-scaffold-save-json'
 
 const FIXTURE_1 = {
@@ -66,9 +70,7 @@ const FIXTURE_1 = {
             'Convey': 'auto-generated test for test-entryCreate',
             'Zome': 'test-zome-name',
             'FnName': 'test-entryCreate',
-            'Input': {
-              'test': 'test'
-            },
+            'Input': '',
             'Output': '%h%'
           },
           {
@@ -76,16 +78,14 @@ const FIXTURE_1 = {
             'Zome': 'test-zome-name',
             'FnName': 'test-entryRead',
             'Input': '%h%',
-            'Output': {
-              'test': 'test'
-            }
+            'Output': ''
           },
           {
             'Convey': 'auto-generated test for test-function',
             'Zome': 'test-zome-name',
             'FnName': 'test-function',
             'Input': '',
-            'Output': ''
+            'Output': TEST_FN_OUTPUT_JSON
           }
         ]
       }
@@ -197,6 +197,9 @@ describe('HC Scaffold Quick Start', () => {
   // from localstorage, generates all the ui (dom) based off it,
   // re-generates json->yaml from the ui, then parses the yaml
   // and compares it against the original json from localstorage.
+  //
+  // NB: this ignores test input and output since we can't rely on the
+  // full dna being generated
   describe('loads from localstorage', () => {
     it('full', (done) => {
       localStorage.setItem(SAVE_JSON_KEY, JSON.stringify(FIXTURE_1))
