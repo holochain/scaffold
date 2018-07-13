@@ -1,24 +1,26 @@
 {
   "name": "hc-scaffold",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Cli and Web wizard for generating scaffolding for holochain applications.",
   "main": "index.js",
   "scripts": {
     "test": "standard --fix && node ./bin/build.js && ninja && node ./bin/exec-tests.js",
     "start": "node ./bin/demo-server.js",
     "start:build": "standard --fix && node ./bin/build.js && ninja && node ./bin/demo-server.js",
-    "clean": "ninja -t clean"
+    "clean": "ninja -t clean",
+    "preversion": "npm test",
+    "postversion": "git push --follow-tags"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metacurrency/hc-scaffold.git"
+    "url": "git+https://github.com/holochain/scaffold.git"
   },
   "author": "",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/metacurrency/hc-scaffold/issues"
+    "url": "https://github.com/holochain/scaffold/issues"
   },
-  "homepage": "https://github.com/metacurrency/hc-scaffold#readme",
+  "homepage": "https://github.com/holochain/scaffold#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -33,7 +35,7 @@
     "uglify-js": "^3.4.2"
   },
   "dependencies": {
-    "@holochain/dna-to-openapi": "^0.2.0",
+    "@holochain/dna-to-openapi": "^0.2.1",
     "ajv": "^5.5.2",
     "babel-polyfill": "^6.26.0",
     "express": "^4.16.3",

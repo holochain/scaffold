@@ -1,5 +1,5 @@
 'use strict'
 module.exports = exports = {
-  "version": "0.0.2+ee7fc55",
-  "url": "https://github.com/metacurrency/hc-scaffold#readme"
+  "version": "0.1.0+06aba91",
+  "url": "https://github.com/holochain/scaffold#readme"
 }
