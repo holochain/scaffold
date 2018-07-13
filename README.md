@@ -18,7 +18,7 @@ To get started quickly, please see the [Hosted Version](https://holochain.github
 To run locally:
 
 ```
-git clone https://github.com/metacurrency/hc-scaffold.git
+git clone https://github.com/holochain/scaffold.git
 cd hc-scaffold
 npm install --production
 npm start
@@ -29,7 +29,7 @@ npm start
 This project uses [Ninja Build](https://ninja-build.org/). You will need to install it.
 
 ```
-git clone https://github.com/metacurrency/hc-scaffold.git
+git clone https://github.com/holochain/scaffold.git
 cd hc-scaffold
 npm install
 npm test
