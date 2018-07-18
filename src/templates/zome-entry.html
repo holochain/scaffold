@@ -21,16 +21,16 @@
     </select>
   </td>
   <td>
-    <input type="checkbox" data-hc-bind="change:$render" name="create-{{id}}" checked="checked" class="zome-entry-create" />
+    <input type="checkbox" data-hc-bind="change:$render" name="create-{{id}}" checked="checked" class="zome-entry-crud zome-entry-create" />
   </td>
   <td>
-    <input type="checkbox" data-hc-bind="change:$render" name="read-{{id}}" checked="checked" class="zome-entry-read" />
+    <input type="checkbox" data-hc-bind="change:$render" name="read-{{id}}" checked="checked" class="zome-entry-crud zome-entry-read" />
   </td>
   <td>
-    <input type="checkbox" data-hc-bind="change:$render" name="update-{{id}}" class="zome-entry-update" />
+    <input type="checkbox" data-hc-bind="change:$render" name="update-{{id}}" class="zome-entry-crud zome-entry-update" />
   </td>
   <td>
-    <input type="checkbox" data-hc-bind="change:$render" name="delete-{{id}}" class="zome-entry-delete" />
+    <input type="checkbox" data-hc-bind="change:$render" name="delete-{{id}}" class="zome-entry-crud zome-entry-delete" />
   </td>
   <td>
     <a title="{{__ 'button-zomeEntryMore'}}" href="javascript:void(0)" data-hc-bind="click:$zomeEntryMore" data-hc-id="{{id}}" data-hc-zome-id="{{zome-id}}" class="no-text entry-more">
