@@ -453,6 +453,10 @@ class HcScaffold {
     row.classList.remove('type-links')
     row.classList.remove('type-string')
     row.classList.add('type-' + evtData.elem.value)
+    const hideCheckboxes = evtData.elem.value === 'links'
+    row.querySelectorAll('input[type=checkbox]').forEach(el => {
+      el.disabled = hideCheckboxes
+    })
   }
 
   /**
@@ -690,6 +694,10 @@ class HcScaffold {
         row.querySelector('.zome-entry-delete').checked =
           (entry._.indexOf('d') > -1)
       }
+
+      if (entry.DataFormat === 'links') {
+        row.querySelectorAll('.zome-entry-crud').forEach(el => { el.disabled = true })
+      }
     }
   }
 
@@ -821,10 +829,18 @@ class HcScaffold {
       }
 
       let hint = ''
-      row.querySelector('.zome-entry-create').checked && (hint += 'c')
-      row.querySelector('.zome-entry-read').checked && (hint += 'r')
-      row.querySelector('.zome-entry-update').checked && (hint += 'u')
-      row.querySelector('.zome-entry-delete').checked && (hint += 'd')
+
+      ;[
+        ['.zome-entry-create', 'c'],
+        ['.zome-entry-read', 'r'],
+        ['.zome-entry-update', 'u'],
+        ['.zome-entry-delete', 'd']
+      ].forEach(([selector, op]) => {
+        const input = row.querySelector(selector)
+        if (input.checked && !input.disabled) {
+          hint += op
+        }
+      })
 
       if (!hint.length) {
         hint = '-'
@@ -867,45 +883,23 @@ class HcScaffold {
         continue
       }
 
-      if (row.querySelector('.zome-entry-create').checked) {
-        addFunction(
-          name + 'Create',
-          row.querySelector('.zome-entry-data-format').value,
-          row.querySelector('.zome-entry-sharing').value,
-          name,
-          'c:' + name
-        )
-      }
-
-      if (row.querySelector('.zome-entry-read').checked) {
-        addFunction(
-          name + 'Read',
-          row.querySelector('.zome-entry-data-format').value,
-          row.querySelector('.zome-entry-sharing').value,
-          name,
-          'r:' + name
-        )
-      }
-
-      if (row.querySelector('.zome-entry-update').checked) {
-        addFunction(
-          name + 'Update',
-          row.querySelector('.zome-entry-data-format').value,
-          row.querySelector('.zome-entry-sharing').value,
-          name,
-          'u:' + name
-        )
-      }
-
-      if (row.querySelector('.zome-entry-delete').checked) {
-        addFunction(
-          name + 'Delete',
-          row.querySelector('.zome-entry-data-format').value,
-          row.querySelector('.zome-entry-sharing').value,
-          name,
-          'd:' + name
-        )
-      }
+      ;[
+        ['.zome-entry-create', 'Create', 'c'],
+        ['.zome-entry-read', 'Read', 'r'],
+        ['.zome-entry-update', 'Update', 'u'],
+        ['.zome-entry-delete', 'Delete', 'd']
+      ].forEach(([selector, suffix, op]) => {
+        const input = row.querySelector(selector)
+        if (input.checked && !input.disabled) {
+          addFunction(
+            name + suffix,
+            row.querySelector('.zome-entry-data-format').value,
+            row.querySelector('.zome-entry-sharing').value,
+            name,
+            op + ':' + name
+          )
+        }
+      })
     }
 
     // next go through the manually defined functions

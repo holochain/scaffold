@@ -115,13 +115,13 @@ templates['zome-entry'] = template({"compiler":[7,">= 4.0.0"],"main":function(co
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
     + "\" class=\"zome-entry-data-format\">\n      <option value=\"json\" selected=\"selected\">Json</option>\n      <option value=\"links\">Links</option>\n      <option value=\"string\">String</option>\n    </select>\n  </td>\n  <td>\n    <select data-hc-bind=\"change:$render\" class=\"zome-entry-sharing\">\n      <option value=\"public\" selected=\"selected\">Public</option>\n      <option value=\"private\">Private</option>\n    </select>\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"create-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" checked=\"checked\" class=\"zome-entry-create\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"read-"
+    + "\" checked=\"checked\" class=\"zome-entry-crud zome-entry-create\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"read-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" checked=\"checked\" class=\"zome-entry-read\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"update-"
+    + "\" checked=\"checked\" class=\"zome-entry-crud zome-entry-read\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"update-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" class=\"zome-entry-update\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"delete-"
+    + "\" class=\"zome-entry-crud zome-entry-update\" />\n  </td>\n  <td>\n    <input type=\"checkbox\" data-hc-bind=\"change:$render\" name=\"delete-"
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-    + "\" class=\"zome-entry-delete\" />\n  </td>\n  <td>\n    <a title=\""
+    + "\" class=\"zome-entry-crud zome-entry-delete\" />\n  </td>\n  <td>\n    <a title=\""
     + alias4((helpers.__ || (depth0 && depth0.__) || alias2).call(alias1,"button-zomeEntryMore",{"name":"__","hash":{},"data":data}))
     + "\" href=\"javascript:void(0)\" data-hc-bind=\"click:$zomeEntryMore\" data-hc-id=\""
     + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
