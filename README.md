@@ -1,4 +1,7 @@
 # hc-scaffold
+
+THIS REPO IS ARCHIVED -- IT REFERENCES A VERY OLD PROTO VERSION OF HOLOCHAIN AND DOES NOT WORK WITH CURRENT RUST CODEBASE
+
 Web-based wizard for generating scaffolding for [holochain](https://holochain.org/) applications.
 
 **Status:** Pre-Alpha. Early development and testing.
